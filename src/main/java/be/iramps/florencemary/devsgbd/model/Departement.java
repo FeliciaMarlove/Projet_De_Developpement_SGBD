@@ -1,10 +1,11 @@
 package be.iramps.florencemary.devsgbd.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Departement", schema = "public", catalog = "brico")
-public class Departement {
+public class Departement implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "departement_generator")

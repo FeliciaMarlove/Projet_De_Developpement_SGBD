@@ -1,14 +1,15 @@
 package be.iramps.florencemary.devsgbd.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Facture", schema = "public", catalog = "brico")
-public class Facture {
+public class Facture implements Serializable {
 
-    @Id
-   // embedded id -> auto génération d'un id unique sur base des infos
-    private Long idFacture_TEMPORAIRE;
+    @EmbeddedId
+    private PK_Facture pkFacture;
+
     // génération auto du numero de facture
 
     // lien vers client
@@ -16,6 +17,10 @@ public class Facture {
     // lien vers articles - qté ! persistence du prix du jour
 
     // LocalDate.now
+
+    //jointure  - pays etc
+    /*@Column(name = "tva")
+    private Tva tauxTva;*/
 
 
 }

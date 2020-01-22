@@ -1,10 +1,11 @@
 package be.iramps.florencemary.devsgbd.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Article", schema = "public", catalog = "brico")
-public class Article {
+public class Article implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_generator")
@@ -20,10 +21,6 @@ public class Article {
 
     @Column(name = "stock")
     private int stock;
-
-    //jointure
-    /*@Column(name = "tva")
-    private Tva tauxTva;*/
 
     @Column(name = "prix_unitaire")
     private Double prixUnitaire;

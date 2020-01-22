@@ -1,16 +1,16 @@
 package be.iramps.florencemary.devsgbd.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "Client", schema = "public", catalog = "brico")
-public class Client {
+public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_generator")
-    @SequenceGenerator(name = "client_generator", allocationSize = 1, initialValue = 10_000)
+    @SequenceGenerator(name = "client_generator", allocationSize = 1, initialValue = 00_001)
     @Column(name = "id_client")
     private Long idClient;
 
