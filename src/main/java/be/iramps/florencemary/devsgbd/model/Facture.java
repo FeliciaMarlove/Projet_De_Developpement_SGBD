@@ -18,6 +18,8 @@ public class Facture implements Serializable {
 
     // LocalDate.now
 
+    //constructeur instancier PK
+
     //jointure  - pays etc
     /*@Column(name = "tva")
     private Tva tauxTva;*/
