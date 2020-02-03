@@ -2,12 +2,15 @@ package be.iramps.florencemary.devsgbd.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Departement", schema = "public", catalog = "brico")
 public class Departement implements Serializable {
 
+    /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "departement_generator")
     @SequenceGenerator(name = "departement_generator", allocationSize = 1, initialValue = 1)
@@ -17,9 +20,16 @@ public class Departement implements Serializable {
     @Column(name = "nom_departement")
     private String nomDepartement;
 
-    public Departement(String nomDepartement) {
-        this.nomDepartement = nomDepartement;
-    }
+    @Column(name = "is_actif_dept")
+    private boolean isActifDepartement;
+
+    /* _____________________________JOINTURES_____________________________ */
+
+    @OneToMany(mappedBy = "departement", targetEntity = Utilisateur.class)
+    private List<Utilisateur> utilisateursList = new ArrayList();
+
+    /* _____________________________GETTERS/SETTERS_____________________________ */
+
 
     public Long getIdDepartement() {
         return idDepartement;
@@ -33,6 +43,34 @@ public class Departement implements Serializable {
         this.nomDepartement = nomDepartement;
     }
 
+    public boolean isActifDepartement() {
+        return isActifDepartement;
+    }
+
+    public void setActifDepartement(boolean isActifDepartement) {
+        this.isActifDepartement = isActifDepartement;
+    }
+
+    public List<Utilisateur> getUtilisateursList() {
+        return utilisateursList;
+    }
+
+    public void setUtilisateursList(List<Utilisateur> utilisateursList) {
+        this.utilisateursList = utilisateursList;
+    }
+    /* _____________________________CONSTRUCTEURS_____________________________ */
+
+    public Departement(String nomDepartement) {
+        this();
+        this.nomDepartement = nomDepartement;
+    }
+
+    public Departement() {
+        this.isActifDepartement = true;
+        this.utilisateursList = new ArrayList<>();
+    }
+    /* _____________________________EQUALS/HASHCODE/TOSTRING_____________________________ */
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -44,5 +82,15 @@ public class Departement implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(nomDepartement);
+    }
+
+    @Override
+    public String toString() {
+        return "Departement{" +
+                "idDepartement=" + idDepartement +
+                ", nomDepartement='" + nomDepartement + '\'' +
+                ", isActifDepartement=" + isActifDepartement +
+                ", utilisateursList=" + utilisateursList +
+                '}';
     }
 }
