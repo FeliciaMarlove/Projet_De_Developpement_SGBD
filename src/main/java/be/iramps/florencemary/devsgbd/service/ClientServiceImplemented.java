@@ -34,7 +34,15 @@ public class ClientServiceImplemented implements ClientService {
 
     @Override
     public Client update(Long id, ClientDto update) {
-        return null;
+        Client toUpdate = repository.findById(id).get();
+        if (toUpdate != null) {
+            toUpdate.setNomClient(update.getNomClient());
+            toUpdate.setPrenomClient(update.getPrenomClient());
+            toUpdate.setTelephoneClient(update.getTelephoneClient());
+            toUpdate.setDateNaissanceClient(update.getDateNaissanceClient());
+            repository.save(toUpdate);
+        }
+        return toUpdate;
     }
 
     @Override

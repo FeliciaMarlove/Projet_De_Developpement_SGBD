@@ -9,6 +9,6 @@ public interface FactureService {
     List<Facture> read();
     Facture readOne(Long id);
     void create(Facture newItem);
-    Facture update(Long id, FactureDto update);
+    //Facture update(Long id, FactureDto update); //nonsense
     Facture delete(Long id);
 }

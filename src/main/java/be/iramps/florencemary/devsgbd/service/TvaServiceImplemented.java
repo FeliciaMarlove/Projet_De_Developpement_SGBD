@@ -34,7 +34,12 @@ public class TvaServiceImplemented implements TvaService {
 
     @Override
     public Tva update(Long id, TvaDto update) {
-        return null;
+        Tva toUpdate = repository.findById(id).get();
+        if (toUpdate != null) {
+            toUpdate.setTauxTva(update.getTauxTva());
+            repository.save(toUpdate);
+        }
+        return toUpdate;
     }
 
     @Override

@@ -32,10 +32,11 @@ public class FactureServiceImplemented implements FactureService {
         repository.save(newItem);
     }
 
-    @Override
+    //nonsense
+    /*@Override
     public Facture update(Long id, FactureDto update) {
         return null;
-    }
+    }*/
 
     @Override
     public Facture delete(Long id) {

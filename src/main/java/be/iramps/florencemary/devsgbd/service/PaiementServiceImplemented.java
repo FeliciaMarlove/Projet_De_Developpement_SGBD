@@ -35,7 +35,13 @@ public class PaiementServiceImplemented implements PaiementService {
 
     @Override
     public Paiement update(Long id, PaiementDto update) {
-        return null;
+        Paiement toUpdate = repository.findById(id).get();
+        if (toUpdate != null) {
+            toUpdate.setNomPaiement(update.getNomPaiement());
+            toUpdate.setDescPaiement(update.getDescPaiement());
+            repository.save(toUpdate);
+        }
+        return toUpdate;
     }
 
     @Override

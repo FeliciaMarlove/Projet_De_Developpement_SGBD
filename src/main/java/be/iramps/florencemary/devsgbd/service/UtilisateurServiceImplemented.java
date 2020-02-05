@@ -2,6 +2,7 @@ package be.iramps.florencemary.devsgbd.service;
 
 import be.iramps.florencemary.devsgbd.model.Utilisateur;
 import be.iramps.florencemary.devsgbd.dto.UtilisateurDto;
+import be.iramps.florencemary.devsgbd.repository.DepartementRepository;
 import be.iramps.florencemary.devsgbd.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.List;
 @Service
 public class UtilisateurServiceImplemented implements UtilisateurService {
     private UtilisateurRepository repository;
+    private DepartementRepository repositoryDepartement;
 
     @Autowired
     public UtilisateurServiceImplemented(UtilisateurRepository repository) {
@@ -34,7 +36,17 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     @Override
     public Utilisateur update(Long id, UtilisateurDto update) {
-        return null;
+        Utilisateur toUpdate = repository.findById(id).get();
+        if (toUpdate != null) {
+            toUpdate.setPrenomUtilisateur(update.getPrenomUtilisateur());
+            toUpdate.setNomUtilisateur(update.getNomUtilisateur());
+            toUpdate.setLogin(update.getLogin());
+            toUpdate.setMotDePasse(update.getMotDePasse());
+            toUpdate.setPoste(update.getPoste());
+            toUpdate.setDepartement(repositoryDepartement.findById(update.getIdDepartement()).get());
+            repository.save(toUpdate);
+        }
+        return toUpdate;
     }
 
     @Override
