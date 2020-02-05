@@ -1,5 +1,7 @@
 package be.iramps.florencemary.devsgbd.model;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -76,7 +78,7 @@ public class Utilisateur implements Serializable {
     }
 
     public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
+        this.motDePasse = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
     }
 
     public String getPoste() {
@@ -109,7 +111,7 @@ public class Utilisateur implements Serializable {
         this.nomUtilisateur = nomUtilisateur;
         this.prenomUtilisateur = prenomUtilisateur;
         this.login = login;
-        this.motDePasse = motDePasse;
+        this.motDePasse = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
         this.poste = poste;
         this.departement = departement;
     }

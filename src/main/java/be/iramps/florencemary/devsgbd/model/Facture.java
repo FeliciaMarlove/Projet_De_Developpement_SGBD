@@ -67,6 +67,7 @@ public class Facture implements Serializable {
     public String getRefFacture() {
         return refFacture;
     }
+
     //_____________________________CONSTRUCTEURS_____________________________
 
     public Facture(Client client, Paiement paiement) {
@@ -81,7 +82,6 @@ public class Facture implements Serializable {
         this.articlesList = new ArrayList<>();
     }
 //_____________________________EQUALS/HASHCODE/TOSTRING_____________________________
-
 
     @Override
     public boolean equals(Object o) {
