@@ -25,7 +25,7 @@ public class Article implements Serializable {
     private int stock;
 
     @Column(name = "prix_unitaire")
-    private Double prixUnitaire;
+    private double prixUnitaire;
 
     @Column(name = "ean")
     private Long codeEAN;
@@ -70,11 +70,11 @@ public class Article implements Serializable {
         this.stock = stock;
     }
 
-    public Double getPrixUnitaire() {
+    public double getPrixUnitaire() {
         return prixUnitaire;
     }
 
-    public void setPrixUnitaire(Double prixUnitaire) {
+    public void setPrixUnitaire(double prixUnitaire) {
         this.prixUnitaire = prixUnitaire;
     }
 

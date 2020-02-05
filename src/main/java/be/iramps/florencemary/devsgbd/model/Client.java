@@ -90,6 +90,7 @@ public class Client implements Serializable {
     public List<Facture> getFacturesList() {
         return facturesList;
     }
+
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
     public Client(String nomClient, String prenomClient, Long telephoneClient, LocalDate dateNaissanceClient) {

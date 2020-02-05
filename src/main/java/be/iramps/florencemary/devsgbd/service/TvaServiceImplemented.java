@@ -29,7 +29,7 @@ public class TvaServiceImplemented implements TvaService {
 
     @Override
     public void create(Tva newItem) {
-
+        repository.save(newItem);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class TvaServiceImplemented implements TvaService {
 
     @Override
     public Tva delete(Long id) {
-        return null;
+        return readOne(id);
     }
 }

@@ -30,7 +30,7 @@ public class PaiementServiceImplemented implements PaiementService {
 
     @Override
     public void create(Paiement newItem) {
-
+        repository.save(newItem);
     }
 
     @Override
@@ -40,6 +40,6 @@ public class PaiementServiceImplemented implements PaiementService {
 
     @Override
     public Paiement delete(Long id) {
-        return null;
+        return readOne(id);
     }
 }

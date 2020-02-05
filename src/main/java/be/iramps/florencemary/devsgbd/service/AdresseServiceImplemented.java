@@ -29,7 +29,7 @@ public class AdresseServiceImplemented implements AdresseService {
 
     @Override
     public void create(Adresse newItem) {
-
+        repository.save(newItem);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class AdresseServiceImplemented implements AdresseService {
 
     @Override
     public Adresse delete(Long id) {
-        return null;
+        return readOne(id);
     }
 }

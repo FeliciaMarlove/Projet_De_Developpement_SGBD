@@ -29,7 +29,7 @@ public class FactureServiceImplemented implements FactureService {
 
     @Override
     public void create(Facture newItem) {
-
+        repository.save(newItem);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class FactureServiceImplemented implements FactureService {
 
     @Override
     public Facture delete(Long id) {
-        return null;
+        return readOne(id);
     }
 }

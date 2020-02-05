@@ -29,7 +29,7 @@ public class ClientServiceImplemented implements ClientService {
 
     @Override
     public void create(Client newItem) {
-
+        repository.save(newItem);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class ClientServiceImplemented implements ClientService {
 
     @Override
     public Client delete(Long id) {
-        return null;
+        return readOne(id);
     }
 }

@@ -29,7 +29,7 @@ public class DepartementServiceImplemented implements DepartementService {
 
     @Override
     public void create(Departement newItem) {
-
+        repository.save(newItem);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class DepartementServiceImplemented implements DepartementService {
 
     @Override
     public Departement delete(Long id) {
-        return null;
+        return readOne(id);
     }
 }

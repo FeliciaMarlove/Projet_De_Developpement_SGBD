@@ -29,7 +29,7 @@ public class ArticleServiceImplemented implements ArticleService {
 
     @Override
     public void create(Article newItem) {
-
+        repository.save(newItem);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class ArticleServiceImplemented implements ArticleService {
 
     @Override
     public Article delete(Long id) {
-        return null;
+        return readOne(id);
     }
 }

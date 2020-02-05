@@ -1,7 +1,7 @@
 package be.iramps.florencemary.devsgbd.service;
 
 import be.iramps.florencemary.devsgbd.model.Utilisateur;
-import be.iramps.florencemary.devsgbd.model.UtilisateurDto;
+import be.iramps.florencemary.devsgbd.dto.UtilisateurDto;
 import be.iramps.florencemary.devsgbd.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     @Override
     public void create(Utilisateur newItem) {
-
+        repository.save(newItem);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     @Override
     public Utilisateur delete(Long id) {
-        return null;
+        return readOne(id);
     }
 }
