@@ -28,8 +28,9 @@ public class DepartementServiceImplemented implements DepartementService {
     }
 
     @Override
-    public void create(Departement newItem) {
-        repository.save(newItem);
+    public void create(DepartementDto newItem) {
+        Departement newDepartement = new Departement(newItem.getNomDepartement());
+        repository.save(newDepartement);
     }
 
     @Override

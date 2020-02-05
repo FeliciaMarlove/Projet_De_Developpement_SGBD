@@ -2,6 +2,7 @@ package be.iramps.florencemary.devsgbd.service;
 
 import be.iramps.florencemary.devsgbd.dto.ArticleDto;
 import be.iramps.florencemary.devsgbd.model.Article;
+import be.iramps.florencemary.devsgbd.model.Tva;
 import be.iramps.florencemary.devsgbd.repository.ArticleRepository;
 import be.iramps.florencemary.devsgbd.repository.TvaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,17 @@ public class ArticleServiceImplemented implements ArticleService {
     }
 
     @Override
-    public void create(Article newItem) {
-        repository.save(newItem);
+    public void create(ArticleDto newItem) {
+        Tva findTva = repositoryTva.findById(newItem.getIdTva()).get();
+        Article newArticle = new Article(
+                newItem.getNomArticle(),
+                newItem.getDescArticle(),
+                newItem.getStock(),
+                newItem.getPrixUnitaire(),
+                newItem.getCodeEAN(),
+                findTva
+        );
+        repository.save(newArticle);
     }
 
     @Override

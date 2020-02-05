@@ -8,7 +8,7 @@ import java.util.List;
 public interface UtilisateurService {
     List<Utilisateur> read();
     Utilisateur readOne(Long id);
-    void create(Utilisateur newItem);
+    void create(UtilisateurDto newItem);
     Utilisateur update(Long id, UtilisateurDto update);
     Utilisateur delete(Long id);
 }

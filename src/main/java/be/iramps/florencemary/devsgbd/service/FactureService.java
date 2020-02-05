@@ -8,7 +8,7 @@ import java.util.List;
 public interface FactureService {
     List<Facture> read();
     Facture readOne(Long id);
-    void create(Facture newItem);
+    void create(FactureDto newItem);
     //Facture update(Long id, FactureDto update); //nonsense
     Facture delete(Long id);
 }

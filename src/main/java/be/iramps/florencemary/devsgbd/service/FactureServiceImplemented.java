@@ -1,8 +1,12 @@
 package be.iramps.florencemary.devsgbd.service;
 
 import be.iramps.florencemary.devsgbd.dto.FactureDto;
+import be.iramps.florencemary.devsgbd.model.Client;
 import be.iramps.florencemary.devsgbd.model.Facture;
+import be.iramps.florencemary.devsgbd.model.Paiement;
+import be.iramps.florencemary.devsgbd.repository.ClientRepository;
 import be.iramps.florencemary.devsgbd.repository.FactureRepository;
+import be.iramps.florencemary.devsgbd.repository.PaiementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +15,8 @@ import java.util.List;
 @Service
 public class FactureServiceImplemented implements FactureService {
     private FactureRepository repository;
+    private PaiementRepository repositoryPaiement;
+    private ClientRepository repositoryClient;
 
     @Autowired
     public FactureServiceImplemented(FactureRepository repository) {
@@ -28,8 +34,11 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     @Override
-    public void create(Facture newItem) {
-        repository.save(newItem);
+    public void create(FactureDto newItem) {
+        Paiement paiement = repositoryPaiement.findById(newItem.getIdPaiement()).get();
+        Client client = repositoryClient.findById(newItem.getIdClient()).get();
+        Facture newFacture = new Facture(client, paiement);
+        repository.save(newFacture);
     }
 
     //nonsense

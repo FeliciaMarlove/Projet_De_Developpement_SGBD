@@ -28,8 +28,9 @@ public class TvaServiceImplemented implements TvaService {
     }
 
     @Override
-    public void create(Tva newItem) {
-        repository.save(newItem);
+    public void create(TvaDto newItem) {
+        Tva newTva = new Tva(newItem.getTauxTva());
+        repository.save(newTva);
     }
 
     @Override

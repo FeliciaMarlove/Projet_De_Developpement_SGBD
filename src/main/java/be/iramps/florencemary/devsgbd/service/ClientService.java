@@ -8,7 +8,7 @@ import java.util.List;
 public interface ClientService {
     List<Client> read();
     Client readOne(Long id);
-    void create(Client newItem);
+    void create(ClientDto newItem);
     Client update(Long id, ClientDto update);
     Client delete(Long id);
 }
