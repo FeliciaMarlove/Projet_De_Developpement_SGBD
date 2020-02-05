@@ -19,12 +19,12 @@ public class FactureServiceImplemented implements FactureService {
 
     @Override
     public List<Facture> read() {
-        return null;
+        return (List<Facture>) repository.findAll();
     }
 
     @Override
     public Facture readOne(Long id) {
-        return null;
+        return repository.findById(id).get();
     }
 
     @Override

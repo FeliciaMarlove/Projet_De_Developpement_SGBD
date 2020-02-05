@@ -19,12 +19,12 @@ public class DepartementServiceImplemented implements DepartementService {
 
     @Override
     public List<Departement> read() {
-        return null;
+        return (List<Departement>) repository.findAll();
     }
 
     @Override
     public Departement readOne(Long id) {
-        return null;
+        return repository.findById(id).get();
     }
 
     @Override

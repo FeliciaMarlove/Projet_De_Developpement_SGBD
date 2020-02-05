@@ -19,12 +19,12 @@ public class TvaServiceImplemented implements TvaService {
 
     @Override
     public List<Tva> read() {
-        return null;
+        return (List<Tva>) repository.findAll();
     }
 
     @Override
     public Tva readOne(Long id) {
-        return null;
+        return repository.findById(id).get();
     }
 
     @Override

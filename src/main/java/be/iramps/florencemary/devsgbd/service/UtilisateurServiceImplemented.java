@@ -19,12 +19,12 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     @Override
     public List<Utilisateur> read() {
-        return null;
+        return (List<Utilisateur>) repository.findAll();
     }
 
     @Override
     public Utilisateur readOne(Long id) {
-        return null;
+        return repository.findById(id).get();
     }
 
     @Override

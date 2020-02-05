@@ -16,14 +16,15 @@ public class ArticleServiceImplemented implements ArticleService {
     public ArticleServiceImplemented(ArticleRepository repository) {
         this.repository = repository;
     }
+
     @Override
     public List<Article> read() {
-        return null;
+        return (List<Article>) repository.findAll();
     }
 
     @Override
     public Article readOne(Long id) {
-        return null;
+        return repository.findById(id).get();
     }
 
     @Override

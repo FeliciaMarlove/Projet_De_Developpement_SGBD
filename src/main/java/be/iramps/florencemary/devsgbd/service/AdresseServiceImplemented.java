@@ -19,12 +19,12 @@ public class AdresseServiceImplemented implements AdresseService {
 
     @Override
     public List<Adresse> read() {
-        return null;
+        return (List<Adresse>)repository.findAll();
     }
 
     @Override
     public Adresse readOne(Long id) {
-        return null;
+        return repository.findById(id).get();
     }
 
     @Override

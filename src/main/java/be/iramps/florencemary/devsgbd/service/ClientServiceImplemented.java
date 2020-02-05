@@ -19,12 +19,12 @@ public class ClientServiceImplemented implements ClientService {
 
     @Override
     public List<Client> read() {
-        return null;
+        return (List<Client>) repository.findAll();
     }
 
     @Override
     public Client readOne(Long id) {
-        return null;
+        return repository.findById(id).get();
     }
 
     @Override

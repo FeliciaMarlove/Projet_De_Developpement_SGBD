@@ -20,12 +20,12 @@ public class PaiementServiceImplemented implements PaiementService {
 
     @Override
     public List<Paiement> read() {
-        return null;
+        return (List<Paiement>) repository.findAll();
     }
 
     @Override
     public Paiement readOne(Long id) {
-        return null;
+        return repository.findById(id).get();
     }
 
     @Override
