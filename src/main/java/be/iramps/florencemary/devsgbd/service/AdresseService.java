@@ -11,4 +11,5 @@ public interface AdresseService {
     void create(AdresseDto newItem);
     Adresse update(Long id, AdresseDto update);
     Adresse delete(Long id);
+    List<Adresse> readActive();
 }

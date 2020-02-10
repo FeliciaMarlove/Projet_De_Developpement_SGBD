@@ -1,5 +1,6 @@
 package be.iramps.florencemary.devsgbd.service;
 
+import be.iramps.florencemary.devsgbd.model.Adresse;
 import be.iramps.florencemary.devsgbd.model.Departement;
 import be.iramps.florencemary.devsgbd.model.Utilisateur;
 import be.iramps.florencemary.devsgbd.dto.UtilisateurDto;
@@ -8,6 +9,7 @@ import be.iramps.florencemary.devsgbd.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,6 +68,15 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
             return readOne(id);
         }
         return null;
+    }
+
+    @Override
+    public List<Utilisateur> readActive() {
+        List<Utilisateur> actifs = new ArrayList<>(read());
+        for (Utilisateur utilisateur : actifs) {
+            if (utilisateur.isActifUtilisateur()) actifs.remove(utilisateur);
+        }
+        return actifs;
     }
 
     /**

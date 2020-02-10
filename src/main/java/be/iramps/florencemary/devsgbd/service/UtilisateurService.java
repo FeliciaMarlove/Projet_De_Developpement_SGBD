@@ -11,4 +11,5 @@ public interface UtilisateurService {
     void create(UtilisateurDto newItem);
     Utilisateur update(Long id, UtilisateurDto update);
     Utilisateur delete(Long id);
+    List<Utilisateur> readActive();
 }

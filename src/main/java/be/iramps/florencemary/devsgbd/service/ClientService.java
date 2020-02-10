@@ -11,4 +11,5 @@ public interface ClientService {
     void create(ClientDto newItem);
     Client update(Long id, ClientDto update);
     Client delete(Long id);
+    List<Client> readActive();
 }

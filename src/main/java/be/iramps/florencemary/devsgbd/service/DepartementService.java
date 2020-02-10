@@ -11,4 +11,5 @@ public interface DepartementService {
     void create(DepartementDto newItem);
     Departement update(Long id, DepartementDto update);
     Departement delete(Long id);
+    List<Departement> readActive();
 }

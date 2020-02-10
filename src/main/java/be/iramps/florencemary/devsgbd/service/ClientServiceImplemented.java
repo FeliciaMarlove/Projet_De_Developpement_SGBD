@@ -6,6 +6,7 @@ import be.iramps.florencemary.devsgbd.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -59,6 +60,15 @@ public class ClientServiceImplemented implements ClientService {
             return readOne(id);
         }
         return null;
+    }
+
+    @Override
+    public List<Client> readActive() {
+        List<Client> actifs = new ArrayList<>(read());
+        for (Client client : actifs) {
+            if (client.isActifClient()) actifs.remove(client);
+        }
+        return actifs;
     }
 
     private boolean exists(Long id) {

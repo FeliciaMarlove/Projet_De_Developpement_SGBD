@@ -11,4 +11,5 @@ public interface FactureService {
     void create(FactureDto newItem);
     //Facture update(Long id, FactureDto update); //nonsense
     Facture delete(Long id);
+    //List<Facture> readActive(); //todo ? cas d'une facture erronée à effacer p.ex ?
 }

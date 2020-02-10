@@ -6,6 +6,7 @@ import be.iramps.florencemary.devsgbd.repository.DepartementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,6 +51,15 @@ public class DepartementServiceImplemented implements DepartementService {
             return readOne(id);
         }
         return null;
+    }
+
+    @Override
+    public List<Departement> readActive() {
+        List<Departement> actifs = new ArrayList<>(read());
+        for (Departement departement : actifs) {
+            if (departement.isActifDepartement()) actifs.remove(departement);
+        }
+        return actifs;
     }
 
     private boolean exists(Long id) {

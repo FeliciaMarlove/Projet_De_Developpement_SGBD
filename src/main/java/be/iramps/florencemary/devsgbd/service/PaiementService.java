@@ -11,4 +11,5 @@ public interface PaiementService {
     void create(PaiementDto newItem);
     Paiement update(Long id, PaiementDto update);
     Paiement delete(Long id);
+    List<Paiement> readActive();
 }

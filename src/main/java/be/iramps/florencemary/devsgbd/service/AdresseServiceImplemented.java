@@ -32,6 +32,15 @@ public class AdresseServiceImplemented implements AdresseService {
     }
 
     @Override
+    public List<Adresse> readActive() {
+        List<Adresse> actifs = new ArrayList<>(read());
+        for (Adresse adresse : actifs) {
+            if (adresse.isActifAdresse()) actifs.remove(adresse);
+        }
+        return actifs;
+    }
+
+    @Override
     public void create(AdresseDto newItem) {
         Client findClient = repositoryClient.findById(newItem.getIdClient()).get();
         Adresse newAdresse = new Adresse(

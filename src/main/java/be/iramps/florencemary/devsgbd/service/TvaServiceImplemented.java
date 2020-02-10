@@ -6,6 +6,7 @@ import be.iramps.florencemary.devsgbd.repository.TvaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,6 +51,15 @@ public class TvaServiceImplemented implements TvaService {
             return readOne(id);
         }
         return null;
+    }
+
+    @Override
+    public List<Tva> readActive() {
+        List<Tva> actifs = new ArrayList<>(read());
+        for (Tva tva : actifs) {
+            if (tva.isActifTva()) actifs.remove(tva);
+        }
+        return actifs;
     }
 
     private boolean exists(Long id) {

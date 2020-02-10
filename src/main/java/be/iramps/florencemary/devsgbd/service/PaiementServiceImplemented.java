@@ -7,6 +7,7 @@ import be.iramps.florencemary.devsgbd.repository.PaiementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,6 +53,15 @@ public class PaiementServiceImplemented implements PaiementService {
             return readOne(id);
         }
         return null;
+    }
+
+    @Override
+    public List<Paiement> readActive() {
+        List<Paiement> actifs = new ArrayList<>(read());
+        for (Paiement paiement : actifs) {
+            if (paiement.isActifPaiement()) actifs.remove(paiement);
+        }
+        return actifs;
     }
 
     private boolean exists(Long id) {

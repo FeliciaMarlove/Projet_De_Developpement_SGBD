@@ -8,6 +8,7 @@ import be.iramps.florencemary.devsgbd.repository.TvaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -66,6 +67,15 @@ public class ArticleServiceImplemented implements ArticleService {
             return readOne(id);
         }
         return null;
+    }
+
+    @Override
+    public List<Article> readActive() {
+        List<Article> actifs = new ArrayList<>(read());
+        for (Article article : actifs) {
+            if (article.isActifArticle()) actifs.remove(article);
+        }
+        return actifs;
     }
 
     private boolean exists(Long id) {
