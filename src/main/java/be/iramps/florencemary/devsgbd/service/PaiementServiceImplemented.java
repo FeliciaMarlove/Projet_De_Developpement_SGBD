@@ -31,7 +31,7 @@ public class PaiementServiceImplemented implements PaiementService {
     @Override
     public void create(PaiementDto newItem) {
         Paiement newPaiement = new Paiement(newItem.getNomPaiement(), newItem.getDescPaiement());
-        repository.save(newPaiement);
+        if (equalsAny(newPaiement) == null) repository.save(newPaiement);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class PaiementServiceImplemented implements PaiementService {
         if ((toUpdate != null) && exists(id)) {
             toUpdate.setNomPaiement(update.getNomPaiement());
             toUpdate.setDescPaiement(update.getDescPaiement());
-            repository.save(toUpdate);
+            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
         }
         return toUpdate;
     }
@@ -60,5 +60,12 @@ public class PaiementServiceImplemented implements PaiementService {
             if ((paiement.isActifPaiement() == true) && (paiement.getIdPaiement() == id)) exists = true;
         }
         return exists;
+    }
+
+    private Paiement equalsAny(Paiement paiement) {
+        for (Paiement paiementCompared : read()) {
+            if (paiement.equals(paiementCompared)) return repository.findById(paiementCompared.getIdPaiement()).get();
+        }
+        return null;
     }
 }

@@ -41,7 +41,7 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
                 newItem.getPoste(),
                 findDepartement
         );
-        repository.save(newUtilisateur);
+        if (equalsAny(newUtilisateur) == null) repository.save(newUtilisateur);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
             toUpdate.setMotDePasse(update.getMotDePasse());
             toUpdate.setPoste(update.getPoste());
             toUpdate.setDepartement(repositoryDepartement.findById(update.getIdDepartement()).get());
-            repository.save(toUpdate);
+            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
         }
         return toUpdate;
     }
@@ -68,11 +68,28 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
         return null;
     }
 
+    /**
+     * Fonction qui vérifie si l'Utilisateur est présent en DB sur base de l'Id
+     * @param id
+     * @return boolean où "true" signifie que l'Utilisateur correspondant à l'id est bien présent en DB
+     */
     private boolean exists(Long id) {
         boolean exists = false;
         for (Utilisateur utilisateur : read()) {
             if ((utilisateur.isActifUtilisateur() == true) && (utilisateur.getIdUtilisateur() == id)) exists = true;
         }
         return exists;
+    }
+
+    /**
+     * Fonction qui vérifie que l'Utilisateur n'est pas déjà présent dans la DB (basé sur la définition de equals)
+     * @param utilisateur
+     * @return Utilisateur où "null" signifie qu'il n'y a aucune correspondance (aucun doublon)
+     */
+    private Utilisateur equalsAny(Utilisateur utilisateur) {
+        for (Utilisateur utlisateurCompared : read()) {
+            if (utilisateur.equals(utlisateurCompared)) return repository.findById(utlisateurCompared.getIdUtilisateur()).get();
+        }
+        return null;
     }
 }

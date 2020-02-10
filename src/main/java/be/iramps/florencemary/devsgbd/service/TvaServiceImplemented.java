@@ -30,7 +30,7 @@ public class TvaServiceImplemented implements TvaService {
     @Override
     public void create(TvaDto newItem) {
         Tva newTva = new Tva(newItem.getTauxTva());
-        repository.save(newTva);
+        if (equalsAny(newTva) == null) repository.save(newTva);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class TvaServiceImplemented implements TvaService {
         Tva toUpdate = repository.findById(id).get();
         if ((toUpdate != null) && exists(id)) {
             toUpdate.setTauxTva(update.getTauxTva());
-            repository.save(toUpdate);
+            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
         }
         return toUpdate;
     }
@@ -58,5 +58,12 @@ public class TvaServiceImplemented implements TvaService {
             if ((tva.isActifTva() == true) && (tva.getIdTva() == id)) exists = true;
         }
         return exists;
+    }
+
+    private Tva equalsAny(Tva tva) {
+        for (Tva tvaCompared : read()) {
+            if (tva.equals(tvaCompared)) return repository.findById(tvaCompared.getIdTva()).get();
+        }
+        return null;
     }
 }

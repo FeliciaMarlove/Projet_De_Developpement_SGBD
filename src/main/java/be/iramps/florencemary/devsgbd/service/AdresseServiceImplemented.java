@@ -42,7 +42,7 @@ public class AdresseServiceImplemented implements AdresseService {
                 newItem.getPays(),
                 findClient
         );
-        repository.save(newAdresse);
+        if (equalsAny(newAdresse) == null) repository.save(newAdresse);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class AdresseServiceImplemented implements AdresseService {
             toUpdate.setVille(update.getVille());
             toUpdate.setPays(update.getPays());
             toUpdate.setClient(repositoryClient.findById(update.getIdClient()).get());
-            repository.save(toUpdate);
+            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
         }
         return toUpdate;
     }
@@ -75,5 +75,12 @@ public class AdresseServiceImplemented implements AdresseService {
             if ((adresse.isActifAdresse() == true) && (adresse.getIdAdresse() == id)) exists = true;
         }
         return exists;
+    }
+
+    private Adresse equalsAny(Adresse adresse) {
+        for (Adresse adresseCompared : read()) {
+            if (adresse.equals(adresseCompared)) return repository.findById(adresseCompared.getIdAdresse()).get();
+        }
+        return null;
     }
 }

@@ -30,7 +30,7 @@ public class DepartementServiceImplemented implements DepartementService {
     @Override
     public void create(DepartementDto newItem) {
         Departement newDepartement = new Departement(newItem.getNomDepartement());
-        repository.save(newDepartement);
+        if (equalsAny(newDepartement) == null) repository.save(newDepartement);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class DepartementServiceImplemented implements DepartementService {
         Departement toUpdate = repository.findById(id).get();
         if (toUpdate != null) {
             toUpdate.setNomDepartement(update.getNomDepartement());
-            repository.save(toUpdate);
+            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
         }
         return toUpdate;
     }
@@ -58,5 +58,12 @@ public class DepartementServiceImplemented implements DepartementService {
             if ((departement.isActifDepartement() == true) && (departement.getIdDepartement() == id)) exists = true;
         }
         return exists;
+    }
+
+    private Departement equalsAny(Departement departement) {
+        for (Departement departementCompared : read()) {
+            if (departement.equals(departementCompared)) return repository.findById(departementCompared.getIdDepartement()).get();
+        }
+        return null;
     }
 }

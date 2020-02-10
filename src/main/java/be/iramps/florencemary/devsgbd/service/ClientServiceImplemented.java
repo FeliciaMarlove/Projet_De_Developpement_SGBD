@@ -36,7 +36,7 @@ public class ClientServiceImplemented implements ClientService {
                 newItem.getTelephoneClient(),
                 newItem.getDateNaissanceClient()
         );
-        repository.save(newClient);
+        if (equalsAny(newClient) == null) repository.save(newClient);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ClientServiceImplemented implements ClientService {
             toUpdate.setPrenomClient(update.getPrenomClient());
             toUpdate.setTelephoneClient(update.getTelephoneClient());
             toUpdate.setDateNaissanceClient(update.getDateNaissanceClient());
-            repository.save(toUpdate);
+            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
         }
         return toUpdate;
     }
@@ -67,5 +67,12 @@ public class ClientServiceImplemented implements ClientService {
             if ((client.isActifClient() == true) && (client.getIdClient() == id)) exists = true;
         }
         return exists;
+    }
+
+    private Client equalsAny(Client client) {
+        for (Client clientCompared : read()) {
+            if (client.equals(clientCompared)) return repository.findById(clientCompared.getIdClient()).get();
+        }
+        return null;
     }
 }

@@ -41,7 +41,7 @@ public class ArticleServiceImplemented implements ArticleService {
                 newItem.getCodeEAN(),
                 findTva
         );
-        repository.save(newArticle);
+        if (equalsAny(newArticle) == null) repository.save(newArticle);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class ArticleServiceImplemented implements ArticleService {
             toUpdate.setCodeEAN(update.getCodeEAN());
             toUpdate.setPrixUnitaire(update.getPrixUnitaire());
             toUpdate.setTva(repositoryTva.findById(update.getIdTva()).get());
-            repository.save(toUpdate);
+            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
         }
         return toUpdate;
     }
@@ -74,5 +74,12 @@ public class ArticleServiceImplemented implements ArticleService {
             if ((article.isActifArticle() == true) && (article.getIdArticle() == id)) exists = true;
         }
         return exists;
+    }
+
+    private Article equalsAny(Article article) {
+        for (Article articleCompared : read()) {
+            if (article.equals(articleCompared)) return repository.findById(articleCompared.getIdArticle()).get();
+        }
+        return null;
     }
 }
