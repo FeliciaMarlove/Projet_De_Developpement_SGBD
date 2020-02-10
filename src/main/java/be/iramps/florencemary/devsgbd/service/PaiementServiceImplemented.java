@@ -37,7 +37,7 @@ public class PaiementServiceImplemented implements PaiementService {
     @Override
     public Paiement update(Long id, PaiementDto update) {
         Paiement toUpdate = repository.findById(id).get();
-        if (toUpdate != null) {
+        if ((toUpdate != null) && exists(id)) {
             toUpdate.setNomPaiement(update.getNomPaiement());
             toUpdate.setDescPaiement(update.getDescPaiement());
             repository.save(toUpdate);
@@ -47,6 +47,18 @@ public class PaiementServiceImplemented implements PaiementService {
 
     @Override
     public Paiement delete(Long id) {
-        return readOne(id);
+        if (exists(id)) {
+            repository.findById(id).get().setActifPaiement(false);
+            return readOne(id);
+        }
+        return null;
+    }
+
+    private boolean exists(Long id) {
+        boolean exists = false;
+        for (Paiement paiement : read()) {
+            if ((paiement.isActifPaiement() == true) && (paiement.getIdPaiement() == id)) exists = true;
+        }
+        return exists;
     }
 }

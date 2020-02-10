@@ -45,6 +45,18 @@ public class DepartementServiceImplemented implements DepartementService {
 
     @Override
     public Departement delete(Long id) {
-        return readOne(id);
+        if (exists(id)) {
+            repository.findById(id).get().setActifDepartement(false);
+            return readOne(id);
+        }
+        return null;
+    }
+
+    private boolean exists(Long id) {
+        boolean exists = false;
+        for (Departement departement : read()) {
+            if ((departement.isActifDepartement() == true) && (departement.getIdDepartement() == id)) exists = true;
+        }
+        return exists;
     }
 }

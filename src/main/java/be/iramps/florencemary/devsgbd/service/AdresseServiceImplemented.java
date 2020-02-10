@@ -8,6 +8,7 @@ import be.iramps.florencemary.devsgbd.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,7 +23,7 @@ public class AdresseServiceImplemented implements AdresseService {
 
     @Override
     public List<Adresse> read() {
-        return (List<Adresse>)repository.findAll();
+        return (List<Adresse>) repository.findAll();
     }
 
     @Override
@@ -40,14 +41,14 @@ public class AdresseServiceImplemented implements AdresseService {
                 newItem.getVille(),
                 newItem.getPays(),
                 findClient
-                );
+        );
         repository.save(newAdresse);
     }
 
     @Override
     public Adresse update(Long id, AdresseDto update) {
         Adresse toUpdate = repository.findById(id).get();
-        if (toUpdate != null) {
+        if ((toUpdate != null) && exists(id)) {
             toUpdate.setRue(update.getRue());
             toUpdate.setNumero(update.getNumero());
             toUpdate.setCodePostal(update.getCodePostal());
@@ -61,6 +62,18 @@ public class AdresseServiceImplemented implements AdresseService {
 
     @Override
     public Adresse delete(Long id) {
-        return readOne(id);
+        if (exists(id)) {
+            repository.findById(id).get().setActifAdresse(false);
+            return readOne(id);
+        }
+        return null;
+    }
+
+    private boolean exists(Long id) {
+        boolean exists = false;
+        for (Adresse adresse : read()) {
+            if ((adresse.isActifAdresse() == true) && (adresse.getIdAdresse() == id)) exists = true;
+        }
+        return exists;
     }
 }

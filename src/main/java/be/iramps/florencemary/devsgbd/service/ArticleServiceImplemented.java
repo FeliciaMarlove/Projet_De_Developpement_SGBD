@@ -47,7 +47,7 @@ public class ArticleServiceImplemented implements ArticleService {
     @Override
     public Article update(Long id, ArticleDto update) {
         Article toUpdate = repository.findById(id).get();
-        if (toUpdate != null) {
+        if ((toUpdate != null) && (exists(id))) {
             toUpdate.setNomArticle(update.getNomArticle());
             toUpdate.setDescArticle(update.getDescArticle());
             toUpdate.setStock(update.getStock());
@@ -61,6 +61,18 @@ public class ArticleServiceImplemented implements ArticleService {
 
     @Override
     public Article delete(Long id) {
-        return readOne(id);
+        if (exists(id)) {
+            repository.findById(id).get().setActifArticle(false);
+            return readOne(id);
+        }
+        return null;
+    }
+
+    private boolean exists(Long id) {
+        boolean exists = false;
+        for (Article article : read()) {
+            if ((article.isActifArticle() == true) && (article.getIdArticle() == id)) exists = true;
+        }
+        return exists;
     }
 }

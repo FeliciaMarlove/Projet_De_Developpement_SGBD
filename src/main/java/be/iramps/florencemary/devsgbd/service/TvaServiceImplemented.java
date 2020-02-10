@@ -36,7 +36,7 @@ public class TvaServiceImplemented implements TvaService {
     @Override
     public Tva update(Long id, TvaDto update) {
         Tva toUpdate = repository.findById(id).get();
-        if (toUpdate != null) {
+        if ((toUpdate != null) && exists(id)) {
             toUpdate.setTauxTva(update.getTauxTva());
             repository.save(toUpdate);
         }
@@ -45,6 +45,18 @@ public class TvaServiceImplemented implements TvaService {
 
     @Override
     public Tva delete(Long id) {
-        return readOne(id);
+        if (exists(id)) {
+            repository.findById(id).get().setActifTva(false);
+            return readOne(id);
+        }
+        return null;
+    }
+
+    private boolean exists(Long id) {
+        boolean exists = false;
+        for (Tva tva : read()) {
+            if ((tva.isActifTva() == true) && (tva.getIdTva() == id)) exists = true;
+        }
+        return exists;
     }
 }

@@ -47,7 +47,7 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
     @Override
     public Utilisateur update(Long id, UtilisateurDto update) {
         Utilisateur toUpdate = repository.findById(id).get();
-        if (toUpdate != null) {
+        if ((toUpdate != null) && exists(id)) {
             toUpdate.setPrenomUtilisateur(update.getPrenomUtilisateur());
             toUpdate.setNomUtilisateur(update.getNomUtilisateur());
             toUpdate.setLogin(update.getLogin());
@@ -61,6 +61,18 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     @Override
     public Utilisateur delete(Long id) {
-        return readOne(id);
+        if (exists(id)) {
+            repository.findById(id).get().setActifUtilisateur(false);
+            return readOne(id);
+        }
+        return null;
+    }
+
+    private boolean exists(Long id) {
+        boolean exists = false;
+        for (Utilisateur utilisateur : read()) {
+            if ((utilisateur.isActifUtilisateur() == true) && (utilisateur.getIdUtilisateur() == id)) exists = true;
+        }
+        return exists;
     }
 }

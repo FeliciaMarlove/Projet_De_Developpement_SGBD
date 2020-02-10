@@ -42,7 +42,7 @@ public class ClientServiceImplemented implements ClientService {
     @Override
     public Client update(Long id, ClientDto update) {
         Client toUpdate = repository.findById(id).get();
-        if (toUpdate != null) {
+        if ((toUpdate != null) && exists(id)) {
             toUpdate.setNomClient(update.getNomClient());
             toUpdate.setPrenomClient(update.getPrenomClient());
             toUpdate.setTelephoneClient(update.getTelephoneClient());
@@ -54,6 +54,18 @@ public class ClientServiceImplemented implements ClientService {
 
     @Override
     public Client delete(Long id) {
-        return readOne(id);
+        if (exists(id)) {
+            repository.findById(id).get().setActifClient(false);
+            return readOne(id);
+        }
+        return null;
+    }
+
+    private boolean exists(Long id) {
+        boolean exists = false;
+        for (Client client : read()) {
+            if ((client.isActifClient() == true) && (client.getIdClient() == id)) exists = true;
+        }
+        return exists;
     }
 }

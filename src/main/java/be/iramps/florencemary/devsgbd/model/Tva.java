@@ -51,6 +51,14 @@ public class Tva implements Serializable {
         this.nom = nom;
     }
 
+    public boolean isActifTva() {
+        return isActifTva;
+    }
+
+    public void setActifTva(boolean isActifTva) {
+        this.isActifTva = isActifTva;
+    }
+
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
     public Tva(Integer tauxTva) {
