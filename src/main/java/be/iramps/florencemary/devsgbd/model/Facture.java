@@ -17,17 +17,20 @@ public class Facture implements Serializable {
     @Column(name = "id_facture")
     private Long idFacture;
 
-    @Column(name = "ref_facture")
+    @Column(name = "ref_facture", nullable = false)
     private String refFacture;
 
-    @Column(name = "date_heure", insertable = false, updatable = false)
+    @Column(name = "date_heure", insertable = false, updatable = false, nullable = false)
     private LocalDateTime dateHeure;
+
+    @Column(name = "actif_facture", nullable = false)
+    private boolean isActiveFacture;
+
     //_____________________________JOINTURES_____________________________
 
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client", referencedColumnName = "id_client", foreignKey = @ForeignKey(name = "FK_client_facture"))
     private Client client;
-
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "facture_articles_liaison",
@@ -66,6 +69,14 @@ public class Facture implements Serializable {
 
     public String getRefFacture() {
         return refFacture;
+    }
+
+    public boolean isActiveFacture() {
+        return isActiveFacture;
+    }
+
+    public void setActiveFacture(boolean isActiveFacture) {
+        this.isActiveFacture = isActiveFacture;
     }
 
     //_____________________________CONSTRUCTEURS_____________________________

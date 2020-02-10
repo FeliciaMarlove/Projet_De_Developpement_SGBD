@@ -15,22 +15,22 @@ public class Article implements Serializable {
     @Column(name = "id_article")
     private Long idArticle;
 
-    @Column(name = "nom_article")
+    @Column(name = "nom_article", nullable = false)
     private String nomArticle;
 
-    @Column(name = "desc_article")
+    @Column(name = "desc_article", nullable = false)
     private String descArticle;
 
-    @Column(name = "stock")
+    @Column(name = "stock", nullable = false)
     private int stock;
 
-    @Column(name = "prix_unitaire")
+    @Column(name = "prix_unitaire", nullable = false)
     private double prixUnitaire;
 
-    @Column(name = "ean")
+    @Column(name = "ean", nullable = false)
     private Long codeEAN;
 
-    @Column(name = "is_actif_art")
+    @Column(name = "is_actif_art", nullable = false)
     private boolean isActifArticle;
 
     /* _____________________________JOINTURES_____________________________ */

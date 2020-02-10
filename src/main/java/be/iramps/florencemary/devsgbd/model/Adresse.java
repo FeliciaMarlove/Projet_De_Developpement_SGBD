@@ -15,22 +15,22 @@ public class Adresse implements Serializable {
     @Column(name = "id_adresse")
     private Long idAdresse;
 
-    @Column(name = "rue")
+    @Column(name = "rue", nullable = false)
     private String rue;
 
     @Column(name = "numero")
     private int numero;
 
-    @Column(name = "code_postal")
+    @Column(name = "code_postal", nullable = false)
     private int codePostal;
 
-    @Column(name = "ville")
+    @Column(name = "ville", nullable = false)
     private String ville;
 
-    @Column(name = "pays")
+    @Column(name = "pays", nullable = false)
     private String pays;
 
-    @Column(name = "is_actif_adr")
+    @Column(name = "is_actif_adr", nullable = false)
     private boolean isActifAdresse;
 
     /* _____________________________JOINTURES_____________________________ */

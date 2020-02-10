@@ -16,19 +16,19 @@ public class Client implements Serializable {
     @Column(name = "id_client")
     private Long idClient;
 
-    @Column(name = "nom_client")
+    @Column(name = "nom_client", nullable = false)
     private String nomClient;
 
-    @Column(name = "prenom_client")
+    @Column(name = "prenom_client", nullable = false)
     private String prenomClient;
 
     @Column(name = "telephone")
     private Long telephoneClient;
 
-    @Column(name = "date_naissance")
+    @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissanceClient;
 
-    @Column(name = "is_actif_clt")
+    @Column(name = "is_actif_clt", nullable = false)
     private boolean isActifClient;
 
     /* _____________________________JOINTURES_____________________________ */

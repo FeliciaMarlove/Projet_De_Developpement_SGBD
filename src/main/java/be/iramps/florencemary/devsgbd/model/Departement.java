@@ -17,10 +17,10 @@ public class Departement implements Serializable {
     @Column(name = "id_departement")
     private Long idDepartement;
 
-    @Column(name = "nom_departement")
+    @Column(name = "nom_departement", nullable = false)
     private String nomDepartement;
 
-    @Column(name = "is_actif_dept")
+    @Column(name = "is_actif_dept", nullable = false)
     private boolean isActifDepartement;
 
     /* _____________________________JOINTURES_____________________________ */

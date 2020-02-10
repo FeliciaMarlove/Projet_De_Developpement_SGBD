@@ -18,10 +18,10 @@ public class Paiement implements Serializable {
     @Column(name = "nom_paiement", nullable = false)
     private String nomPaiement;
 
-    @Column(name = "desc_paiement")
+    @Column(name = "desc_paiement", nullable = false)
     private String descPaiement;
 
-    @Column(name = "actif_paiement")
+    @Column(name = "actif_paiement", nullable = false)
     private boolean isActifPaiement;
 
     /* _____________________________JOINTURES_____________________________ */

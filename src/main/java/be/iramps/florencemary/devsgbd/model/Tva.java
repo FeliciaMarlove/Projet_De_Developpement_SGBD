@@ -17,13 +17,13 @@ public class Tva implements Serializable {
     @Column(name = "id_tva")
     private Long idTva;
 
-    @Column(name = "taux_tva")
+    @Column(name = "taux_tva", nullable = false)
     private Integer tauxTva;
 
     @Transient
     private String nom;
 
-    @Column(name = "is_actif_tva")
+    @Column(name = "is_actif_tva", nullable = false)
     private boolean isActifTva;
 
     /* _____________________________JOINTURES_____________________________ */

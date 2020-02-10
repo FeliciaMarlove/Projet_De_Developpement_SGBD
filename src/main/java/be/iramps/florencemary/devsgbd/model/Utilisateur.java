@@ -17,23 +17,22 @@ public class Utilisateur implements Serializable {
     @Column(name = "id_utilisateur")
     private Long idUtilisateur;
 
-    @Column(name = "nom_utilisateur")
+    @Column(name = "nom_utilisateur", nullable = false)
     private String nomUtilisateur;
 
-    @Column(name = "prenom_utilisateur")
+    @Column(name = "prenom_utilisateur", nullable = false)
     private String prenomUtilisateur;
 
-    @Column(name = "login")
+    @Column(name = "login", nullable = false)
     private String login;
 
-    // Bcrypt avant de faire des méthodes d'utilisation du mdp !
-    @Column(name = "mot_de_passe")
+    @Column(name = "mot_de_passe", nullable = false)
     private String motDePasse;
 
-    @Column(name = "poste")
+    @Column(name = "poste", nullable = false)
     private String poste;
 
-    @Column(name = "is_actif_util")
+    @Column(name = "is_actif_util", nullable = false)
     private boolean isActifUtilisateur;
 
     /* _____________________________JOINTURES_____________________________ */
@@ -70,7 +69,7 @@ public class Utilisateur implements Serializable {
     }
 
     public void setLogin(String login) {
-        this.login = login;
+        if (login.length() > 3) this.login = login;
     }
 
     public String getMotDePasse() {
@@ -78,7 +77,8 @@ public class Utilisateur implements Serializable {
     }
 
     public void setMotDePasse(String motDePasse) {
-        this.motDePasse = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
+        String strRegEx = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*](?=\\S+$).{8,15}$";
+        if (motDePasse.matches(strRegEx)) this.motDePasse = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
     }
 
     public String getPoste() {
