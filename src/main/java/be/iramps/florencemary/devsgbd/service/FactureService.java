@@ -1,5 +1,6 @@
 package be.iramps.florencemary.devsgbd.service;
 
+import be.iramps.florencemary.devsgbd.dto.FactureArticleDto;
 import be.iramps.florencemary.devsgbd.dto.FactureDto;
 import be.iramps.florencemary.devsgbd.model.Facture;
 
@@ -12,4 +13,7 @@ public interface FactureService {
     //Facture update(Long id, FactureDto update); //nonsense
     Facture delete(Long id);
     List<Facture> readActive();
+    boolean addArticle(Long id, FactureArticleDto article);
+    boolean deleteArticle(Long id, FactureArticleDto article);
+    boolean deleteOneArticle(Long id, FactureArticleDto article);
 }
