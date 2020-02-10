@@ -26,21 +26,21 @@ public class Facture implements Serializable {
     @Column(name = "actif_facture", nullable = false)
     private boolean isActiveFacture;
 
-    //_____________________________JOINTURES_____________________________
+    @Transient
+    private Double total;
 
+    //_____________________________JOINTURES_____________________________
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client", referencedColumnName = "id_client", foreignKey = @ForeignKey(name = "FK_client_facture"))
     private Client client;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "facture_articles_liaison",
-            joinColumns = @JoinColumn(name = "id_facture"),
-            inverseJoinColumns = @JoinColumn(name = "id_article"))
-    private List<Article> articlesList;
+    @OneToMany(mappedBy = "facture", targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
+    private List<FactureArticlesLiaison> listeArticlesFactures;
 
     @ManyToOne(targetEntity = Paiement.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_paiement", referencedColumnName = "id_paiement", foreignKey = @ForeignKey(name = "FK_paiement_facture"))
     private Paiement paiement;
+
     //_____________________________GETTERS/SETTERS_____________________________
 
     public Long getIdFacture() {
@@ -63,8 +63,8 @@ public class Facture implements Serializable {
         this.client = client;
     }
 
-    public List<Article> getArticlesList() {
-        return articlesList;
+    public List<FactureArticlesLiaison> getArticlesList() {
+        return listeArticlesFactures;
     }
 
     public String getRefFacture() {
@@ -79,6 +79,14 @@ public class Facture implements Serializable {
         this.isActiveFacture = isActiveFacture;
     }
 
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
     //_____________________________CONSTRUCTEURS_____________________________
 
     public Facture(Client client, Paiement paiement) {
@@ -90,7 +98,7 @@ public class Facture implements Serializable {
 
     public Facture() {
         this.dateHeure = LocalDateTime.now();
-        this.articlesList = new ArrayList<>();
+        this.listeArticlesFactures = new ArrayList<>();
     }
 //_____________________________EQUALS/HASHCODE/TOSTRING_____________________________
 
@@ -105,7 +113,7 @@ public class Facture implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(idFacture, refFacture, dateHeure, client, articlesList);
+        return Objects.hash(idFacture, refFacture, dateHeure, client, listeArticlesFactures);
     }
 
     @Override
@@ -116,7 +124,7 @@ public class Facture implements Serializable {
                 ", dateHeure=" + dateHeure +
                 ", client=" + client +
                 ", paiement=" + paiement +
-                ", articlesList=" + articlesList +
+                ", articlesList=" + listeArticlesFactures +
                 '}';
     }
 }

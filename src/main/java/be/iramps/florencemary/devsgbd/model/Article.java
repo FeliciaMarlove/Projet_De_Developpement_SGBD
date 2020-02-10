@@ -38,8 +38,8 @@ public class Article implements Serializable {
     @JoinColumn(name = "id_tva", referencedColumnName = "id_tva", foreignKey = @ForeignKey(name = "FK_tva_article"))
     private Tva tva;
 
-    @ManyToMany(mappedBy = "articlesList", fetch = FetchType.LAZY)
-    private List<Facture> facturesList;
+    @OneToMany(mappedBy = "article", targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
+    private List<FactureArticlesLiaison> facturesList;
 
     /* _____________________________GETTERS/SETTERS_____________________________ */
     public Long getIdArticle() {
@@ -102,10 +102,6 @@ public class Article implements Serializable {
         this.tva = tva;
     }
 
-    public List<Facture> getFacturesList() {
-        return facturesList;
-    }
-
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
     public Article(String nomArticle, String descArticle, int stock, Double prixUnitaire, Long codeEAN, Tva tva) {
@@ -120,7 +116,6 @@ public class Article implements Serializable {
 
     public Article() {
         this.isActifArticle = true;
-        this.facturesList = new ArrayList();
     }
 
     /* _____________________________EQUALS/HASHCODE/TOSTRING_____________________________ */
