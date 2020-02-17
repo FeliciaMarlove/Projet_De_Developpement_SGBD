@@ -14,6 +14,7 @@ public interface FactureService {
     Facture delete(Long id);
     List<Facture> readActive();
     boolean addArticle(Long id, FactureArticleDto article);
-    boolean deleteArticle(Long id, FactureArticleDto article);
-    boolean deleteOneArticle(Long id, FactureArticleDto article);
+    boolean deleteArticle(Long idFacture, Long idArticle);
+    boolean deleteOneArticle(Long idFacture, Long idArticle);
+    public void validateFacture(Long idFacture);
 }

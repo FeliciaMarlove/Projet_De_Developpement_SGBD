@@ -87,6 +87,14 @@ public class Facture implements Serializable {
         this.total = total;
     }
 
+    public Paiement getPaiement() {
+        return paiement;
+    }
+
+    public void setListeArticlesFactures(List<FactureArticlesLiaison> listeArticlesFactures) {
+        this.listeArticlesFactures = listeArticlesFactures;
+    }
+
     //_____________________________CONSTRUCTEURS_____________________________
 
     public Facture(Client client, Paiement paiement) {

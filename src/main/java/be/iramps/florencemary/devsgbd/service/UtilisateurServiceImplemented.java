@@ -1,6 +1,5 @@
 package be.iramps.florencemary.devsgbd.service;
 
-import be.iramps.florencemary.devsgbd.model.Adresse;
 import be.iramps.florencemary.devsgbd.model.Departement;
 import be.iramps.florencemary.devsgbd.model.Utilisateur;
 import be.iramps.florencemary.devsgbd.dto.UtilisateurDto;
@@ -18,8 +17,9 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
     private DepartementRepository repositoryDepartement;
 
     @Autowired
-    public UtilisateurServiceImplemented(UtilisateurRepository repository) {
+    public UtilisateurServiceImplemented(UtilisateurRepository repository, DepartementRepository repositoryDepartement) {
         this.repository = repository;
+        this.repositoryDepartement = repositoryDepartement;
     }
 
     @Override

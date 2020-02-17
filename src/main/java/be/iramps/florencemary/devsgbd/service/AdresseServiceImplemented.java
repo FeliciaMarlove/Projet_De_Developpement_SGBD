@@ -17,8 +17,9 @@ public class AdresseServiceImplemented implements AdresseService {
     private ClientRepository repositoryClient;
 
     @Autowired
-    public AdresseServiceImplemented(AdresseRepository repository) {
+    public AdresseServiceImplemented(AdresseRepository repository, ClientRepository repositoryClient) {
         this.repository = repository;
+        this.repositoryClient = repositoryClient;
     }
 
     @Override

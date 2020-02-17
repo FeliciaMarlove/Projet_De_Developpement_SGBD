@@ -2,7 +2,6 @@ package be.iramps.florencemary.devsgbd.service;
 
 import be.iramps.florencemary.devsgbd.dto.PaiementDto;
 import be.iramps.florencemary.devsgbd.model.Paiement;
-import be.iramps.florencemary.devsgbd.repository.AdresseRepository;
 import be.iramps.florencemary.devsgbd.repository.PaiementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -17,8 +17,9 @@ public class ArticleServiceImplemented implements ArticleService {
     private TvaRepository repositoryTva;
 
     @Autowired
-    public ArticleServiceImplemented(ArticleRepository repository) {
+    public ArticleServiceImplemented(ArticleRepository repository, TvaRepository repositoryTva) {
         this.repository = repository;
+        this.repositoryTva = repositoryTva;
     }
 
     @Override

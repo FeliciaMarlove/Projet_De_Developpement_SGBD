@@ -116,6 +116,7 @@ public class Article implements Serializable {
 
     public Article() {
         this.isActifArticle = true;
+        this.setTva(new Tva(21));
     }
 
     /* _____________________________EQUALS/HASHCODE/TOSTRING_____________________________ */

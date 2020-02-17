@@ -24,6 +24,9 @@ public class FactureArticlesLiaison implements Serializable {
     @Column(name = "quantite")
     private Integer quantite;
 
+    @Transient
+    private Double montantLigne;
+
     /* _____________________________JOINTURES_____________________________ */
     @ManyToOne(targetEntity = Facture.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_facture", referencedColumnName = "id_facture", foreignKey = @ForeignKey(name = "FK_facture_articles_facture"))
@@ -49,6 +52,14 @@ public class FactureArticlesLiaison implements Serializable {
 
     public void setQuantite(Integer quantite) {
         this.quantite = quantite;
+    }
+
+    public Double getMontantLigne() {
+        return montantLigne;
+    }
+
+    public void setMontantLigne(Double montantLigne) {
+        this.montantLigne = montantLigne;
     }
 
     /* _____________________________CONSTRUCTEURS_____________________________ */
