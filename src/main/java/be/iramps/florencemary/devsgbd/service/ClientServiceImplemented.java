@@ -29,7 +29,7 @@ public class ClientServiceImplemented implements ClientService {
     }
 
     @Override
-    public void create(ClientDto newItem) {
+    public Client create(ClientDto newItem) {
         Client newClient = new Client(
                 newItem.getNomClient(),
                 newItem.getPrenomClient(),
@@ -37,6 +37,7 @@ public class ClientServiceImplemented implements ClientService {
                 newItem.getDateNaissanceClient()
         );
         if (equalsAny(newClient) == null) repository.save(newClient);
+        return newClient;
     }
 
     @Override
