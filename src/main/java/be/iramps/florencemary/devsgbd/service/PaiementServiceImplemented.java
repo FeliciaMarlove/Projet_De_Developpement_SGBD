@@ -29,9 +29,10 @@ public class PaiementServiceImplemented implements PaiementService {
     }
 
     @Override
-    public void create(PaiementDto newItem) {
+    public Paiement create(PaiementDto newItem) {
         Paiement newPaiement = new Paiement(newItem.getNomPaiement(), newItem.getDescPaiement());
         if (equalsAny(newPaiement) == null) repository.save(newPaiement);
+        return newPaiement;
     }
 
     @Override

@@ -8,7 +8,7 @@ import java.util.List;
 public interface PaiementService {
     List<Paiement> read();
     Paiement readOne(Long id);
-    void create(PaiementDto newItem);
+    Paiement create(PaiementDto newItem);
     Paiement update(Long id, PaiementDto update);
     Paiement delete(Long id);
     List<Paiement> readActive();
