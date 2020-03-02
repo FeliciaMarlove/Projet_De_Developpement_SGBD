@@ -1,5 +1,6 @@
 package be.iramps.florencemary.devsgbd.service;
 
+import be.iramps.florencemary.devsgbd.dto.ConnectionMessenger;
 import be.iramps.florencemary.devsgbd.model.Utilisateur;
 import be.iramps.florencemary.devsgbd.dto.UtilisateurDto;
 
@@ -12,4 +13,5 @@ public interface UtilisateurService {
     Utilisateur update(Long id, UtilisateurDto update);
     Utilisateur delete(Long id);
     List<Utilisateur> readActive();
+    ConnectionMessenger connectUser(String login, String motDePasse);
 }

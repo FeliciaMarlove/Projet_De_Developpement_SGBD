@@ -1,10 +1,12 @@
 package be.iramps.florencemary.devsgbd.service;
 
+import be.iramps.florencemary.devsgbd.dto.ConnectionMessenger;
 import be.iramps.florencemary.devsgbd.model.Departement;
 import be.iramps.florencemary.devsgbd.model.Utilisateur;
 import be.iramps.florencemary.devsgbd.dto.UtilisateurDto;
 import be.iramps.florencemary.devsgbd.repository.DepartementRepository;
 import be.iramps.florencemary.devsgbd.repository.UtilisateurRepository;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -102,5 +104,19 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
             if (utilisateur.equals(utlisateurCompared)) return repository.findById(utlisateurCompared.getIdUtilisateur()).get();
         }
         return null;
+    }
+
+    public ConnectionMessenger connectUser(String login, String motDePasse) {
+        ConnectionMessenger connectionMessenger = new ConnectionMessenger(0L, "Echec de connexion, veuillez réessayer. Si le problème persiste, contactez l'administrateur", false, 0);
+        for (Utilisateur user: readActive()) {
+           if (user.getLogin() == login) {
+               if (BCrypt.checkpw(motDePasse, user.getMotDePasse())) {
+                   connectionMessenger = new ConnectionMessenger(user.getIdUtilisateur(), "Connexion réussie", true, 1);
+               }
+               connectionMessenger = new ConnectionMessenger(user.getIdUtilisateur(), "Mot de passe incorrect", false, 2);
+           }
+            connectionMessenger = new ConnectionMessenger(0L, "Le login " + login + " n'existe pas", false, 3);
+        }
+        return connectionMessenger;
     }
 }
