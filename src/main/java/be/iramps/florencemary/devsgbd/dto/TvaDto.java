@@ -7,6 +7,9 @@ public class TvaDto {
         this.tauxTva = tauxTva;
     }
 
+    public TvaDto() {
+    }
+
     public Integer getTauxTva() {
         return tauxTva;
     }

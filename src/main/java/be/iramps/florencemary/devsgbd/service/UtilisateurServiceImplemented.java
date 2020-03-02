@@ -72,9 +72,9 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     @Override
     public List<Utilisateur> readActive() {
-        List<Utilisateur> actifs = new ArrayList<>(read());
-        for (Utilisateur utilisateur : actifs) {
-            if (utilisateur.isActifUtilisateur()) actifs.remove(utilisateur);
+        List<Utilisateur> actifs = new ArrayList<>();
+        for (Utilisateur utilisateur : read()) {
+            if (utilisateur.isActifUtilisateur()) actifs.add(utilisateur);
         }
         return actifs;
     }

@@ -18,6 +18,9 @@ public class UtilisateurDto {
         this.idDepartement = idDepartement;
     }
 
+    public UtilisateurDto() {
+    }
+
     public String getNomUtilisateur() {
         return nomUtilisateur;
     }

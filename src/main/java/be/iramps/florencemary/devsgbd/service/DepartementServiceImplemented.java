@@ -55,9 +55,9 @@ public class DepartementServiceImplemented implements DepartementService {
 
     @Override
     public List<Departement> readActive() {
-        List<Departement> actifs = new ArrayList<>(read());
-        for (Departement departement : actifs) {
-            if (departement.isActifDepartement()) actifs.remove(departement);
+        List<Departement> actifs = new ArrayList<>();
+        for (Departement departement : read()) {
+            if (departement.isActifDepartement()) actifs.add(departement);
         }
         return actifs;
     }

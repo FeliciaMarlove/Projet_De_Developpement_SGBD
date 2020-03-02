@@ -63,9 +63,9 @@ public class ClientServiceImplemented implements ClientService {
 
     @Override
     public List<Client> readActive() {
-        List<Client> actifs = new ArrayList<>(read());
-        for (Client client : actifs) {
-            if (client.isActifClient()) actifs.remove(client);
+        List<Client> actifs = new ArrayList<>();
+        for (Client client : read()) {
+            if (client.isActifClient()) actifs.add(client);
         }
         return actifs;
     }

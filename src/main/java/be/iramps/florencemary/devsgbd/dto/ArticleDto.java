@@ -17,6 +17,9 @@ public class ArticleDto {
         this.idTva = idTva;
     }
 
+    public ArticleDto() {
+    }
+
     public String getNomArticle() {
         return nomArticle;
     }

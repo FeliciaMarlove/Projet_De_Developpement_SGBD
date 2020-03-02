@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/article", method = {RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE})
+@RequestMapping(value = "/api/article")
 @CrossOrigin(origins = {"http://localhost:4200"})
 public class ArticleController {
     private final ArticleService service;

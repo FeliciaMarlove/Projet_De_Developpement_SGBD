@@ -17,6 +17,9 @@ public class AdresseDto {
         this.idClient = idClient;
     }
 
+    public AdresseDto() {
+    }
+
     public String getRue() {
         return rue;
     }

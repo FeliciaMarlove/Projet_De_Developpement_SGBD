@@ -15,6 +15,9 @@ public class ClientDto {
         this.dateNaissanceClient = dateNaissanceClient;
     }
 
+    public ClientDto() {
+    }
+
     public String getNomClient() {
         return nomClient;
     }

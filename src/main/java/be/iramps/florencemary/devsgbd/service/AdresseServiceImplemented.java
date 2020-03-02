@@ -34,16 +34,16 @@ public class AdresseServiceImplemented implements AdresseService {
 
     @Override
     public List<Adresse> readActive() {
-        List<Adresse> actifs = new ArrayList<>(read());
-        for (Adresse adresse : actifs) {
-            if (adresse.isActifAdresse()) actifs.remove(adresse);
+        List<Adresse> actifs = new ArrayList<>();
+        for (Adresse adresse : read()) {
+            if (adresse.isActifAdresse()) actifs.add(adresse);
         }
         return actifs;
     }
 
     @Override
-    public void create(AdresseDto newItem) {
-        Client findClient = repositoryClient.findById(newItem.getIdClient()).get();
+    public Adresse create(Long idClient, AdresseDto newItem) {
+        Client findClient = repositoryClient.findById(idClient).get();
         Adresse newAdresse = new Adresse(
                 newItem.getRue(),
                 newItem.getNumero(),
@@ -52,7 +52,11 @@ public class AdresseServiceImplemented implements AdresseService {
                 newItem.getPays(),
                 findClient
         );
-        if (equalsAny(newAdresse) == null) repository.save(newAdresse);
+        if (equalsAny(newAdresse) == null) {
+            repository.save(newAdresse);
+            return newAdresse;
+        }
+        return null;
     }
 
     @Override

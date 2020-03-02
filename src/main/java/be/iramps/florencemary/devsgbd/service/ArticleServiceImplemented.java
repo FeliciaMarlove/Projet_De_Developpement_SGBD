@@ -72,9 +72,9 @@ public class ArticleServiceImplemented implements ArticleService {
 
     @Override
     public List<Article> readActive() {
-        List<Article> actifs = new ArrayList<>(read());
-        for (Article article : actifs) {
-            if (article.isActifArticle()) actifs.remove(article);
+        List<Article> actifs = new ArrayList<>();
+        for (Article article : read()) {
+            if (article.isActifArticle()) actifs.add(article);
         }
         return actifs;
     }

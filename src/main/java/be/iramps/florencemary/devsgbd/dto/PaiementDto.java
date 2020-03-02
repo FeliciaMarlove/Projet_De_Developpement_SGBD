@@ -9,6 +9,9 @@ public class PaiementDto {
         this.descPaiement = descPaiement;
     }
 
+    public PaiementDto() {
+    }
+
     public String getNomPaiement() {
         return nomPaiement;
     }

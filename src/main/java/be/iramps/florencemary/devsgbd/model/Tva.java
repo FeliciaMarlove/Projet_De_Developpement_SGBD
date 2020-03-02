@@ -20,7 +20,7 @@ public class Tva implements Serializable {
     @Column(name = "taux_tva", nullable = false)
     private Integer tauxTva;
 
-    @Transient
+    @Column(name = "nom_tva")
     private String nom;
 
     @Column(name = "is_actif_tva", nullable = false)

@@ -7,6 +7,9 @@ public class DepartementDto {
         this.nomDepartement = nomDepartement;
     }
 
+    public DepartementDto() {
+    }
+
     public String getNomDepartement() {
         return nomDepartement;
     }

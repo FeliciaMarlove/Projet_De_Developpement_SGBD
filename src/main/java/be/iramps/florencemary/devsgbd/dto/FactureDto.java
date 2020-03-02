@@ -9,6 +9,9 @@ public class FactureDto {
         this.idPaiement = idPaiement;
     }
 
+    public FactureDto() {
+    }
+
     public Long getIdClient() {
         return idClient;
     }

@@ -56,9 +56,9 @@ public class PaiementServiceImplemented implements PaiementService {
 
     @Override
     public List<Paiement> readActive() {
-        List<Paiement> actifs = new ArrayList<>(read());
-        for (Paiement paiement : actifs) {
-            if (paiement.isActifPaiement()) actifs.remove(paiement);
+        List<Paiement> actifs = new ArrayList<>();
+        for (Paiement paiement : read()) {
+            if (paiement.isActifPaiement()) actifs.add(paiement);
         }
         return actifs;
     }
