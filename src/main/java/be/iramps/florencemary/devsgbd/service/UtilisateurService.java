@@ -9,7 +9,7 @@ import java.util.List;
 public interface UtilisateurService {
     List<Utilisateur> read();
     Utilisateur readOne(Long id);
-    void create(UtilisateurDto newItem);
+    Utilisateur create(UtilisateurDto newItem);
     Utilisateur update(Long id, UtilisateurDto update);
     Utilisateur delete(Long id);
     List<Utilisateur> readActive();

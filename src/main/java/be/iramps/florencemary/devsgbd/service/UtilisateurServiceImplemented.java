@@ -35,7 +35,7 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
     }
 
     @Override
-    public void create(UtilisateurDto newItem) {
+    public Utilisateur create(UtilisateurDto newItem) {
         Departement findDepartement = repositoryDepartement.findById(newItem.getIdDepartement()).get();
         Utilisateur newUtilisateur = new Utilisateur(
                 newItem.getNomUtilisateur(),
@@ -46,6 +46,7 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
                 findDepartement
         );
         if (equalsAny(newUtilisateur) == null) repository.save(newUtilisateur);
+        return newUtilisateur;
     }
 
     @Override
@@ -109,13 +110,15 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
     public ConnectionMessenger connectUser(String login, String motDePasse) {
         ConnectionMessenger connectionMessenger = new ConnectionMessenger(0L, "Echec de connexion, veuillez réessayer. Si le problème persiste, contactez l'administrateur", false, 0);
         for (Utilisateur user: readActive()) {
-           if (user.getLogin() == login) {
+           if (user.getLogin().equals(login)) {
                if (BCrypt.checkpw(motDePasse, user.getMotDePasse())) {
                    connectionMessenger = new ConnectionMessenger(user.getIdUtilisateur(), "Connexion réussie", true, 1);
+               } else {
+                   connectionMessenger = new ConnectionMessenger(user.getIdUtilisateur(), "Mot de passe incorrect", false, 2);
                }
-               connectionMessenger = new ConnectionMessenger(user.getIdUtilisateur(), "Mot de passe incorrect", false, 2);
+           } else {
+               connectionMessenger = new ConnectionMessenger(0L, "Le login " + login + " n'existe pas", false, 3);
            }
-            connectionMessenger = new ConnectionMessenger(0L, "Le login " + login + " n'existe pas", false, 3);
         }
         return connectionMessenger;
     }
