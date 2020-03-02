@@ -8,7 +8,7 @@ import java.util.List;
 public interface ArticleService {
     List<Article> read();
     Article readOne(Long id);
-    void create(ArticleDto newItem);
+    Article create(ArticleDto newItem);
     Article update(Long id, ArticleDto update);
     Article delete(Long id);
     List<Article> readActive();

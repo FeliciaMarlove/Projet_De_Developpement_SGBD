@@ -33,7 +33,7 @@ public class ArticleServiceImplemented implements ArticleService {
     }
 
     @Override
-    public void create(ArticleDto newItem) {
+    public Article create(ArticleDto newItem) {
         Tva findTva = repositoryTva.findById(newItem.getIdTva()).get();
         Article newArticle = new Article(
                 newItem.getNomArticle(),
@@ -44,6 +44,7 @@ public class ArticleServiceImplemented implements ArticleService {
                 findTva
         );
         if (equalsAny(newArticle) == null) repository.save(newArticle);
+        return newArticle;
     }
 
     @Override
