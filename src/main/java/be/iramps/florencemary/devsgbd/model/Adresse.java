@@ -21,6 +21,9 @@ public class Adresse implements Serializable {
     @Column(name = "numero")
     private int numero;
 
+    @Column(name = "complement")
+    private String complementNumero;
+
     @Column(name = "code_postal", nullable = false)
     private int codePostal;
 
@@ -99,11 +102,34 @@ public class Adresse implements Serializable {
         this.client = client;
     }
 
+    public void setIdAdresse(Long idAdresse) {
+        this.idAdresse = idAdresse;
+    }
+
+    public String getComplementNumero() {
+        return complementNumero;
+    }
+
+    public void setComplementNumero(String complementNumero) {
+        this.complementNumero = complementNumero;
+    }
+
     /* _____________________________CONSTRUCTEURS_____________________________ */
     public Adresse(String rue, int numero, int codePostal, String ville, String pays, Client client) {
         this();
         this.rue = rue;
         this.numero = numero;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.pays = pays;
+        this.client = client;
+    }
+
+    public Adresse(String rue, int numero, String complementNumero, int codePostal, String ville, String pays, Client client) {
+        this();
+        this.rue = rue;
+        this.numero = numero;
+        this.complementNumero = complementNumero;
         this.codePostal = codePostal;
         this.ville = ville;
         this.pays = pays;
@@ -121,18 +147,18 @@ public class Adresse implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Adresse adresse = (Adresse) o;
         return numero == adresse.numero &&
+                complementNumero == adresse.complementNumero &&
                 codePostal == adresse.codePostal &&
                 isActifAdresse == adresse.isActifAdresse &&
-                idAdresse.equals(adresse.idAdresse) &&
                 rue.equals(adresse.rue) &&
                 ville.equals(adresse.ville) &&
                 pays.equals(adresse.pays) &&
-                client.equals(adresse.client);
+                client.getIdClient().equals(adresse.client.getIdClient());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idAdresse, rue, numero, codePostal, ville, pays, isActifAdresse, client);
+        return Objects.hash(idAdresse, rue, numero, codePostal, ville, pays, isActifAdresse);
     }
 
     @Override
@@ -141,10 +167,12 @@ public class Adresse implements Serializable {
                 "id n° " + idAdresse +
                 ", rue = " + rue + '\'' +
                 ", numero = " + numero +
+                ", complément d'adresse = " + complementNumero +
                 ", codePostal = " + codePostal +
                 ", ville = " + ville + '\'' +
                 ", pays = " + pays + '\'' +
-                ", adresse active ?" + isActifAdresse +
-                ", client =" + client;
+                ", adresse active ?" + isActifAdresse
+//                +", Id client =" + client.getIdClient()
+                ;
     }
 }

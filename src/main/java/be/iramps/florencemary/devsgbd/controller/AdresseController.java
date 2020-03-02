@@ -32,9 +32,9 @@ public class AdresseController {
         return service.readOne(id);
     }
 
-    @PostMapping("/client/{id}")
-    public Adresse create(@RequestBody AdresseDto adresseDto, @PathVariable("id") Long id) {
-        return service.create(id, adresseDto);
+    @PostMapping("/client/{idClient}")
+    public List<AdresseDto> create(@RequestBody AdresseDto adresseDto, @PathVariable("idClient") Long idClient) {
+        return service.create(idClient, adresseDto);
     }
 
     @PutMapping("/{id}")

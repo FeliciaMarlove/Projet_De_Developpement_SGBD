@@ -42,11 +42,12 @@ public class AdresseServiceImplemented implements AdresseService {
     }
 
     @Override
-    public Adresse create(Long idClient, AdresseDto newItem) {
+    public List<AdresseDto> create(Long idClient, AdresseDto newItem) {
         Client findClient = repositoryClient.findById(idClient).get();
         Adresse newAdresse = new Adresse(
                 newItem.getRue(),
                 newItem.getNumero(),
+                newItem.getComplementNumero(),
                 newItem.getCodePostal(),
                 newItem.getVille(),
                 newItem.getPays(),
@@ -54,9 +55,17 @@ public class AdresseServiceImplemented implements AdresseService {
         );
         if (equalsAny(newAdresse) == null) {
             repository.save(newAdresse);
-            return newAdresse;
+            return mapEntityToDto(findClient.getAdressesList()) ;
         }
         return null;
+    }
+
+    private List<AdresseDto> mapEntityToDto(List<Adresse> adresses) {
+        List<AdresseDto> adressesDtos = new ArrayList<>();
+        for (Adresse adresse: adresses) {
+            adressesDtos.add(new AdresseDto(adresse.getRue(), adresse.getNumero(), adresse.getComplementNumero(), adresse.getCodePostal(), adresse.getVille(), adresse.getPays(), adresse.getClient().getIdClient()));
+        }
+        return adressesDtos;
     }
 
     @Override
@@ -65,6 +74,7 @@ public class AdresseServiceImplemented implements AdresseService {
         if ((toUpdate != null) && exists(id)) {
             toUpdate.setRue(update.getRue());
             toUpdate.setNumero(update.getNumero());
+            toUpdate.setComplementNumero(update.getComplementNumero());
             toUpdate.setCodePostal(update.getCodePostal());
             toUpdate.setVille(update.getVille());
             toUpdate.setPays(update.getPays());

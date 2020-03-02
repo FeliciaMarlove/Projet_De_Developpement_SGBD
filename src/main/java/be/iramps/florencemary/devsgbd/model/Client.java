@@ -12,7 +12,7 @@ public class Client implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_generator")
-    @SequenceGenerator(name = "client_generator", allocationSize = 1, initialValue = 00_001)
+    @SequenceGenerator(name = "client_generator", allocationSize = 1, initialValue = 1)
     @Column(name = "id_client")
     private Long idClient;
 
@@ -140,8 +140,8 @@ public class Client implements Serializable {
                 ", telephoneClient=" + telephoneClient +
                 ", dateNaissanceClient=" + dateNaissanceClient +
                 ", isActifClient=" + isActifClient +
-                ", adressesList=" + adressesList +
-                ", facturesList=" + facturesList +
+//                ", adressesList=" + adressesList +
+//                ", facturesList=" + facturesList +
                 '}';
     }
 }

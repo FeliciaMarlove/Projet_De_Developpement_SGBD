@@ -8,7 +8,7 @@ import java.util.List;
 public interface AdresseService {
     List<Adresse> read();
     Adresse readOne(Long id);
-    Adresse create(Long idClient, AdresseDto newItem);
+    List<AdresseDto> create(Long idClient, AdresseDto newItem);
     Adresse update(Long id, AdresseDto update);
     Adresse delete(Long id);
     List<Adresse> readActive();
