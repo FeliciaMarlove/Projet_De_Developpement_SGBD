@@ -43,7 +43,12 @@ public class FactureServiceImplemented implements FactureService {
      */
     @Override
     public Facture readOne(Long id) {
-        return repository.findById(id).get();
+        for (Facture facture: repository.findAll()) {
+            if (facture.getIdFacture().equals(id)) {
+                return repository.findById(id).get();
+            }
+        }
+        return null;
     }
 
     /**
@@ -53,8 +58,10 @@ public class FactureServiceImplemented implements FactureService {
      */
     @Override
     public Facture delete(Long id) {
+        Facture facture = repository.findById(id).get();
         if (exists(id)) {
-            repository.findById(id).get().setActiveFacture(false);
+            facture.setActiveFacture(false);
+            repository.save(facture);
             return readOne(id);
         }
         return null;

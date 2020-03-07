@@ -28,50 +28,49 @@ public class AdresseServiceImplemented implements AdresseService {
     }
 
     @Override
-    public Adresse readOne(Long id) {
-        return repository.findById(id).get();
-    }
-
-    @Override
-    public List<Adresse> readActive() {
-        List<Adresse> actifs = new ArrayList<>();
-        for (Adresse adresse : read()) {
-            if (adresse.isActifAdresse()) actifs.add(adresse);
-        }
-        return actifs;
-    }
-
-    @Override
-    public List<AdresseDto> create(Long idClient, AdresseDto newItem) {
-        Client findClient = repositoryClient.findById(idClient).get();
-        Adresse newAdresse = new Adresse(
-                newItem.getRue(),
-                newItem.getNumero(),
-                newItem.getComplementNumero(),
-                newItem.getCodePostal(),
-                newItem.getVille(),
-                newItem.getPays(),
-                findClient
-        );
-        if (equalsAny(newAdresse) == null) {
-            repository.save(newAdresse);
-            return mapEntityToDto(findClient.getAdressesList()) ;
+    public AdresseDto readOne(Long id) {
+        for (Adresse adresse: repository.findAll()) {
+            if (adresse.getIdAdresse().equals(id)) {
+                return mapEntityToDto(repository.findById(id).get());
+            }
         }
         return null;
     }
 
-    private List<AdresseDto> mapEntityToDto(List<Adresse> adresses) {
-        List<AdresseDto> adressesDtos = new ArrayList<>();
-        for (Adresse adresse: adresses) {
-            adressesDtos.add(new AdresseDto(adresse.getRue(), adresse.getNumero(), adresse.getComplementNumero(), adresse.getCodePostal(), adresse.getVille(), adresse.getPays(), adresse.getClient().getIdClient()));
+    @Override
+    public List<AdresseDto> readActive() {
+        List<Adresse> actifs = new ArrayList<>();
+        for (Adresse adresse : read()) {
+            if (adresse.isActifAdresse()) actifs.add(adresse);
         }
-        return adressesDtos;
+        return mapEntitiesToDtos(actifs);
     }
 
     @Override
-    public Adresse update(Long id, AdresseDto update) {
-        Adresse toUpdate = repository.findById(id).get();
-        if ((toUpdate != null) && exists(id)) {
+    public List<AdresseDto> create(Long idClient, AdresseDto newItem) {
+        if (equalsAny(newItem) == null) {
+            Client findClient = repositoryClient.findById(idClient).get();
+            Adresse newAdresse = new Adresse(
+                    newItem.getRue(),
+                    newItem.getNumero(),
+                    newItem.getComplementNumero(),
+                    newItem.getCodePostal(),
+                    newItem.getVille(),
+                    newItem.getPays(),
+                    findClient
+            );
+            repository.save(newAdresse);
+            repositoryClient.save(findClient);
+            return mapEntitiesToDtos(findClient.getAdressesList()) ;
+        }
+        return null;
+    }
+
+    @Override
+    public AdresseDto update(Long id, AdresseDto update) {
+        Adresse toUpdate;
+        if (exists(id) && (equalsAny(update) == null)) {
+            toUpdate = repository.findById(id).get();
             toUpdate.setRue(update.getRue());
             toUpdate.setNumero(update.getNumero());
             toUpdate.setComplementNumero(update.getComplementNumero());
@@ -79,15 +78,18 @@ public class AdresseServiceImplemented implements AdresseService {
             toUpdate.setVille(update.getVille());
             toUpdate.setPays(update.getPays());
             toUpdate.setClient(repositoryClient.findById(update.getIdClient()).get());
-            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
+            repository.save(toUpdate);
+            return mapEntityToDto(toUpdate);
         }
-        return toUpdate;
+        return null;
     }
 
     @Override
-    public Adresse delete(Long id) {
+    public AdresseDto delete(Long id) {
+        Adresse adresse = repository.findById(id).get();
         if (exists(id)) {
-            repository.findById(id).get().setActifAdresse(false);
+            adresse.setActifAdresse(false);
+            repository.save(adresse);
             return readOne(id);
         }
         return null;
@@ -96,7 +98,7 @@ public class AdresseServiceImplemented implements AdresseService {
     private boolean exists(Long id) {
         boolean exists = false;
         for (Adresse adresse : read()) {
-            if ((adresse.isActifAdresse() == true) && (adresse.getIdAdresse() == id)) exists = true;
+            if ((adresse.isActifAdresse()) && (adresse.getIdAdresse().equals(id))) exists = true;
         }
         return exists;
     }
@@ -106,5 +108,32 @@ public class AdresseServiceImplemented implements AdresseService {
             if (adresse.equals(adresseCompared)) return repository.findById(adresseCompared.getIdAdresse()).get();
         }
         return null;
+    }
+
+    private Adresse equalsAny(AdresseDto adresseDto) {
+        for (Adresse adresseCompared : read()) {
+            if ((adresseDto.getIdClient() == adresseCompared.getClient().getIdClient())
+                   && (adresseDto.getComplementNumero() == null || adresseDto.getComplementNumero().equals(adresseCompared.getComplementNumero()))
+                    && (adresseDto.getCodePostal() == adresseCompared.getCodePostal())
+                    && (adresseDto.getNumero() == adresseCompared.getNumero())
+                    && (adresseDto.getPays().equals(adresseCompared.getPays()))
+                    && (adresseDto.getRue().equals(adresseCompared.getRue()))
+                    && (adresseDto.getVille().equals(adresseCompared.getVille()))
+            )
+                return repository.findById(adresseCompared.getIdAdresse()).get();
+        }
+        return null;
+    }
+
+    private List<AdresseDto> mapEntitiesToDtos(List<Adresse> adresses) {
+        List<AdresseDto> adressesDtos = new ArrayList<>();
+        for (Adresse adresse: adresses) {
+            adressesDtos.add(mapEntityToDto(adresse));
+        }
+        return adressesDtos;
+    }
+
+    private AdresseDto mapEntityToDto(Adresse adresse) {
+        return new AdresseDto(adresse.getRue(), adresse.getNumero(), adresse.getComplementNumero(), adresse.getCodePostal(), adresse.getVille(), adresse.getPays(), adresse.getClient().getIdClient());
     }
 }

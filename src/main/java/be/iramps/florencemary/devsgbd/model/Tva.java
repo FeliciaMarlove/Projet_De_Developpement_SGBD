@@ -41,6 +41,7 @@ public class Tva implements Serializable {
 
     public void setTauxTva(Integer tauxTva) {
         this.tauxTva = tauxTva;
+        this.nom = tauxTva.toString() + "%";
     }
 
     public String getNom() {
@@ -49,6 +50,10 @@ public class Tva implements Serializable {
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public void setNom(Integer taux) {
+        this.nom = taux.toString() + "%";;
     }
 
     public boolean isActifTva() {

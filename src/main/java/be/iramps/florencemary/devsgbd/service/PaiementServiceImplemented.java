@@ -25,31 +25,42 @@ public class PaiementServiceImplemented implements PaiementService {
 
     @Override
     public Paiement readOne(Long id) {
-        return repository.findById(id).get();
+        for (Paiement paiement: repository.findAll()) {
+            if (paiement.getIdPaiement().equals(id)) {
+                return repository.findById(id).get();
+            }
+        }
+        return null;
     }
 
     @Override
     public Paiement create(PaiementDto newItem) {
         Paiement newPaiement = new Paiement(newItem.getNomPaiement(), newItem.getDescPaiement());
-        if (equalsAny(newPaiement) == null) repository.save(newPaiement);
-        return newPaiement;
+        if (equalsAny(newPaiement) == null) {
+            repository.save(newPaiement);
+            return newPaiement;
+        }
+        return null;
     }
 
     @Override
     public Paiement update(Long id, PaiementDto update) {
-        Paiement toUpdate = repository.findById(id).get();
-        if ((toUpdate != null) && exists(id)) {
+        if (exists(id) && (equalsAny(update) == null)) {
+            Paiement toUpdate = repository.findById(id).get();
             toUpdate.setNomPaiement(update.getNomPaiement());
             toUpdate.setDescPaiement(update.getDescPaiement());
-            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
+            repository.save(toUpdate);
+            return toUpdate;
         }
-        return toUpdate;
+        return null;
     }
 
     @Override
     public Paiement delete(Long id) {
+        Paiement paiement = repository.findById(id).get();
         if (exists(id)) {
-            repository.findById(id).get().setActifPaiement(false);
+            paiement.setActifPaiement(false);
+            repository.save(paiement);
             return readOne(id);
         }
         return null;
@@ -75,6 +86,13 @@ public class PaiementServiceImplemented implements PaiementService {
     private Paiement equalsAny(Paiement paiement) {
         for (Paiement paiementCompared : read()) {
             if (paiement.equals(paiementCompared)) return repository.findById(paiementCompared.getIdPaiement()).get();
+        }
+        return null;
+    }
+
+    private Paiement equalsAny(PaiementDto paiementDto) {
+        for (Paiement paiementCompared : read()) {
+            if (paiementCompared.getNomPaiement().equals(paiementDto.getNomPaiement())) return repository.findById(paiementCompared.getIdPaiement()).get();
         }
         return null;
     }

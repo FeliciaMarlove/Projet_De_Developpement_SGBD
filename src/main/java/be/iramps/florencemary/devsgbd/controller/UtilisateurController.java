@@ -23,19 +23,19 @@ public class UtilisateurController {
     UtilisateurRepository repository;
 
     @GetMapping
-    public List<Utilisateur> read() {
+    public List<UtilisateurDto> read() {
         return service.readActive();
     }
 
     @GetMapping("/{id}")
-    public Utilisateur readOne(@PathVariable("id") Long id) { return service.readOne(id); }
+    public UtilisateurDto readOne(@PathVariable("id") Long id) { return service.readOne(id); }
 
     @PostMapping
-    public Utilisateur create(@RequestBody UtilisateurDto utilisateurDto) { return service.create(utilisateurDto);}
+    public UtilisateurDto create(@RequestBody UtilisateurDto utilisateurDto) { return service.create(utilisateurDto);}
 
     @PutMapping("/{id}")
-    public Utilisateur update(@PathVariable("id") Long id, @RequestBody UtilisateurDto utilisateurDto) { return service.update(id, utilisateurDto); }
+    public UtilisateurDto update(@PathVariable("id") Long id, @RequestBody UtilisateurDto utilisateurDto) { return service.update(id, utilisateurDto); }
 
     @DeleteMapping("/{id}")
-    public Utilisateur delete(@PathVariable("id") Long id) { return service.delete(id); }
+    public UtilisateurDto delete(@PathVariable("id") Long id) { return service.delete(id); }
 }

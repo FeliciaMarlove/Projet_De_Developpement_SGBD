@@ -23,12 +23,12 @@ public class AdresseController {
     AdresseRepository repository;
 
     @GetMapping
-    public List<Adresse> read() {
+    public List<AdresseDto> read() {
         return service.readActive();
     }
 
     @GetMapping("/{id}")
-    public Adresse readOne(@PathVariable("id") Long id) {
+    public AdresseDto readOne(@PathVariable("id") Long id) {
         return service.readOne(id);
     }
 
@@ -38,7 +38,7 @@ public class AdresseController {
     }
 
     @PutMapping("/{id}")
-    public Adresse update(@PathVariable("id") Long id, @RequestBody AdresseDto adresseDto) {
+    public AdresseDto update(@PathVariable("id") Long id, @RequestBody AdresseDto adresseDto) {
         return service.update(id, adresseDto);
     }
 }

@@ -5,6 +5,7 @@ import be.iramps.florencemary.devsgbd.model.Article;
 import be.iramps.florencemary.devsgbd.model.Tva;
 import be.iramps.florencemary.devsgbd.repository.ArticleRepository;
 import be.iramps.florencemary.devsgbd.repository.TvaRepository;
+import com.sun.xml.bind.v2.schemagen.xmlschema.Particle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,12 @@ public class ArticleServiceImplemented implements ArticleService {
 
     @Override
     public Article readOne(Long id) {
-        return repository.findById(id).get();
+        for (Article article: repository.findAll()) {
+            if (article.getIdArticle().equals(id)) {
+                return repository.findById(id).get();
+            }
+        }
+        return null;
     }
 
     @Override
@@ -43,29 +49,35 @@ public class ArticleServiceImplemented implements ArticleService {
                 newItem.getCodeEAN(),
                 findTva
         );
-        if (equalsAny(newArticle) == null) repository.save(newArticle);
-        return newArticle;
+        if (equalsAny(newItem) == null) {
+            repository.save(newArticle);
+            return newArticle;
+        }
+        return null;
     }
 
     @Override
     public Article update(Long id, ArticleDto update) {
-        Article toUpdate = repository.findById(id).get();
-        if ((toUpdate != null) && (exists(id))) {
+        if ((exists(id) && (equalsAny(update) == null))) {
+            Article toUpdate = repository.findById(id).get();
             toUpdate.setNomArticle(update.getNomArticle());
             toUpdate.setDescArticle(update.getDescArticle());
             toUpdate.setStock(update.getStock());
             toUpdate.setCodeEAN(update.getCodeEAN());
             toUpdate.setPrixUnitaire(update.getPrixUnitaire());
             toUpdate.setTva(repositoryTva.findById(update.getIdTva()).get());
-            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
+            repository.save(toUpdate);
+            return toUpdate;
         }
-        return toUpdate;
+        return null;
     }
 
     @Override
     public Article delete(Long id) {
         if (exists(id)) {
+            Article article = repository.findById(id).get();
             repository.findById(id).get().setActifArticle(false);
+            repository.save(article);
             return readOne(id);
         }
         return null;
@@ -91,6 +103,17 @@ public class ArticleServiceImplemented implements ArticleService {
     private Article equalsAny(Article article) {
         for (Article articleCompared : read()) {
             if (article.equals(articleCompared)) return repository.findById(articleCompared.getIdArticle()).get();
+        }
+        return null;
+    }
+
+    private Article equalsAny(ArticleDto articleDto) {
+        for (Article articleCompared : read()) {
+            System.out.println(articleCompared);
+            if ((articleDto.getCodeEAN().equals(articleCompared.getCodeEAN()))
+                    && (articleDto.getNomArticle().equals(articleCompared.getNomArticle()))) {
+                return repository.findById(articleCompared.getIdArticle()).get();
+            }
         }
         return null;
     }

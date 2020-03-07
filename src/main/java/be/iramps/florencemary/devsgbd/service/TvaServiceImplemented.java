@@ -25,13 +25,18 @@ public class TvaServiceImplemented implements TvaService {
 
     @Override
     public Tva readOne(Long id) {
-        return repository.findById(id).get();
+        for (Tva tva: repository.findAll()) {
+            if (tva.getIdTva().equals(id)) {
+                return repository.findById(id).get();
+            }
+        }
+        return null;
     }
 
     @Override
     public Tva create(TvaDto newItem) {
-        Tva newTva = new Tva(newItem.getTauxTva());
-        if (equalsAny(newTva) == null) {
+        if (equalsAny(newItem) == null) {
+            Tva newTva = new Tva(newItem.getTauxTva());
             repository.save(newTva);
             return newTva;
         }
@@ -41,20 +46,21 @@ public class TvaServiceImplemented implements TvaService {
 
     @Override
     public Tva update(Long id, TvaDto update) {
-        Tva toUpdate = repository.findById(id).get();
-        if ((toUpdate != null) && exists(id)) {
-            //if (equalsAny(toUpdate) == null) {
-                toUpdate.setTauxTva(update.getTauxTva());
-                repository.save(toUpdate);
-           // }
+        if ((exists(id)) && (equalsAny(update) == null)) {
+            Tva toUpdate = repository.findById(id).get();
+            toUpdate.setTauxTva(update.getTauxTva());
+            repository.save(toUpdate);
+            return toUpdate;
         }
-        return toUpdate;
+        return null;
     }
 
     @Override
     public Tva delete(Long id) {
+        Tva tva = repository.findById(id).get();
         if (exists(id)) {
-            repository.findById(id).get().setActifTva(false);
+            tva.setActifTva(false);
+            repository.save(tva);
             return readOne(id);
         }
         return null;
@@ -80,6 +86,13 @@ public class TvaServiceImplemented implements TvaService {
     private Tva equalsAny(Tva tva) {
         for (Tva tvaCompared : read()) {
             if (tva.equals(tvaCompared)) return repository.findById(tvaCompared.getIdTva()).get();
+        }
+        return null;
+    }
+
+    private Tva equalsAny(TvaDto tvaDto) {
+        for (Tva tvaCompared : read()) {
+            if (tvaDto.getTauxTva() == tvaCompared.getTauxTva()) return repository.findById(tvaCompared.getIdTva()).get();
         }
         return null;
     }

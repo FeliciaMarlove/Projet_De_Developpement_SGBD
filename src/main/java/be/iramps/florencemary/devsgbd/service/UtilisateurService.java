@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface UtilisateurService {
     List<Utilisateur> read();
-    Utilisateur readOne(Long id);
-    Utilisateur create(UtilisateurDto newItem);
-    Utilisateur update(Long id, UtilisateurDto update);
-    Utilisateur delete(Long id);
-    List<Utilisateur> readActive();
+    UtilisateurDto readOne(Long id);
+    UtilisateurDto create(UtilisateurDto newItem);
+    UtilisateurDto update(Long id, UtilisateurDto update);
+    UtilisateurDto delete(Long id);
+    List<UtilisateurDto> readActive();
     ConnectionMessenger connectUser(String login, String motDePasse);
 }

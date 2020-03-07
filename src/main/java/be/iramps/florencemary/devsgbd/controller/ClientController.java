@@ -23,19 +23,19 @@ public class ClientController {
     ClientRepository repository;
 
     @GetMapping
-    public List<Client> read() {
+    public List<ClientDto> read() {
         return service.readActive();
     }
 
     @GetMapping("/{id}")
-    public Client readOne(@PathVariable("id") Long id) { return service.readOne(id); }
+    public ClientDto readOne(@PathVariable("id") Long id) { return service.readOne(id); }
 
     @PostMapping
-    public Client create(@RequestBody ClientDto clientDto) { return service.create(clientDto); }
+    public ClientDto create(@RequestBody ClientDto clientDto) { return service.create(clientDto); }
 
     @PutMapping("/{id}")
-    public Client update(@PathVariable("id") Long id, @RequestBody ClientDto clientDto) { return service.update(id, clientDto); }
+    public ClientDto update(@PathVariable("id") Long id, @RequestBody ClientDto clientDto) { return service.update(id, clientDto); }
 
     @DeleteMapping("/{id}")
-    public Client delete(@PathVariable("id") Long id) { return service.delete(id); }
+    public ClientDto delete(@PathVariable("id") Long id) { return service.delete(id); }
 }

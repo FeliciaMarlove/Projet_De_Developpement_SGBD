@@ -24,51 +24,62 @@ public class ClientServiceImplemented implements ClientService {
     }
 
     @Override
-    public Client readOne(Long id) {
-        return repository.findById(id).get();
+    public ClientDto readOne(Long id) {
+        for (Client client: repository.findAll()) {
+            if (client.getIdClient().equals(id)) {
+                return mapEntityToDto(repository.findById(id).get());
+            }
+        }
+        return null;
     }
 
     @Override
-    public Client create(ClientDto newItem) {
+    public ClientDto create(ClientDto newItem) {
         Client newClient = new Client(
                 newItem.getNomClient(),
                 newItem.getPrenomClient(),
                 newItem.getTelephoneClient(),
                 newItem.getDateNaissanceClient()
         );
-        if (equalsAny(newClient) == null) repository.save(newClient);
-        return newClient;
+        if (equalsAny(newClient) == null) {
+            repository.save(newClient);
+            return newItem;
+        }
+        return null;
     }
 
     @Override
-    public Client update(Long id, ClientDto update) {
-        Client toUpdate = repository.findById(id).get();
-        if ((toUpdate != null) && exists(id)) {
+    public ClientDto update(Long id, ClientDto update) {
+        if (exists(id) && (equalsAny(update) == null)) {
+            Client toUpdate = repository.findById(id).get();
             toUpdate.setNomClient(update.getNomClient());
             toUpdate.setPrenomClient(update.getPrenomClient());
             toUpdate.setTelephoneClient(update.getTelephoneClient());
             toUpdate.setDateNaissanceClient(update.getDateNaissanceClient());
-            if (equalsAny(toUpdate) == null) repository.save(toUpdate);
+            repository.save(toUpdate);
+            return update;
         }
-        return toUpdate;
+        return null;
     }
 
     @Override
-    public Client delete(Long id) {
+    public ClientDto delete(Long id) {
+        Client client = repository.findById(id).get();
         if (exists(id)) {
-            repository.findById(id).get().setActifClient(false);
+            client.setActifClient(false);
+            repository.save(client);
             return readOne(id);
         }
         return null;
     }
 
     @Override
-    public List<Client> readActive() {
+    public List<ClientDto> readActive() {
         List<Client> actifs = new ArrayList<>();
         for (Client client : read()) {
             if (client.isActifClient()) actifs.add(client);
         }
-        return actifs;
+        return mapEntitiesToDtos(actifs);
     }
 
     private boolean exists(Long id) {
@@ -84,5 +95,27 @@ public class ClientServiceImplemented implements ClientService {
             if (client.equals(clientCompared)) return repository.findById(clientCompared.getIdClient()).get();
         }
         return null;
+    }
+
+    private Client equalsAny(ClientDto clientDto) {
+        for (Client clientCompared : read()) {
+            if (clientDto.getNomClient().equals(clientCompared.getNomClient())
+                && (clientDto.getPrenomClient().equals(clientCompared.getPrenomClient()))
+                && (clientDto.getDateNaissanceClient().equals(clientCompared.getDateNaissanceClient())))
+                return repository.findById(clientCompared.getIdClient()).get();
+        }
+        return null;
+    }
+
+    private ClientDto mapEntityToDto(Client client) {
+        return new ClientDto(client.getNomClient(), client.getPrenomClient(), client.getTelephoneClient() == null? 0 : client.getTelephoneClient(), client.getDateNaissanceClient());
+    }
+
+    private List<ClientDto> mapEntitiesToDtos(List<Client> clients) {
+        List<ClientDto> dtos = new ArrayList<>();
+        for (Client client: clients) {
+            dtos.add(mapEntityToDto(client));
+        }
+        return dtos;
     }
 }

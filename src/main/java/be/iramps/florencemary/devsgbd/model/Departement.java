@@ -90,7 +90,6 @@ public class Departement implements Serializable {
                 "idDepartement=" + idDepartement +
                 ", nomDepartement='" + nomDepartement + '\'' +
                 ", isActifDepartement=" + isActifDepartement +
-                ", utilisateursList=" + utilisateursList +
                 '}';
     }
 }

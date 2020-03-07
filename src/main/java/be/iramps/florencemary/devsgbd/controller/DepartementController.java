@@ -24,19 +24,19 @@ public class DepartementController {
     DepartementRepository repository;
 
     @GetMapping
-    public List<Departement> read() {
+    public List<DepartementDto> read() {
         return service.readActive();
     }
 
     @GetMapping("/{id}")
-    public Departement readOne(@PathVariable("id") Long id) { return service.readOne(id); }
+    public DepartementDto readOne(@PathVariable("id") Long id) { return service.readOne(id); }
 
     @PostMapping
-    public Departement create(@RequestBody DepartementDto departementDto) { return service.create(departementDto); }
+    public DepartementDto create(@RequestBody DepartementDto departementDto) { return service.create(departementDto); }
 
     @PutMapping("/{id}")
-    public Departement update(@PathVariable("id") Long id, @RequestBody DepartementDto departementDto) { return service.update(id, departementDto); }
+    public DepartementDto update(@PathVariable("id") Long id, @RequestBody DepartementDto departementDto) { return service.update(id, departementDto); }
 
     @DeleteMapping("/{id}")
-    public Departement delete(@PathVariable("id") Long id) { return service.delete(id); }
+    public DepartementDto delete(@PathVariable("id") Long id) { return service.delete(id); }
 }
