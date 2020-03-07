@@ -1,7 +1,6 @@
 package be.iramps.florencemary.devsgbd.controller;
 
 import be.iramps.florencemary.devsgbd.dto.AdresseDto;
-import be.iramps.florencemary.devsgbd.model.Adresse;
 import be.iramps.florencemary.devsgbd.repository.AdresseRepository;
 import be.iramps.florencemary.devsgbd.service.AdresseService;
 import org.springframework.beans.factory.annotation.Autowired;

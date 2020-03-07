@@ -136,4 +136,6 @@ public class AdresseServiceImplemented implements AdresseService {
     private AdresseDto mapEntityToDto(Adresse adresse) {
         return new AdresseDto(adresse.getRue(), adresse.getNumero(), adresse.getComplementNumero(), adresse.getCodePostal(), adresse.getVille(), adresse.getPays(), adresse.getClient().getIdClient());
     }
+
+
 }
