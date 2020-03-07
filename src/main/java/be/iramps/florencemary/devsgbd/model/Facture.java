@@ -26,6 +26,9 @@ public class Facture implements Serializable {
     @Column(name = "actif_facture", nullable = false)
     private boolean isActiveFacture;
 
+    @Column(name = "validee", nullable = false)
+    private boolean isValidee;
+
     @Transient
     private Double total;
 
@@ -91,8 +94,20 @@ public class Facture implements Serializable {
         return paiement;
     }
 
+    public void setPaiement(Paiement paiement) {
+        this.paiement = paiement;
+    }
+
     public void setListeArticlesFactures(List<FactureArticlesLiaison> listeArticlesFactures) {
         this.listeArticlesFactures = listeArticlesFactures;
+    }
+
+    public boolean isValidee() {
+        return isValidee;
+    }
+
+    public void setValidee(boolean isValidee) {
+        this.isValidee = isValidee;
     }
 
     //_____________________________CONSTRUCTEURS_____________________________
@@ -107,6 +122,7 @@ public class Facture implements Serializable {
     public Facture() {
         this.dateHeure = LocalDateTime.now();
         this.listeArticlesFactures = new ArrayList<>();
+        this.isValidee = false;
     }
 //_____________________________EQUALS/HASHCODE/TOSTRING_____________________________
 
@@ -130,9 +146,12 @@ public class Facture implements Serializable {
                 "idFacture=" + idFacture +
                 ", refFacture='" + refFacture + '\'' +
                 ", dateHeure=" + dateHeure +
+                ", isActiveFacture=" + isActiveFacture +
+                ", isValidee=" + isValidee +
+                ", total=" + total +
                 ", client=" + client +
+                ", listeArticlesFactures=" + listeArticlesFactures +
                 ", paiement=" + paiement +
-                ", articlesList=" + listeArticlesFactures +
                 '}';
     }
 }
