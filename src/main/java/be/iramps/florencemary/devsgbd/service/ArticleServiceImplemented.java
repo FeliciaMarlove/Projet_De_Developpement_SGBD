@@ -5,7 +5,6 @@ import be.iramps.florencemary.devsgbd.model.Article;
 import be.iramps.florencemary.devsgbd.model.Tva;
 import be.iramps.florencemary.devsgbd.repository.ArticleRepository;
 import be.iramps.florencemary.devsgbd.repository.TvaRepository;
-import com.sun.xml.bind.v2.schemagen.xmlschema.Particle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -15,15 +15,15 @@ public class FactureServiceImplemented implements FactureService {
     private FactureRepository repository;
     private PaiementRepository repositoryPaiement;
     private ClientRepository repositoryClient;
-    private ArticleRepository articleRepository;
+    private ArticleRepository repositoryArticle;
     private FactureArticlesRepository repositoryFactureArticles;
 
     @Autowired
-    public FactureServiceImplemented(FactureRepository repository, PaiementRepository repositoryPaiement, ClientRepository repositoryClient, ArticleRepository articleRepository, FactureArticlesRepository repositoryFactureArticles) {
+    public FactureServiceImplemented(FactureRepository repository, PaiementRepository repositoryPaiement, ClientRepository repositoryClient, ArticleRepository repositoryArticle, FactureArticlesRepository repositoryFactureArticles) {
         this.repository = repository;
         this.repositoryPaiement = repositoryPaiement;
         this.repositoryClient = repositoryClient;
-        this.articleRepository = articleRepository;
+        this.repositoryArticle = repositoryArticle;
         this.repositoryFactureArticles = repositoryFactureArticles;
     }
 
@@ -42,10 +42,12 @@ public class FactureServiceImplemented implements FactureService {
      * @return une facture
      */
     @Override
-    public Facture readOne(Long id) {
-        for (Facture facture: repository.findAll()) {
-            if (facture.getIdFacture().equals(id)) {
-                return repository.findById(id).get();
+    public FactureDto readOne(Long id) {
+        Facture facture;
+        for (Facture fact: repository.findAll()) {
+            if (fact.getIdFacture().equals(id)) {
+                facture = repository.findById(id).get();
+                return new FactureDto(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement());
             }
         }
         return null;
@@ -57,7 +59,7 @@ public class FactureServiceImplemented implements FactureService {
      * @return la facture qui a été effacée, ou null si pas de suppression
      */
     @Override
-    public Facture delete(Long id) {
+    public FactureDto delete(Long id) {
         Facture facture = repository.findById(id).get();
         if (exists(id)) {
             facture.setActiveFacture(false);
@@ -72,12 +74,19 @@ public class FactureServiceImplemented implements FactureService {
      * @return la liste des factures actives
      */
     @Override
-    public List<Facture> readActive() {
-        List<Facture> actifs = new ArrayList<>(read());
-        for (Facture facture : actifs) {
-            if (facture.isActiveFacture()) actifs.remove(facture);
+    public List<FactureDto> readActive() {
+        List<Facture> actifs = new ArrayList<>();
+        List<FactureDto> actifsDtos = new ArrayList<>();
+        for (Facture facture : read()) {
+            if (facture.isActiveFacture()) {
+                actifs.add(facture);
+                actifsDtos.add(new FactureDto(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement()));
+            }
         }
-        return actifs;
+        if (!actifsDtos.isEmpty()) {
+            return actifsDtos;
+        }
+        return null;
     }
 
     /**
@@ -88,8 +97,9 @@ public class FactureServiceImplemented implements FactureService {
      */
     private FactureArticlesLiaison isOnFacture(Long idFacture, Long idArticle) {
         Facture facture = repository.findById(idFacture).get();
+        System.out.println(facture); // la liste est vide !
         for (FactureArticlesLiaison fal : facture.getArticlesList()) {
-            if (fal.getIdArticle() == idArticle) {
+            if (fal.getIdArticle().equals(idArticle)) {
                 return fal;
             }
         }
@@ -107,22 +117,31 @@ public class FactureServiceImplemented implements FactureService {
         boolean success = false;
         Facture facture = repository.findById(idFacture).get();
         if (exists(idFacture)) {
-            List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
+            List<FactureArticlesLiaison> articlesSurFacture = facture.getArticlesList();
             FactureArticlesLiaison factArt = isOnFacture(idFacture, article.getIdArticle());
+            System.out.println(factArt); // return null !
             if (factArt != null) {
                 articlesSurFacture.get(articlesSurFacture.indexOf(factArt)).setQuantite(factArt.getQuantite() + 1);
-                factArt.setMontantLigne(factArt.getQuantite() * (articleRepository.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
+                factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
+                repositoryFactureArticles.save(factArt);
+                articlesSurFacture.add(factArt);
+                repository.save(facture);
                 success = true;
+                System.out.println("already in");
             } else {
-                success = articlesSurFacture.add(new FactureArticlesLiaison(
+                factArt = new FactureArticlesLiaison(
                         article.getIdFacture(),
                         article.getIdArticle(),
-                        article.getQuantite()
-                ));
-                factArt = articlesSurFacture.get(articlesSurFacture.size() - 1);
-                factArt.setMontantLigne(factArt.getQuantite() * (articleRepository.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
+                        article.getQuantite());
+                factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
+                repositoryFactureArticles.save(factArt);
+                success = articlesSurFacture.add(factArt);
+                repository.save(facture);
+                System.out.println("new");
             }
         }
+        System.out.println(facture);
+
         return success;
     }
 
@@ -169,16 +188,17 @@ public class FactureServiceImplemented implements FactureService {
         return success;
     }
 
-    /**
-     * Crée une facture avec un client et un moyen de paiement
-     * @param newItem DTO facture
-     */
     @Override
-    public void create(FactureDto newItem) {
-        Paiement paiement = repositoryPaiement.findById(newItem.getIdPaiement()).get();
-        Client client = repositoryClient.findById(newItem.getIdClient()).get();
+    public FactureDto create(Long idClient, Long idPaiement) {
+        Client client = repositoryClient.findById(idClient).get();
+        Paiement paiement = repositoryPaiement.findById(idPaiement).get();
         Facture newFacture = new Facture(client, paiement);
-        if (equalsAny(newFacture) == null) repository.save(newFacture);
+        if (equalsAny(newFacture) == null){
+            System.out.println(newFacture);
+            repository.save(newFacture);
+            return new FactureDto(idClient, idPaiement);
+        }
+        return null;
     }
 
     /**
@@ -186,23 +206,29 @@ public class FactureServiceImplemented implements FactureService {
      * @param idFacture
      */
     @Override
-    public void validateFacture(Long idFacture) {
-        Facture factureAFinaliser = repository.findById(idFacture).get();
-        final Facture factureFinale = new Facture(factureAFinaliser.getClient(), factureAFinaliser.getPaiement());
-        final List<FactureArticlesLiaison> listeFinale = new ArrayList<>();
-        for (FactureArticlesLiaison fal : factureAFinaliser.getArticlesList()) {
-            final FactureArticlesLiaison falUnite = new FactureArticlesLiaison(fal.getIdFacture(), fal.getIdArticle(), fal.getQuantite());
-            listeFinale.add(falUnite);
+    public Facture validateFacture(Long idFacture) {
+        if (exists(idFacture)) {
+            Facture factureAFinaliser = repository.findById(idFacture).get();
+            final Facture factureFinale = new Facture(factureAFinaliser.getClient(), factureAFinaliser.getPaiement());
+            final List<FactureArticlesLiaison> listeFinale = new ArrayList<>();
+            for (FactureArticlesLiaison fal : factureAFinaliser.getArticlesList()) {
+                final FactureArticlesLiaison falUnite = new FactureArticlesLiaison(fal.getIdFacture(), fal.getIdArticle(), fal.getQuantite());
+                listeFinale.add(falUnite);
+            }
+            final Double total = calculerMontant(idFacture);
+            factureFinale.setTotal(total);
+            if (!listeFinale.isEmpty()) {
+                return factureFinale;
+            }
         }
-        final Double total = calculerMontant(idFacture);
-        factureFinale.setTotal(total);
+        return null;
     }
 
     private Double calculerMontant(Long idFacture) {
         Double montant = 0.0;
         Facture facture = repository.findById(idFacture).get();
         for (FactureArticlesLiaison fal: facture.getArticlesList()) {
-            montant += (fal.getQuantite() * articleRepository.findById(fal.getIdArticle()).get().getPrixUnitaire());
+            montant += (fal.getQuantite() * repositoryArticle.findById(fal.getIdArticle()).get().getPrixUnitaire());
         }
         return montant;
     }
@@ -216,8 +242,11 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     private Facture equalsAny(Facture facture) {
-        for (Facture factureCompared : read()) {
-            if (facture.equals(factureCompared)) return repository.findById(factureCompared.getIdFacture()).get();
+        if (!read().isEmpty()) {
+            for (Facture factureCompared : read()) {
+                if (facture.equals(factureCompared)) return repository.findById(factureCompared.getIdFacture()).get();
+            }
+            return null;
         }
         return null;
     }

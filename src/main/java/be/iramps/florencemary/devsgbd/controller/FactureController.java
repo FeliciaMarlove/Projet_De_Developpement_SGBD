@@ -1,5 +1,7 @@
 package be.iramps.florencemary.devsgbd.controller;
 
+import be.iramps.florencemary.devsgbd.dto.FactureArticleDto;
+import be.iramps.florencemary.devsgbd.dto.FactureDto;
 import be.iramps.florencemary.devsgbd.model.Facture;
 import be.iramps.florencemary.devsgbd.repository.FactureRepository;
 import be.iramps.florencemary.devsgbd.service.FactureService;
@@ -22,23 +24,32 @@ public class FactureController {
     FactureRepository repository;
 
     @GetMapping
-    public List<Facture> read() {
+    public List<FactureDto> read() {
         return service.readActive();
     }
 
     @GetMapping("/{id}")
-    public Facture readOne(@PathVariable("id") Long id) {
+    public FactureDto readOne(@PathVariable("id") Long id) {
         return service.readOne(id);
     }
 
     @PostMapping
+    public FactureDto create(@RequestBody FactureDto factureDto) {
+        return service.create(factureDto.getIdClient(), factureDto.getIdPaiement());
+    }
+
+    @PutMapping("/{id}/add")
+    public boolean update(@RequestBody FactureArticleDto factureArticleDto, @PathVariable("id") Long id) {
+        return service.addArticle(factureArticleDto.getIdFacture(), factureArticleDto);
+    }
 
     @PutMapping("/{id}")
+    public Facture validate(@PathVariable("id") Long id) {
+        return service.validateFacture(id);
+    }
 
     @DeleteMapping("/{id}")
-    public Facture delete(@PathVariable("id") Long id) {
+    public FactureDto delete(@PathVariable("id") Long id) {
         return service.delete(id);
     }
 }
-
-//todo : terminer et tester contrôleur

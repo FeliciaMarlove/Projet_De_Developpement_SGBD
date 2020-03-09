@@ -1,8 +1,12 @@
 package be.iramps.florencemary.devsgbd.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import javax.print.attribute.standard.MediaSize;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -20,7 +24,7 @@ public class Facture implements Serializable {
     @Column(name = "ref_facture", nullable = false)
     private String refFacture;
 
-    @Column(name = "date_heure", insertable = false, updatable = false, nullable = false)
+    @Column(name = "date_heure", updatable = false, nullable = false)
     private LocalDateTime dateHeure;
 
     @Column(name = "actif_facture", nullable = false)
@@ -116,13 +120,15 @@ public class Facture implements Serializable {
         this();
         this.client = client;
         this.paiement = paiement;
-        this.refFacture = dateHeure.toString() + "" + client.getNomClient().substring(0,4).toUpperCase() + "" + client.getPrenomClient().substring(0,4);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyhhmm");
+        this.refFacture = this.dateHeure.format(formatter) + "" + client.getNomClient().substring(0,4).toUpperCase() + "" + client.getPrenomClient().substring(0,4);
     }
 
     public Facture() {
         this.dateHeure = LocalDateTime.now();
         this.listeArticlesFactures = new ArrayList<>();
         this.isValidee = false;
+        this.isActiveFacture = true;
     }
 //_____________________________EQUALS/HASHCODE/TOSTRING_____________________________
 
