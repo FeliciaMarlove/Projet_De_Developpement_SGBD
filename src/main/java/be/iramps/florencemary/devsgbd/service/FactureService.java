@@ -16,5 +16,5 @@ public interface FactureService {
     boolean addArticle(Long id, FactureArticleDto article);
     boolean deleteArticle(Long idFacture, Long idArticle);
     boolean deleteOneArticle(Long idFacture, Long idArticle);
-    Facture validateFacture(Long idFacture);
+    FactureDto validateFacture(Long idFacture);
 }

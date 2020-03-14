@@ -15,6 +15,7 @@ public class TvaDto {
     }
 
     public void setTauxTva(Integer tauxTva) {
-        this.tauxTva = tauxTva;
+        if (tauxTva >= 0 && tauxTva < 22)
+            this.tauxTva = tauxTva;
     }
 }

@@ -44,7 +44,7 @@ public class FactureController {
     }
 
     @PutMapping("/{id}")
-    public Facture validate(@PathVariable("id") Long id) {
+    public FactureDto validate(@PathVariable("id") Long id) {
         return service.validateFacture(id);
     }
 

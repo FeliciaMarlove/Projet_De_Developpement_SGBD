@@ -59,7 +59,8 @@ public class Adresse implements Serializable {
     }
 
     public void setNumero(int numero) {
-        this.numero = numero;
+        if (numero > 0)
+            this.numero = numero;
     }
 
     public int getCodePostal() {
@@ -67,6 +68,7 @@ public class Adresse implements Serializable {
     }
 
     public void setCodePostal(int codePostal) {
+        if (codePostal > 0 && codePostal < 99999)
         this.codePostal = codePostal;
     }
 
@@ -83,6 +85,7 @@ public class Adresse implements Serializable {
     }
 
     public void setPays(String pays) {
+        if (pays.equalsIgnoreCase("Belgique") || pays.equalsIgnoreCase("France"))
         this.pays = pays;
     }
 
@@ -99,11 +102,8 @@ public class Adresse implements Serializable {
     }
 
     public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public void setIdAdresse(Long idAdresse) {
-        this.idAdresse = idAdresse;
+        if (client != null)
+            this.client = client;
     }
 
     public String getComplementNumero() {
@@ -147,7 +147,7 @@ public class Adresse implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Adresse adresse = (Adresse) o;
         return numero == adresse.numero &&
-                complementNumero == adresse.complementNumero &&
+                complementNumero.equals(adresse.complementNumero) &&
                 codePostal == adresse.codePostal &&
                 isActifAdresse == adresse.isActifAdresse &&
                 rue.equals(adresse.rue) &&
@@ -172,7 +172,6 @@ public class Adresse implements Serializable {
                 ", ville = " + ville + '\'' +
                 ", pays = " + pays + '\'' +
                 ", adresse active ?" + isActifAdresse
-//                +", Id client =" + client.getIdClient()
                 ;
     }
 }

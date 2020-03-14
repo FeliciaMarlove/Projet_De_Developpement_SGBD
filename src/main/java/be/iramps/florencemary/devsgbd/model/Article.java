@@ -38,9 +38,6 @@ public class Article implements Serializable {
     @JoinColumn(name = "id_tva", referencedColumnName = "id_tva", foreignKey = @ForeignKey(name = "FK_tva_article"))
     private Tva tva;
 
-//    @OneToMany(cascade = CascadeType.ALL, targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
-//    private List<FactureArticlesLiaison> facturesList;
-
     /* _____________________________GETTERS/SETTERS_____________________________ */
     public Long getIdArticle() {
         return idArticle;
@@ -67,7 +64,8 @@ public class Article implements Serializable {
     }
 
     public void setStock(int stock) {
-        this.stock = stock;
+        if (stock >= 0)
+            this.stock = stock;
     }
 
     public double getPrixUnitaire() {
@@ -75,7 +73,8 @@ public class Article implements Serializable {
     }
 
     public void setPrixUnitaire(double prixUnitaire) {
-        this.prixUnitaire = prixUnitaire;
+        if (prixUnitaire >= 0.00)
+            this.prixUnitaire = prixUnitaire;
     }
 
     public String getCodeEAN() {
@@ -83,6 +82,7 @@ public class Article implements Serializable {
     }
 
     public void setCodeEAN(String codeEAN) {
+        if ((codeEAN.length() > 11 && codeEAN.length() < 14) && (codeEAN.matches("-?\\d+(\\.\\d+)?")))
         this.codeEAN = codeEAN;
     }
 
@@ -99,7 +99,8 @@ public class Article implements Serializable {
     }
 
     public void setTva(Tva tva) {
-        this.tva = tva;
+        if (tva != null)
+            this.tva = tva;
     }
 
     /* _____________________________CONSTRUCTEURS_____________________________ */

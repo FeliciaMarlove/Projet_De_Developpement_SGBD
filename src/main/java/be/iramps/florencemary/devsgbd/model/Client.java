@@ -3,6 +3,7 @@ package be.iramps.florencemary.devsgbd.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
@@ -64,7 +65,8 @@ public class Client implements Serializable {
     }
 
     public void setTelephoneClient(String telephoneClient) {
-        this.telephoneClient = telephoneClient;
+        if ((telephoneClient.length() > 8 && telephoneClient.length() < 11) && (telephoneClient.matches("-?\\d+(\\.\\d+)?")))
+            this.telephoneClient = telephoneClient;
     }
 
     public LocalDate getDateNaissanceClient() {
@@ -72,7 +74,8 @@ public class Client implements Serializable {
     }
 
     public void setDateNaissanceClient(LocalDate dateNaissanceClient) {
-        this.dateNaissanceClient = dateNaissanceClient;
+        if (dateNaissanceClient.getYear() <= (LocalDate.now().getYear() - 18))
+            this.dateNaissanceClient = dateNaissanceClient;
     }
 
     public boolean isActifClient() {

@@ -23,7 +23,7 @@ public class Utilisateur implements Serializable {
     @Column(name = "prenom_utilisateur", nullable = false)
     private String prenomUtilisateur;
 
-    @Column(name = "login", nullable = false)
+    @Column(name = "login", nullable = false, unique = true)
     private String login;
 
     @Column(name = "mot_de_passe", nullable = false)
@@ -77,8 +77,7 @@ public class Utilisateur implements Serializable {
     }
 
     public void setMotDePasse(String motDePasse) {
-        String strRegEx = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*](?=\\S+$).{8,15}$";
-        if (motDePasse.matches(strRegEx)) this.motDePasse = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
+        this.motDePasse = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
     }
 
     public String getPoste() {
@@ -102,7 +101,7 @@ public class Utilisateur implements Serializable {
     }
 
     public void setDepartement(Departement departement) {
-        this.departement = departement;
+            this.departement = departement;
     }
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
@@ -129,8 +128,7 @@ public class Utilisateur implements Serializable {
         Utilisateur that = (Utilisateur) o;
         return isActifUtilisateur == that.isActifUtilisateur &&
                 nomUtilisateur.equals(that.nomUtilisateur) &&
-                prenomUtilisateur.equals(that.prenomUtilisateur) &&
-                login.equals(that.login);
+                prenomUtilisateur.equals(that.prenomUtilisateur);
     }
 
     @Override

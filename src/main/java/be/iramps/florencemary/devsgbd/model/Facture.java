@@ -36,6 +36,12 @@ public class Facture implements Serializable {
     @Transient
     private Double total;
 
+    @Transient
+    private Double totalTva;
+
+    @Transient
+    private Double totalTTC;
+
     //_____________________________JOINTURES_____________________________
     @ManyToOne(targetEntity = Client.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client", referencedColumnName = "id_client", foreignKey = @ForeignKey(name = "FK_client_facture"))
@@ -91,7 +97,8 @@ public class Facture implements Serializable {
     }
 
     public void setTotal(Double total) {
-        this.total = total;
+        if (total >= 0.00)
+            this.total = total;
     }
 
     public Paiement getPaiement() {
@@ -99,7 +106,8 @@ public class Facture implements Serializable {
     }
 
     public void setPaiement(Paiement paiement) {
-        this.paiement = paiement;
+        if (paiement != null)
+            this.paiement = paiement;
     }
 
     public void setListeArticlesFactures(List<FactureArticlesLiaison> listeArticlesFactures) {
@@ -112,6 +120,22 @@ public class Facture implements Serializable {
 
     public void setValidee(boolean isValidee) {
         this.isValidee = isValidee;
+    }
+
+    public Double getTotalTva() {
+        return totalTva;
+    }
+
+    public void setTotalTva(Double totalTva) {
+        this.totalTva = totalTva;
+    }
+
+    public Double getTotalTTC() {
+        return totalTTC;
+    }
+
+    public void setTotalTTC(Double totalTTC) {
+        this.totalTTC = totalTTC;
     }
 
     //_____________________________CONSTRUCTEURS_____________________________

@@ -44,7 +44,8 @@ public class AdresseDto {
     }
 
     public void setNumero(int numero) {
-        this.numero = numero;
+        if (numero > 0)
+            this.numero = numero;
     }
 
     public int getCodePostal() {
@@ -52,7 +53,8 @@ public class AdresseDto {
     }
 
     public void setCodePostal(int codePostal) {
-        this.codePostal = codePostal;
+        if (codePostal > 0 && codePostal < 99999)
+            this.codePostal = codePostal;
     }
 
     public String getVille() {
@@ -68,7 +70,8 @@ public class AdresseDto {
     }
 
     public void setPays(String pays) {
-        this.pays = pays;
+        if (pays.equalsIgnoreCase("Belgique") || pays.equalsIgnoreCase("France"))
+            this.pays = pays;
     }
 
     public Long getIdClient() {

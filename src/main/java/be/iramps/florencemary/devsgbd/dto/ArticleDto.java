@@ -41,23 +41,24 @@ public class ArticleDto {
     }
 
     public void setStock(int stock) {
-        this.stock = stock;
+        if (stock >= 0)
+            this.stock = stock;
     }
-
     public double getPrixUnitaire() {
         return prixUnitaire;
     }
 
     public void setPrixUnitaire(double prixUnitaire) {
-        this.prixUnitaire = prixUnitaire;
+        if (prixUnitaire >= 0.00)
+            this.prixUnitaire = prixUnitaire;
     }
-
     public String getCodeEAN() {
         return codeEAN;
     }
 
     public void setCodeEAN(String codeEAN) {
-        this.codeEAN = codeEAN;
+        if ((codeEAN.length() > 11 && codeEAN.length() < 14) && (codeEAN.matches("-?\\d+(\\.\\d+)?")))
+            this.codeEAN = codeEAN;
     }
 
     public Long getIdTva() {

@@ -39,7 +39,8 @@ public class ClientDto {
     }
 
     public void setTelephoneClient(String telephoneClient) {
-        this.telephoneClient = telephoneClient;
+        if ((telephoneClient.length() > 8 && telephoneClient.length() < 11) && (telephoneClient.matches("-?\\d+(\\.\\d+)?")))
+            this.telephoneClient = telephoneClient;
     }
 
     public LocalDate getDateNaissanceClient() {
@@ -47,6 +48,8 @@ public class ClientDto {
     }
 
     public void setDateNaissanceClient(LocalDate dateNaissanceClient) {
-        this.dateNaissanceClient = dateNaissanceClient;
+        if (dateNaissanceClient.getYear() <= (LocalDate.now().getYear() - 18))
+            this.dateNaissanceClient = dateNaissanceClient;
     }
+
 }

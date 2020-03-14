@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Read
+     *
      * @return liste des factures
      */
     @Override
@@ -39,13 +41,14 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Read 1 facture
+     *
      * @param id id de la facture
      * @return une facture
      */
     @Override
     public FactureDto readOne(Long id) {
         Facture facture;
-        for (Facture fact: repository.findAll()) {
+        for (Facture fact : repository.findAll()) {
             if (fact.getIdFacture().equals(id)) {
                 facture = repository.findById(id).get();
                 return new FactureDto(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement());
@@ -56,6 +59,7 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Supprimer une facture
+     *
      * @param id de la facture à supprimer
      * @return la facture qui a été effacée, ou null si pas de suppression
      */
@@ -72,6 +76,7 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Read des factures "actives" (non supprimées logiquement)
+     *
      * @return la liste des factures actives
      */
     @Override
@@ -92,6 +97,7 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Vérifie qu'un FactureArticle se trouve sur la facture
+     *
      * @param idFacture
      * @param idArticle
      * @return le FactureArticle trouvé, ou null si pas trouvé
@@ -109,6 +115,7 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Ajoute un article sur la facture
+     *
      * @param idFacture
      * @param articleDto
      * @return
@@ -146,6 +153,7 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Fonction qui supprime un article (facture_article) de la facture (quantité = 0)
+     *
      * @param idFacture
      * @param idArticle
      * @return true sur l'article a été trouvé et supprimé
@@ -157,7 +165,8 @@ public class FactureServiceImplemented implements FactureService {
         List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
         for (FactureArticlesLiaison articleSurFacture : articlesSurFacture) {
             if (exists(idFacture) && (articleSurFacture.getIdArticle() == idArticle)) {
-                success = articlesSurFacture.remove(articleSurFacture); break;
+                success = articlesSurFacture.remove(articleSurFacture);
+                break;
             }
         }
         return success;
@@ -165,6 +174,7 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Fonction qui supprime 1 unité de l'article (quantité -= 1) ou supprime l'article sur la quantité = 0
+     *
      * @param idFacture
      * @param idArticle
      * @return true sur l'article a été trouvé et supprimé
@@ -178,9 +188,11 @@ public class FactureServiceImplemented implements FactureService {
             if (exists(idFacture) && (articleSurFacture.getIdArticle() == idArticle)) {
                 success = true;
                 if (articleSurFacture.getIdArticle() == 1L) {
-                    deleteArticle(idFacture, idArticle); break;
+                    deleteArticle(idFacture, idArticle);
+                    break;
                 } else {
-                    articleSurFacture.setQuantite(articleSurFacture.getQuantite() - 1); break;
+                    articleSurFacture.setQuantite(articleSurFacture.getQuantite() - 1);
+                    break;
                 }
             }
         }
@@ -192,7 +204,7 @@ public class FactureServiceImplemented implements FactureService {
         Client client = repositoryClient.findById(idClient).get();
         Paiement paiement = repositoryPaiement.findById(idPaiement).get();
         Facture newFacture = new Facture(client, paiement);
-        if (equalsAny(newFacture) == null){
+        if (equalsAny(newFacture) == null) {
             System.out.println(newFacture);
             repository.save(newFacture);
             return new FactureDto(idClient, idPaiement);
@@ -202,22 +214,38 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Finaliser la facture (créer une facture immutable)
+     *
      * @param idFacture
+     * @return
      */
     @Override
-    public Facture validateFacture(Long idFacture) {
+    @Transactional
+    public FactureDto validateFacture(Long idFacture) {
         if (exists(idFacture)) {
             Facture factureAFinaliser = repository.findById(idFacture).get();
-            final Facture factureFinale = new Facture(factureAFinaliser.getClient(), factureAFinaliser.getPaiement());
-            final List<FactureArticlesLiaison> listeFinale = new ArrayList<>();
-            for (FactureArticlesLiaison fal : factureAFinaliser.getArticlesList()) {
-                final FactureArticlesLiaison falUnite = new FactureArticlesLiaison(fal.getIdFacture(), fal.getIdArticle(), fal.getQuantite());
-                listeFinale.add(falUnite);
-            }
-            final Double total = calculerMontant(idFacture);
-            factureFinale.setTotal(total);
-            if (!listeFinale.isEmpty()) {
-                return factureFinale;
+            if (!factureAFinaliser.getArticlesList().isEmpty()) {
+                final Facture factureFinale = new Facture(factureAFinaliser.getClient(), factureAFinaliser.getPaiement());
+                final List<FactureArticlesLiaison> listeFinale = new ArrayList<>();
+                for (FactureArticlesLiaison fal : factureAFinaliser.getArticlesList()) {
+                    final FactureArticlesLiaison falUnite = new FactureArticlesLiaison(fal.getIdFacture(), fal.getIdArticle(), fal.getQuantite());
+                    repositoryFactureArticles.save(falUnite);
+                    listeFinale.add(falUnite);
+                }
+                final Double total = calculerMontant(idFacture);
+                final Double totalTva = calculerMontantTVA(idFacture);
+                final Double totalTTC = calculerMontantTTC(idFacture);
+                factureFinale.setListeArticlesFactures(listeFinale);
+                factureFinale.setTotal(total);
+                factureFinale.setTotalTva(totalTva);
+                factureFinale.setTotalTTC(totalTTC);
+                repository.save(factureFinale);
+                System.out.println("Facture finale : " + factureFinale +
+                        " \n Total : " + factureFinale.getTotal() +
+                        " \n Total TVA : " + factureFinale.getTotalTva() +
+                        " \n Total TTC : " + factureFinale.getTotalTTC() +
+                        " \n Articles : " + factureFinale.getArticlesList()
+                );
+                return new FactureDto(factureFinale.getClient().getIdClient(), factureFinale.getPaiement().getIdPaiement());
             }
         }
         return null;
@@ -226,10 +254,23 @@ public class FactureServiceImplemented implements FactureService {
     private Double calculerMontant(Long idFacture) {
         Double montant = 0.0;
         Facture facture = repository.findById(idFacture).get();
-        for (FactureArticlesLiaison fal: facture.getArticlesList()) {
+        for (FactureArticlesLiaison fal : facture.getArticlesList()) {
             montant += (fal.getQuantite() * repositoryArticle.findById(fal.getIdArticle()).get().getPrixUnitaire());
         }
         return montant;
+    }
+
+    private Double calculerMontantTVA(Long idFacture) {
+        Double montant = 0.0;
+        Facture facture = repository.findById(idFacture).get();
+        for (FactureArticlesLiaison fal : facture.getArticlesList()) {
+            montant += (fal.getQuantite() * ((repositoryArticle.findById(fal.getIdArticle()).get().getPrixUnitaire() / 100) * repositoryArticle.findById(fal.getIdArticle()).get().getTva().getTauxTva()));
+        }
+        return montant;
+    }
+
+    private Double calculerMontantTTC(Long idFacture) {
+        return calculerMontant(idFacture) + calculerMontantTVA(idFacture);
     }
 
     private boolean exists(Long id) {

@@ -112,8 +112,7 @@ public class AdresseServiceImplemented implements AdresseService {
 
     private Adresse equalsAny(AdresseDto adresseDto) {
         for (Adresse adresseCompared : read()) {
-            if ((adresseDto.getIdClient() == adresseCompared.getClient().getIdClient())
-                   && (adresseDto.getComplementNumero() == null || adresseDto.getComplementNumero().equals(adresseCompared.getComplementNumero()))
+            if ((adresseDto.getComplementNumero() == null || adresseDto.getComplementNumero().equals(adresseCompared.getComplementNumero()))
                     && (adresseDto.getCodePostal() == adresseCompared.getCodePostal())
                     && (adresseDto.getNumero() == adresseCompared.getNumero())
                     && (adresseDto.getPays().equals(adresseCompared.getPays()))

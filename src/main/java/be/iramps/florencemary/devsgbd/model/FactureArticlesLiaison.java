@@ -15,13 +15,13 @@ public class FactureArticlesLiaison implements Serializable {
     @Column(name = "id_facture_articles")
     private Long idFactureArticles;
 
-    @Column(name = "id_facture")
+    @Column(name = "id_facture", nullable = false)
     private Long idFacture;
 
-    @Column(name = "id_article")
+    @Column(name = "id_article", nullable = false)
     private Long idArticle;
 
-    @Column(name = "quantite")
+    @Column(name = "quantite", nullable = false)
     private Integer quantite;
 
     @Transient

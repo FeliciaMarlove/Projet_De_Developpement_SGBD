@@ -144,15 +144,13 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
         for (Utilisateur user : readActiveForConnection()) {
             if (user.getLogin().equals(login)) {
                 if (BCrypt.checkpw(motDePasse, user.getMotDePasse())) {
-                    connectionMessenger = new ConnectionMessenger(user.getIdUtilisateur(), "Connexion réussie", true, 1);
+                    return new ConnectionMessenger(user.getIdUtilisateur(), "Connexion réussie", true, 1);
                 } else {
-                    connectionMessenger = new ConnectionMessenger(user.getIdUtilisateur(), "Mot de passe incorrect", false, 2);
+                    return new ConnectionMessenger(user.getIdUtilisateur(), "Mot de passe incorrect", false, 2);
                 }
-            } else {
-                connectionMessenger = new ConnectionMessenger(0L, "Le login " + login + " n'existe pas", false, 3);
             }
         }
-        return connectionMessenger;
+        return new ConnectionMessenger(0L, "Le login " + login + " n'existe pas", false, 3);
     }
 
     private UtilisateurDto mapEntityToDto(Utilisateur utilisateur) {

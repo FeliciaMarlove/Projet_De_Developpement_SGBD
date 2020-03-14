@@ -40,8 +40,10 @@ public class Tva implements Serializable {
     }
 
     public void setTauxTva(Integer tauxTva) {
-        this.tauxTva = tauxTva;
-        this.nom = tauxTva.toString() + "%";
+        if (tauxTva >= 0 && tauxTva < 22) {
+            this.tauxTva = tauxTva;
+            this.nom = tauxTva.toString() + "%";
+        }
     }
 
     public String getNom() {
