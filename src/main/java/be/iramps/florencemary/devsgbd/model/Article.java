@@ -38,8 +38,8 @@ public class Article implements Serializable {
     @JoinColumn(name = "id_tva", referencedColumnName = "id_tva", foreignKey = @ForeignKey(name = "FK_tva_article"))
     private Tva tva;
 
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
-    private List<FactureArticlesLiaison> facturesList;
+//    @OneToMany(cascade = CascadeType.ALL, targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
+//    private List<FactureArticlesLiaison> facturesList;
 
     /* _____________________________GETTERS/SETTERS_____________________________ */
     public Long getIdArticle() {

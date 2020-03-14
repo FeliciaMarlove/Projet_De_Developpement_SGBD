@@ -15,7 +15,7 @@ public class FactureArticlesLiaison implements Serializable {
     @Column(name = "id_facture_articles")
     private Long idFactureArticles;
 
-    @Column(name = "id_facture") // mais donc comment update la valeur ???
+    @Column(name = "id_facture")
     private Long idFacture;
 
     @Column(name = "id_article")
@@ -28,13 +28,7 @@ public class FactureArticlesLiaison implements Serializable {
     private Double montantLigne;
 
     /* _____________________________JOINTURES_____________________________ */
-//    @ManyToOne(targetEntity = Facture.class, fetch = FetchType.LAZY)
-//    //@JoinColumn(name = "id_facture", referencedColumnName = "id_facture", foreignKey = @ForeignKey(name = "FK_facture_articles_facture"))
-//    private Facture facture;
-//
-//    @ManyToOne(targetEntity = Article.class, fetch = FetchType.LAZY)
-//   // @JoinColumn(name = "id_article", referencedColumnName = "id_article", foreignKey = @ForeignKey(name = "FK_facture_articles_article"))
-//    private Article article;
+
 
     /* _____________________________GETTERS/SETTERS_____________________________ */
 
@@ -78,14 +72,12 @@ public class FactureArticlesLiaison implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FactureArticlesLiaison that = (FactureArticlesLiaison) o;
-        return idFacture.equals(that.idFacture) &&
-                idArticle.equals(that.idArticle) &&
-                quantite.equals(that.quantite);
+        return idFactureArticles.equals(that.idFactureArticles);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idFacture, idArticle, quantite);
+        return Objects.hash(idFactureArticles);
     }
 
     @Override

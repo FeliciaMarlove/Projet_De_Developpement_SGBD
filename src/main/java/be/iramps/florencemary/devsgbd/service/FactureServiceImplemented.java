@@ -106,6 +106,8 @@ public class FactureServiceImplemented implements FactureService {
         return null;
     }
 
+
+
     /**
      * Ajoute un article sur la facture
      * @param idFacture
@@ -116,19 +118,15 @@ public class FactureServiceImplemented implements FactureService {
     public boolean addArticle(Long idFacture, FactureArticleDto article) {
         boolean success = false;
         Facture facture = repository.findById(idFacture).get();
-        System.out.println(facture);
-
         if (exists(idFacture)) {
             List<FactureArticlesLiaison> articlesSurFacture = facture.getArticlesList();
             System.out.println(articlesSurFacture); //-----------------------------------------------
             FactureArticlesLiaison factArt = isOnFacture(idFacture, article.getIdArticle());
             System.out.println(factArt); // return null !
             if (factArt != null) {
-                articlesSurFacture.get(articlesSurFacture.indexOf(factArt)).setQuantite(factArt.getQuantite() + 1);
-                factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
+                articlesSurFacture.get(articlesSurFacture.indexOf(factArt)).setQuantite(factArt.getQuantite() + article.getQuantite());
+               // factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
                 repositoryFactureArticles.save(factArt);
-                articlesSurFacture.add(factArt);
-                repository.save(facture);
                 success = true;
             } else {
                 factArt = new FactureArticlesLiaison(
@@ -144,7 +142,6 @@ public class FactureServiceImplemented implements FactureService {
             }
         }
         System.out.println(facture);
-
         return success;
     }
 
