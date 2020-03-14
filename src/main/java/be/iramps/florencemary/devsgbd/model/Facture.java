@@ -41,7 +41,7 @@ public class Facture implements Serializable {
     @JoinColumn(name = "id_client", referencedColumnName = "id_client", foreignKey = @ForeignKey(name = "FK_client_facture"))
     private Client client;
 
-    @OneToMany(mappedBy = "facture", cascade = CascadeType.ALL, targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
     private List<FactureArticlesLiaison> listeArticlesFactures;
 
     @ManyToOne(targetEntity = Paiement.class, fetch = FetchType.LAZY)

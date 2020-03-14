@@ -15,10 +15,10 @@ public class FactureArticlesLiaison implements Serializable {
     @Column(name = "id_facture_articles")
     private Long idFactureArticles;
 
-    @Column(name = "id_facture", updatable=false, insertable = false) // mais donc comment update la valeur ???
+    @Column(name = "id_facture") // mais donc comment update la valeur ???
     private Long idFacture;
 
-    @Column(name = "id_article", updatable=false, insertable = false)
+    @Column(name = "id_article")
     private Long idArticle;
 
     @Column(name = "quantite")
@@ -28,13 +28,13 @@ public class FactureArticlesLiaison implements Serializable {
     private Double montantLigne;
 
     /* _____________________________JOINTURES_____________________________ */
-    @ManyToOne(targetEntity = Facture.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_facture", referencedColumnName = "id_facture", foreignKey = @ForeignKey(name = "FK_facture_articles_facture"))
-    private Facture facture;
-
-    @ManyToOne(targetEntity = Article.class, fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_article", referencedColumnName = "id_article", foreignKey = @ForeignKey(name = "FK_facture_articles_article"))
-    private Article article;
+//    @ManyToOne(targetEntity = Facture.class, fetch = FetchType.LAZY)
+//    //@JoinColumn(name = "id_facture", referencedColumnName = "id_facture", foreignKey = @ForeignKey(name = "FK_facture_articles_facture"))
+//    private Facture facture;
+//
+//    @ManyToOne(targetEntity = Article.class, fetch = FetchType.LAZY)
+//   // @JoinColumn(name = "id_article", referencedColumnName = "id_article", foreignKey = @ForeignKey(name = "FK_facture_articles_article"))
+//    private Article article;
 
     /* _____________________________GETTERS/SETTERS_____________________________ */
 

@@ -116,6 +116,8 @@ public class FactureServiceImplemented implements FactureService {
     public boolean addArticle(Long idFacture, FactureArticleDto article) {
         boolean success = false;
         Facture facture = repository.findById(idFacture).get();
+        System.out.println(facture);
+
         if (exists(idFacture)) {
             List<FactureArticlesLiaison> articlesSurFacture = facture.getArticlesList();
             System.out.println(articlesSurFacture); //-----------------------------------------------
@@ -133,7 +135,7 @@ public class FactureServiceImplemented implements FactureService {
                         article.getIdFacture(),
                         article.getIdArticle(),
                         article.getQuantite());
-                factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
+                //factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
                 System.out.println(factArt);//-------------------------
                 repositoryFactureArticles.save(factArt);
                 success = articlesSurFacture.add(factArt);
