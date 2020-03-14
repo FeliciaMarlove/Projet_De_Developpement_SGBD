@@ -238,7 +238,10 @@ public class FactureServiceImplemented implements FactureService {
                 factureFinale.setTotal(total);
                 factureFinale.setTotalTva(totalTva);
                 factureFinale.setTotalTTC(totalTTC);
+                factureAFinaliser.setValidee(true);
+                factureAFinaliser.setActiveFacture(false);
                 repository.save(factureFinale);
+                repository.save(factureAFinaliser);
                 System.out.println("Facture finale : " + factureFinale +
                         " \n Total : " + factureFinale.getTotal() +
                         " \n Total TVA : " + factureFinale.getTotalTva() +
