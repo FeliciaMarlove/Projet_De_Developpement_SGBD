@@ -111,37 +111,33 @@ public class FactureServiceImplemented implements FactureService {
     /**
      * Ajoute un article sur la facture
      * @param idFacture
-     * @param article
+     * @param articleDto
      * @return
      */
     @Override
-    public boolean addArticle(Long idFacture, FactureArticleDto article) {
+    public boolean addArticle(Long idFacture, FactureArticleDto articleDto) {
         boolean success = false;
+        Article article = repositoryArticle.findById(articleDto.getIdArticle()).get();
         Facture facture = repository.findById(idFacture).get();
         if (exists(idFacture)) {
             List<FactureArticlesLiaison> articlesSurFacture = facture.getArticlesList();
-            System.out.println(articlesSurFacture); //-----------------------------------------------
             FactureArticlesLiaison factArt = isOnFacture(idFacture, article.getIdArticle());
-            System.out.println(factArt); // return null !
             if (factArt != null) {
-                articlesSurFacture.get(articlesSurFacture.indexOf(factArt)).setQuantite(factArt.getQuantite() + article.getQuantite());
-               // factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
+                articlesSurFacture.get(articlesSurFacture.indexOf(factArt)).setQuantite(factArt.getQuantite() + articleDto.getQuantite());
+                factArt.setMontantLigne(factArt.getQuantite() * (article.getPrixUnitaire()));
                 repositoryFactureArticles.save(factArt);
                 success = true;
             } else {
                 factArt = new FactureArticlesLiaison(
-                        article.getIdFacture(),
-                        article.getIdArticle(),
-                        article.getQuantite());
-                //factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
-                System.out.println(factArt);//-------------------------
+                        articleDto.getIdFacture(),
+                        articleDto.getIdArticle(),
+                        articleDto.getQuantite());
+                factArt.setMontantLigne(factArt.getQuantite() * (article.getPrixUnitaire()));
                 repositoryFactureArticles.save(factArt);
                 success = articlesSurFacture.add(factArt);
-                System.out.println(articlesSurFacture); //-------------------
                 repository.save(facture);
             }
         }
-        System.out.println(facture);
         return success;
     }
 
