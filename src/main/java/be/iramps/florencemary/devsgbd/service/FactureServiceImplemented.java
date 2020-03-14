@@ -6,6 +6,7 @@ import be.iramps.florencemary.devsgbd.model.*;
 import be.iramps.florencemary.devsgbd.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,7 @@ public class FactureServiceImplemented implements FactureService {
      */
     private FactureArticlesLiaison isOnFacture(Long idFacture, Long idArticle) {
         Facture facture = repository.findById(idFacture).get();
-        System.out.println(facture); // la liste est vide !
+        System.out.println(facture);
         for (FactureArticlesLiaison fal : facture.getArticlesList()) {
             if (fal.getIdArticle().equals(idArticle)) {
                 return fal;
@@ -106,8 +107,6 @@ public class FactureServiceImplemented implements FactureService {
         return null;
     }
 
-
-
     /**
      * Ajoute un article sur la facture
      * @param idFacture
@@ -115,6 +114,7 @@ public class FactureServiceImplemented implements FactureService {
      * @return
      */
     @Override
+    @Transactional
     public boolean addArticle(Long idFacture, FactureArticleDto articleDto) {
         boolean success = false;
         Article article = repositoryArticle.findById(articleDto.getIdArticle()).get();
@@ -137,6 +137,9 @@ public class FactureServiceImplemented implements FactureService {
                 success = articlesSurFacture.add(factArt);
                 repository.save(facture);
             }
+            article.setStock(article.getStock() - articleDto.getQuantite());
+            repositoryArticle.save(article);
+            // tester si la transaction s'arrête bien en cas de problème : System.exit(1);
         }
         return success;
     }
