@@ -5,10 +5,10 @@ import java.time.LocalDate;
 public class ClientDto {
     private String nomClient;
     private String prenomClient;
-    private Long telephoneClient;
+    private String telephoneClient;
     private LocalDate dateNaissanceClient;
 
-    public ClientDto(String nomClient, String prenomClient, Long telephoneClient, LocalDate dateNaissanceClient) {
+    public ClientDto(String nomClient, String prenomClient, String telephoneClient, LocalDate dateNaissanceClient) {
         this.nomClient = nomClient;
         this.prenomClient = prenomClient;
         this.telephoneClient = telephoneClient;
@@ -34,11 +34,11 @@ public class ClientDto {
         this.prenomClient = prenomClient;
     }
 
-    public Long getTelephoneClient() {
+    public String getTelephoneClient() {
         return telephoneClient;
     }
 
-    public void setTelephoneClient(Long telephoneClient) {
+    public void setTelephoneClient(String telephoneClient) {
         this.telephoneClient = telephoneClient;
     }
 

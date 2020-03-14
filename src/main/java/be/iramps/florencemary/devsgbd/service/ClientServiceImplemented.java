@@ -38,7 +38,7 @@ public class ClientServiceImplemented implements ClientService {
         Client newClient = new Client(
                 newItem.getNomClient(),
                 newItem.getPrenomClient(),
-                newItem.getTelephoneClient(),
+                newItem.getTelephoneClient() != null? newItem.getTelephoneClient() : "Non renseigné",
                 newItem.getDateNaissanceClient()
         );
         if (equalsAny(newClient) == null) {
@@ -54,7 +54,7 @@ public class ClientServiceImplemented implements ClientService {
             Client toUpdate = repository.findById(id).get();
             toUpdate.setNomClient(update.getNomClient());
             toUpdate.setPrenomClient(update.getPrenomClient());
-            toUpdate.setTelephoneClient(update.getTelephoneClient());
+            toUpdate.setTelephoneClient(update.getTelephoneClient() != null ? update.getTelephoneClient() : "Non renseigné");
             toUpdate.setDateNaissanceClient(update.getDateNaissanceClient());
             repository.save(toUpdate);
             return update;
@@ -108,7 +108,7 @@ public class ClientServiceImplemented implements ClientService {
     }
 
     private ClientDto mapEntityToDto(Client client) {
-        return new ClientDto(client.getNomClient(), client.getPrenomClient(), client.getTelephoneClient() == null? 0 : client.getTelephoneClient(), client.getDateNaissanceClient());
+        return new ClientDto(client.getNomClient(), client.getPrenomClient(), client.getTelephoneClient() == null? "Non renseigné" : client.getTelephoneClient(), client.getDateNaissanceClient());
     }
 
     private List<ClientDto> mapEntitiesToDtos(List<Client> clients) {

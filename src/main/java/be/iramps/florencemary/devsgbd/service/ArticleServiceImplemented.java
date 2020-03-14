@@ -109,8 +109,7 @@ public class ArticleServiceImplemented implements ArticleService {
     private Article equalsAny(ArticleDto articleDto) {
         for (Article articleCompared : read()) {
             System.out.println(articleCompared);
-            if ((articleDto.getCodeEAN().equals(articleCompared.getCodeEAN()))
-                    && (articleDto.getNomArticle().equals(articleCompared.getNomArticle()))) {
+            if ((articleDto.getCodeEAN().equals(articleCompared.getCodeEAN()))) {
                 return repository.findById(articleCompared.getIdArticle()).get();
             }
         }

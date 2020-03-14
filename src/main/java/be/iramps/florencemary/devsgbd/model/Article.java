@@ -28,7 +28,7 @@ public class Article implements Serializable {
     private double prixUnitaire;
 
     @Column(name = "ean", nullable = false)
-    private Long codeEAN;
+    private String codeEAN;
 
     @Column(name = "is_actif_art", nullable = false)
     private boolean isActifArticle;
@@ -38,7 +38,7 @@ public class Article implements Serializable {
     @JoinColumn(name = "id_tva", referencedColumnName = "id_tva", foreignKey = @ForeignKey(name = "FK_tva_article"))
     private Tva tva;
 
-    @OneToMany(mappedBy = "article", targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, targetEntity = FactureArticlesLiaison.class, fetch = FetchType.LAZY)
     private List<FactureArticlesLiaison> facturesList;
 
     /* _____________________________GETTERS/SETTERS_____________________________ */
@@ -78,11 +78,11 @@ public class Article implements Serializable {
         this.prixUnitaire = prixUnitaire;
     }
 
-    public Long getCodeEAN() {
+    public String getCodeEAN() {
         return codeEAN;
     }
 
-    public void setCodeEAN(Long codeEAN) {
+    public void setCodeEAN(String codeEAN) {
         this.codeEAN = codeEAN;
     }
 
@@ -104,7 +104,7 @@ public class Article implements Serializable {
 
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
-    public Article(String nomArticle, String descArticle, int stock, Double prixUnitaire, Long codeEAN, Tva tva) {
+    public Article(String nomArticle, String descArticle, int stock, Double prixUnitaire, String codeEAN, Tva tva) {
         this();
         this.nomArticle = nomArticle;
         this.descArticle = descArticle;

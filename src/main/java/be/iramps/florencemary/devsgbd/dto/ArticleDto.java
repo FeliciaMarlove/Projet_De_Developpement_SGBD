@@ -5,10 +5,10 @@ public class ArticleDto {
     private String descArticle;
     private int stock;
     private double prixUnitaire;
-    private Long codeEAN;
+    private String codeEAN;
     private Long idTva;
 
-    public ArticleDto(String nomArticle, String descArticle, int stock, double prixUnitaire, Long codeEAN, Long idTva) {
+    public ArticleDto(String nomArticle, String descArticle, int stock, double prixUnitaire, String codeEAN, Long idTva) {
         this.nomArticle = nomArticle;
         this.descArticle = descArticle;
         this.stock = stock;
@@ -52,11 +52,11 @@ public class ArticleDto {
         this.prixUnitaire = prixUnitaire;
     }
 
-    public Long getCodeEAN() {
+    public String getCodeEAN() {
         return codeEAN;
     }
 
-    public void setCodeEAN(Long codeEAN) {
+    public void setCodeEAN(String codeEAN) {
         this.codeEAN = codeEAN;
     }
 

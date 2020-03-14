@@ -23,7 +23,7 @@ public class Client implements Serializable {
     private String prenomClient;
 
     @Column(name = "telephone")
-    private Long telephoneClient;
+    private String telephoneClient;
 
     @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissanceClient;
@@ -59,11 +59,11 @@ public class Client implements Serializable {
         this.prenomClient = prenomClient;
     }
 
-    public Long getTelephoneClient() {
+    public String getTelephoneClient() {
         return telephoneClient;
     }
 
-    public void setTelephoneClient(Long telephoneClient) {
+    public void setTelephoneClient(String telephoneClient) {
         this.telephoneClient = telephoneClient;
     }
 
@@ -93,7 +93,7 @@ public class Client implements Serializable {
 
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
-    public Client(String nomClient, String prenomClient, Long telephoneClient, LocalDate dateNaissanceClient) {
+    public Client(String nomClient, String prenomClient, String telephoneClient, LocalDate dateNaissanceClient) {
         this();
         this.nomClient = nomClient;
         this.prenomClient = prenomClient;

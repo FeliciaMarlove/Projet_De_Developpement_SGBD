@@ -118,6 +118,7 @@ public class FactureServiceImplemented implements FactureService {
         Facture facture = repository.findById(idFacture).get();
         if (exists(idFacture)) {
             List<FactureArticlesLiaison> articlesSurFacture = facture.getArticlesList();
+            System.out.println(articlesSurFacture); //-----------------------------------------------
             FactureArticlesLiaison factArt = isOnFacture(idFacture, article.getIdArticle());
             System.out.println(factArt); // return null !
             if (factArt != null) {
@@ -127,17 +128,17 @@ public class FactureServiceImplemented implements FactureService {
                 articlesSurFacture.add(factArt);
                 repository.save(facture);
                 success = true;
-                System.out.println("already in");
             } else {
                 factArt = new FactureArticlesLiaison(
                         article.getIdFacture(),
                         article.getIdArticle(),
                         article.getQuantite());
                 factArt.setMontantLigne(factArt.getQuantite() * (repositoryArticle.findById(factArt.getIdArticle()).get().getPrixUnitaire()));
+                System.out.println(factArt);//-------------------------
                 repositoryFactureArticles.save(factArt);
                 success = articlesSurFacture.add(factArt);
+                System.out.println(articlesSurFacture); //-------------------
                 repository.save(facture);
-                System.out.println("new");
             }
         }
         System.out.println(facture);

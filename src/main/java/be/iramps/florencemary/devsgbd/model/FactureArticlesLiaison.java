@@ -15,10 +15,10 @@ public class FactureArticlesLiaison implements Serializable {
     @Column(name = "id_facture_articles")
     private Long idFactureArticles;
 
-    @Column(name = "id_facture", insertable=false, updatable=false)
+    @Column(name = "id_facture", updatable=false, insertable = false) // mais donc comment update la valeur ???
     private Long idFacture;
 
-    @Column(name = "id_article", insertable=false, updatable=false)
+    @Column(name = "id_article", updatable=false, insertable = false)
     private Long idArticle;
 
     @Column(name = "quantite")
