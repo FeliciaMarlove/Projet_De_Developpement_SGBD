@@ -40,4 +40,9 @@ public class AdresseController {
     public AdresseDto update(@PathVariable("id") Long id, @RequestBody AdresseDto adresseDto) {
         return service.update(id, adresseDto);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") Long id) {
+        service.delete(id);
+    }
 }

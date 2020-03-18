@@ -32,7 +32,7 @@ public class ArticleController {
     public Article create(@RequestBody ArticleDto articleDto) { return service.create(articleDto);}
 
     @PutMapping("/{id}")
-    public Article update(@PathVariable("id") Long id, @RequestBody ArticleDto articleDto) {
+    public Boolean update(@PathVariable("id") Long id, @RequestBody ArticleDto articleDto) {
         return service.update(id, articleDto);
     }
 

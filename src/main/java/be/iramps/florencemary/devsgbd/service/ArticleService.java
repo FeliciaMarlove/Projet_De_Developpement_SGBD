@@ -9,7 +9,7 @@ public interface ArticleService {
     List<Article> read();
     Article readOne(Long id);
     Article create(ArticleDto newItem);
-    Article update(Long id, ArticleDto update);
+    Boolean update(Long id, ArticleDto update);
     Article delete(Long id);
     List<Article> readActive();
 }

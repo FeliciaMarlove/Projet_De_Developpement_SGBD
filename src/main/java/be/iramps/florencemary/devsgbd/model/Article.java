@@ -82,7 +82,6 @@ public class Article implements Serializable {
     }
 
     public void setCodeEAN(String codeEAN) {
-        if ((codeEAN.length() > 11 && codeEAN.length() < 14) && (codeEAN.matches("-?\\d+(\\.\\d+)?")))
         this.codeEAN = codeEAN;
     }
 

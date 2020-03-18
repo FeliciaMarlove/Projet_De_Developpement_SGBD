@@ -56,19 +56,23 @@ public class ArticleServiceImplemented implements ArticleService {
     }
 
     @Override
-    public Article update(Long id, ArticleDto update) {
+    public Boolean update(Long id, ArticleDto update) {
         if ((exists(id) && (equalsAny(update) == null))) {
             Article toUpdate = repository.findById(id).get();
+            System.out.println(toUpdate);
+            System.out.println(update);
             toUpdate.setNomArticle(update.getNomArticle());
             toUpdate.setDescArticle(update.getDescArticle());
             toUpdate.setStock(update.getStock());
             toUpdate.setCodeEAN(update.getCodeEAN());
             toUpdate.setPrixUnitaire(update.getPrixUnitaire());
             toUpdate.setTva(repositoryTva.findById(update.getIdTva()).get());
+            System.out.println(toUpdate);
+            System.out.println(update);
             repository.save(toUpdate);
-            return toUpdate;
+            return true;
         }
-        return null;
+        return false;
     }
 
     @Override
@@ -108,7 +112,6 @@ public class ArticleServiceImplemented implements ArticleService {
 
     private Article equalsAny(ArticleDto articleDto) {
         for (Article articleCompared : read()) {
-            System.out.println(articleCompared);
             if ((articleDto.getCodeEAN().equals(articleCompared.getCodeEAN()))) {
                 return repository.findById(articleCompared.getIdArticle()).get();
             }

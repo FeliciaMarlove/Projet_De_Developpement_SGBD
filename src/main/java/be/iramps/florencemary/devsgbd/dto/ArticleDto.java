@@ -57,7 +57,6 @@ public class ArticleDto {
     }
 
     public void setCodeEAN(String codeEAN) {
-        if ((codeEAN.length() > 11 && codeEAN.length() < 14) && (codeEAN.matches("-?\\d+(\\.\\d+)?")))
             this.codeEAN = codeEAN;
     }
 
@@ -67,5 +66,17 @@ public class ArticleDto {
 
     public void setIdTva(Long idTva) {
         this.idTva = idTva;
+    }
+
+    @Override
+    public String toString() {
+        return "ArticleDto{" +
+                "nomArticle='" + nomArticle + '\'' +
+                ", descArticle='" + descArticle + '\'' +
+                ", stock=" + stock +
+                ", prixUnitaire=" + prixUnitaire +
+                ", codeEAN='" + codeEAN + '\'' +
+                ", idTva=" + idTva +
+                '}';
     }
 }
