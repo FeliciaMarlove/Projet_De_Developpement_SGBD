@@ -57,7 +57,7 @@ public class ArticleServiceImplemented implements ArticleService {
 
     @Override
     public Boolean update(Long id, ArticleDto update) {
-        if ((exists(id) && (equalsAny(update) == null))) {
+        if ((exists(id))) {
             Article toUpdate = repository.findById(id).get();
             System.out.println(toUpdate);
             System.out.println(update);

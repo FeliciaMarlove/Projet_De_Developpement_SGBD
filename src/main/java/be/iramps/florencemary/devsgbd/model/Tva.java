@@ -13,7 +13,7 @@ public class Tva implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tva_generator")
-    @SequenceGenerator(name = "tva_generator", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "tva_generator", allocationSize = 1, initialValue = 20)
     @Column(name = "id_tva")
     private Long idTva;
 

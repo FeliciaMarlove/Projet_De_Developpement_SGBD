@@ -13,7 +13,7 @@ public class Utilisateur implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "utilisateur_generator")
-    @SequenceGenerator(name = "utlisateur_generator", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "utlisateur_generator", allocationSize = 1, initialValue = 20)
     @Column(name = "id_utilisateur")
     private Long idUtilisateur;
 

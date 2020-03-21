@@ -69,7 +69,7 @@ public class AdresseServiceImplemented implements AdresseService {
     @Override
     public AdresseDto update(Long id, AdresseDto update) {
         Adresse toUpdate;
-        if (exists(id) && (equalsAny(update) == null)) {
+        if (exists(id)) {
             toUpdate = repository.findById(id).get();
             toUpdate.setRue(update.getRue());
             toUpdate.setNumero(update.getNumero());

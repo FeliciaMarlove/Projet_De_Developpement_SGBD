@@ -50,7 +50,7 @@ public class ClientServiceImplemented implements ClientService {
 
     @Override
     public ClientDto update(Long id, ClientDto update) {
-        if (exists(id) && (equalsAny(update) == null)) {
+        if (exists(id)) {
             Client toUpdate = repository.findById(id).get();
             toUpdate.setNomClient(update.getNomClient());
             toUpdate.setPrenomClient(update.getPrenomClient());

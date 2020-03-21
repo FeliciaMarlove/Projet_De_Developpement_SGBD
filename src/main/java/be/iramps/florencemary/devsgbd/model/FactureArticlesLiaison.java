@@ -11,7 +11,7 @@ public class FactureArticlesLiaison implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "facture_articles_generator")
-    @SequenceGenerator(name = "facture_articles_generator", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "facture_articles_generator", allocationSize = 1, initialValue = 20)
     @Column(name = "id_facture_articles")
     private Long idFactureArticles;
 

@@ -13,7 +13,7 @@ public class Departement implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "departement_generator")
-    @SequenceGenerator(name = "departement_generator", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "departement_generator", allocationSize = 1, initialValue = 20)
     @Column(name = "id_departement")
     private Long idDepartement;
 

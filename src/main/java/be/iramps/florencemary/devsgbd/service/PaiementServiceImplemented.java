@@ -45,7 +45,7 @@ public class PaiementServiceImplemented implements PaiementService {
 
     @Override
     public Paiement update(Long id, PaiementDto update) {
-        if (exists(id) && (equalsAny(update) == null)) {
+        if (exists(id)) {
             Paiement toUpdate = repository.findById(id).get();
             toUpdate.setNomPaiement(update.getNomPaiement());
             toUpdate.setDescPaiement(update.getDescPaiement());

@@ -59,7 +59,7 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     @Override
     public UtilisateurDto update(Long id, UtilisateurDto update) {
-        if (exists(id) && (equalsAny(update) == null)) {
+        if (exists(id)) {
             Utilisateur toUpdate = repository.findById(id).get();
             toUpdate.setPrenomUtilisateur(update.getPrenomUtilisateur());
             toUpdate.setNomUtilisateur(update.getNomUtilisateur());

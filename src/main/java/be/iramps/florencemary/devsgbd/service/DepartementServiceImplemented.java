@@ -45,7 +45,7 @@ public class DepartementServiceImplemented implements DepartementService {
 
     @Override
     public DepartementDto update(Long id, DepartementDto update) {
-        if (exists(id) && equalsAny(update) == null) {
+        if (exists(id)) {
             Departement toUpdate = repository.findById(id).get();
             toUpdate.setNomDepartement(update.getNomDepartement());
             repository.save(toUpdate);

@@ -11,7 +11,7 @@ public class Article implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_generator")
-    @SequenceGenerator(name = "article_generator", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "article_generator", allocationSize = 1, initialValue = 20)
     @Column(name = "id_article")
     private Long idArticle;
 
@@ -116,7 +116,6 @@ public class Article implements Serializable {
 
     public Article() {
         this.isActifArticle = true;
-        this.setTva(new Tva(21));
     }
 
     /* _____________________________EQUALS/HASHCODE/TOSTRING_____________________________ */

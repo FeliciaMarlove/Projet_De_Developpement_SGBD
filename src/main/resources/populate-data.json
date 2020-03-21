@@ -1,0 +1,42 @@
+[
+    {
+        "_class": "be.iramps.florencemary.devsgbd.model.Tva",
+        "tauxTva" : 21
+    },
+    {
+        "_class": "be.iramps.florencemary.devsgbd.model.Tva",
+        "tauxTva" : 19
+    },
+    {
+        "_class": "be.iramps.florencemary.devsgbd.model.Tva",
+        "tauxTva" : 0
+    },
+    {
+        "_class": "be.iramps.florencemary.devsgbd.model.Client",
+        "nomClient" : "Rieu",
+        "prenomClient" : "Andre",
+        "telephoneClient" : "074745545",
+        "dateNaissanceClient" : "2000-02-03"
+    },
+    {
+        "_class": "be.iramps.florencemary.devsgbd.model.Client",
+        "nomClient" : "Bundchen",
+        "prenomClient" : "Gisele",
+        "telephoneClient" : "065745545",
+        "dateNaissanceClient" : "1990-02-03"
+    },
+    {
+        "_class": "be.iramps.florencemary.devsgbd.model.Client",
+        "nomClient" : "Di Caprio",
+        "prenomClient" : "Leonardo",
+        "telephoneClient" : "0475745545",
+        "dateNaissanceClient" : "1986-02-03"
+    },
+    {
+        "_class": "be.iramps.florencemary.devsgbd.model.Client",
+        "nomClient" : "Pacman",
+        "prenomClient" : "Eric",
+        "telephoneClient" : "048745545",
+        "dateNaissanceClient" : "1961-02-03"
+    }
+]

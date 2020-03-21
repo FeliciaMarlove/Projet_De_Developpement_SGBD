@@ -1,5 +1,11 @@
 package be.iramps.florencemary.devsgbd.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -13,7 +19,7 @@ public class Client implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_generator")
-    @SequenceGenerator(name = "client_generator", allocationSize = 1, initialValue = 1)
+    @SequenceGenerator(name = "client_generator", allocationSize = 1, initialValue = 20)
     @Column(name = "id_client")
     private Long idClient;
 
@@ -26,6 +32,8 @@ public class Client implements Serializable {
     @Column(name = "telephone")
     private String telephoneClient;
 
+//    @JsonDeserialize(using = LocalDateDeserializer.class)
+//    @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissanceClient;
 
