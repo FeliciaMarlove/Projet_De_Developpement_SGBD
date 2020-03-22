@@ -28,8 +28,8 @@ public class DepartementController {
         return service.readActive();
     }
 
-    @GetMapping("/{id}")
-    public DepartementDto readOne(@PathVariable("id") Long id) { return service.readOne(id); }
+    @GetMapping("/{name}")
+    public DepartementDto readOne(@PathVariable("name") String name) { return service.readOne(name); }
 
     @PostMapping
     public DepartementDto create(@RequestBody DepartementDto departementDto) { return service.create(departementDto); }
@@ -37,6 +37,6 @@ public class DepartementController {
     @PutMapping("/{id}")
     public DepartementDto update(@PathVariable("id") Long id, @RequestBody DepartementDto departementDto) { return service.update(id, departementDto); }
 
-    @DeleteMapping("/{id}")
-    public DepartementDto delete(@PathVariable("id") Long id) { return service.delete(id); }
+    @DeleteMapping("/{name}")
+    public DepartementDto delete(@PathVariable("name") String name) { return service.delete(name); }
 }

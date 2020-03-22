@@ -10,7 +10,7 @@ public interface UtilisateurService {
     List<Utilisateur> read();
     UtilisateurDto readOne(Long id);
     UtilisateurDto create(UtilisateurDto newItem);
-    UtilisateurDto update(Long id, UtilisateurDto update);
+    UtilisateurDto update(String login, UtilisateurDto update);
     UtilisateurDto delete(Long id);
     List<UtilisateurDto> readActive();
     ConnectionMessenger connectUser(String login, String motDePasse);

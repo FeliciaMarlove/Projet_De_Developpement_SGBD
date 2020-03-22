@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface DepartementService {
     List<Departement> read();
-    DepartementDto readOne(Long id);
+    DepartementDto readOne(String deptName);
     DepartementDto create(DepartementDto newItem);
     DepartementDto update(Long id, DepartementDto update);
-    DepartementDto delete(Long id);
+    DepartementDto delete(String deptName);
     List<DepartementDto> readActive();
 }

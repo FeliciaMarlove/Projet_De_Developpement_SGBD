@@ -33,8 +33,8 @@ public class UtilisateurController {
     @PostMapping
     public UtilisateurDto create(@RequestBody UtilisateurDto utilisateurDto) { return service.create(utilisateurDto);}
 
-    @PutMapping("/{id}")
-    public UtilisateurDto update(@PathVariable("id") Long id, @RequestBody UtilisateurDto utilisateurDto) { return service.update(id, utilisateurDto); }
+    @PutMapping("/{login}")
+    public UtilisateurDto update(@PathVariable("login") String login, @RequestBody UtilisateurDto utilisateurDto) { return service.update(login, utilisateurDto); }
 
     @DeleteMapping("/{id}")
     public UtilisateurDto delete(@PathVariable("id") Long id) { return service.delete(id); }

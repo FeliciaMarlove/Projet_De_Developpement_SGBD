@@ -24,10 +24,10 @@ public class DepartementServiceImplemented implements DepartementService {
     }
 
     @Override
-    public DepartementDto readOne(Long id) {
+    public DepartementDto readOne(String name) {
         for (Departement departement : repository.findAll()) {
-            if (departement.getIdDepartement().equals(id)) {
-                return mapEntityToDto(repository.findById(id).get());
+            if (departement.getNomDepartement().equals(name)) {
+                return mapEntityToDto(repository.findDepartementByNomDepartement(name));
             }
         }
         return null;
@@ -55,12 +55,12 @@ public class DepartementServiceImplemented implements DepartementService {
     }
 
     @Override
-    public DepartementDto delete(Long id) {
-        Departement departement = repository.findById(id).get();
-        if (exists(id)) {
+    public DepartementDto delete(String name) {
+        Departement departement = repository.findDepartementByNomDepartement(name);
+        if (exists(departement.getIdDepartement())) {
             departement.setActifDepartement(false);
             repository.save(departement);
-            return readOne(id);
+            return readOne(name);
         }
         return null;
     }

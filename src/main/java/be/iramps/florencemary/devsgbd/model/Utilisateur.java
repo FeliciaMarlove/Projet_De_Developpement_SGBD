@@ -101,7 +101,7 @@ public class Utilisateur implements Serializable {
     }
 
     public void setDepartement(Departement departement) {
-            this.departement = departement;
+            if (this.departement != null) this.departement = departement;
     }
     /* _____________________________CONSTRUCTEURS_____________________________ */
 

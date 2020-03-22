@@ -7,15 +7,15 @@ public class UtilisateurDto {
     private String login;
     private String motDePasse;
     private String poste;
-    private Long idDepartement;
+    private String nomDepartement;
 
-    public UtilisateurDto(String nomUtilisateur, String prenomUtilisateur, String login, String motDePasse, String poste, Long idDepartement) {
+    public UtilisateurDto(String nomUtilisateur, String prenomUtilisateur, String login, String motDePasse, String poste, String nomDepartement) {
         this.nomUtilisateur = nomUtilisateur;
         this.prenomUtilisateur = prenomUtilisateur;
         this.login = login;
         this.motDePasse = motDePasse;
         this.poste = poste;
-        this.idDepartement = idDepartement;
+        this.nomDepartement = nomDepartement;
     }
 
     public UtilisateurDto() {
@@ -61,11 +61,23 @@ public class UtilisateurDto {
         this.poste = poste;
     }
 
-    public Long getIdDepartement() {
-        return idDepartement;
+    public String getNomDepartement() {
+        return nomDepartement;
     }
 
-    public void setIdDepartement(Long idDepartement) {
-        this.idDepartement = idDepartement;
+    public void setNomDepartement(String nomDepartement) {
+        this.nomDepartement = nomDepartement;
+    }
+
+    @Override
+    public String toString() {
+        return "UtilisateurDto{" +
+                "nomUtilisateur='" + nomUtilisateur + '\'' +
+                ", prenomUtilisateur='" + prenomUtilisateur + '\'' +
+                ", login='" + login + '\'' +
+                ", motDePasse='" + motDePasse + '\'' +
+                ", poste='" + poste + '\'' +
+                ", nomDepartement='" + nomDepartement + '\'' +
+                '}';
     }
 }

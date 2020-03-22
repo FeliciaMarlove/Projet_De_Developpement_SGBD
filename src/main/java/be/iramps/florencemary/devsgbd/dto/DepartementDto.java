@@ -17,4 +17,5 @@ public class DepartementDto {
     public void setNomDepartement(String nomDepartement) {
         this.nomDepartement = nomDepartement;
     }
+
 }

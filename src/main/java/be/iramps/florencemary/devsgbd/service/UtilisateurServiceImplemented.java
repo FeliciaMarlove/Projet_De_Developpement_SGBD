@@ -18,6 +18,7 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
     private UtilisateurRepository repository;
     private DepartementRepository repositoryDepartement;
 
+
     @Autowired
     public UtilisateurServiceImplemented(UtilisateurRepository repository, DepartementRepository repositoryDepartement) {
         this.repository = repository;
@@ -41,16 +42,16 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     @Override
     public UtilisateurDto create(UtilisateurDto newItem) {
-        Departement findDepartement = repositoryDepartement.findById(newItem.getIdDepartement()).get();
-        Utilisateur newUtilisateur = new Utilisateur(
-                newItem.getNomUtilisateur(),
-                newItem.getPrenomUtilisateur(),
-                newItem.getLogin(),
-                newItem.getMotDePasse(),
-                newItem.getPoste(),
-                findDepartement
-        );
         if (equalsAny(newItem) == null) {
+            Departement findDepartement = repositoryDepartement.findById(repositoryDepartement.findDepartementByNomDepartement(newItem.getNomDepartement()).getIdDepartement()).get();
+            Utilisateur newUtilisateur = new Utilisateur(
+                    newItem.getNomUtilisateur(),
+                    newItem.getPrenomUtilisateur(),
+                    newItem.getLogin(),
+                    newItem.getMotDePasse(),
+                    newItem.getPoste(),
+                    findDepartement
+            );
             repository.save(newUtilisateur);
             return mapEntityToDto(newUtilisateur);
         }
@@ -58,15 +59,17 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
     }
 
     @Override
-    public UtilisateurDto update(Long id, UtilisateurDto update) {
+    public UtilisateurDto update(String login, UtilisateurDto update) {
+        Departement dpt = repositoryDepartement.findDepartementByNomDepartement(update.getNomDepartement());
+        Utilisateur util = repository.findUtilisateurByLogin(login);
+        Long id = util.getIdUtilisateur();
         if (exists(id)) {
-            Utilisateur toUpdate = repository.findById(id).get();
+            Utilisateur toUpdate = util;
             toUpdate.setPrenomUtilisateur(update.getPrenomUtilisateur());
             toUpdate.setNomUtilisateur(update.getNomUtilisateur());
             toUpdate.setLogin(update.getLogin());
-            toUpdate.setMotDePasse(update.getMotDePasse());
             toUpdate.setPoste(update.getPoste());
-            toUpdate.setDepartement(repositoryDepartement.findById(update.getIdDepartement()).get());
+            toUpdate.setDepartement(dpt);
             repository.save(toUpdate);
             return mapEntityToDto(toUpdate);
         }
@@ -123,9 +126,9 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
 
     private UtilisateurDto equalsAny(UtilisateurDto utilisateurDto) {
         for (Utilisateur utlisateurCompared : read()) {
-            if ((utilisateurDto.getNomUtilisateur().equals(utlisateurCompared.getNomUtilisateur())
-                    && (utilisateurDto.getPrenomUtilisateur().equals(utlisateurCompared.getPrenomUtilisateur()))
-                    && (utilisateurDto.getLogin().equals(utlisateurCompared.getLogin())))) {
+            if (((utilisateurDto.getNomUtilisateur().equals(utlisateurCompared.getNomUtilisateur())
+                    && (utilisateurDto.getPrenomUtilisateur().equals(utlisateurCompared.getPrenomUtilisateur())))
+                    || (utilisateurDto.getLogin().equals(utlisateurCompared.getLogin())))) {
                 return mapEntityToDto(repository.findById(utlisateurCompared.getIdUtilisateur()).get());
             }
         }
@@ -154,7 +157,8 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
     }
 
     private UtilisateurDto mapEntityToDto(Utilisateur utilisateur) {
-        return new UtilisateurDto(utilisateur.getNomUtilisateur(), utilisateur.getPrenomUtilisateur(), utilisateur.getLogin(), utilisateur.getMotDePasse(), utilisateur.getPoste(), utilisateur.getDepartement().getIdDepartement());
+        System.out.println(utilisateur);
+        return new UtilisateurDto(utilisateur.getNomUtilisateur(), utilisateur.getPrenomUtilisateur(), utilisateur.getLogin(), utilisateur.getMotDePasse(), utilisateur.getPoste(), utilisateur.getDepartement().getNomDepartement());
     }
 
     private List<UtilisateurDto> mapEntitiesToDtos(List<Utilisateur> utilisateurs) {
