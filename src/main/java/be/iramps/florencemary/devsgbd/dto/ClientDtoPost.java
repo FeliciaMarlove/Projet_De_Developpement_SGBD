@@ -2,20 +2,20 @@ package be.iramps.florencemary.devsgbd.dto;
 
 import java.time.LocalDate;
 
-public class ClientDto {
+public class ClientDtoPost {
     private String nomClient;
     private String prenomClient;
     private String telephoneClient;
     private LocalDate dateNaissanceClient;
 
-    public ClientDto(String nomClient, String prenomClient, String telephoneClient, LocalDate dateNaissanceClient) {
+    public ClientDtoPost(String nomClient, String prenomClient, String telephoneClient, LocalDate dateNaissanceClient) {
         this.nomClient = nomClient;
         this.prenomClient = prenomClient;
         this.telephoneClient = telephoneClient;
         this.dateNaissanceClient = dateNaissanceClient;
     }
 
-    public ClientDto() {
+    public ClientDtoPost() {
     }
 
     public String getNomClient() {
@@ -39,7 +39,7 @@ public class ClientDto {
     }
 
     public void setTelephoneClient(String telephoneClient) {
-        if ((telephoneClient.length() > 8 && telephoneClient.length() < 11) && (telephoneClient.matches("-?\\d+(\\.\\d+)?")))
+        if ((telephoneClient.length() > 8) && (telephoneClient.matches("-?\\d+(\\.\\d+)?")))
             this.telephoneClient = telephoneClient;
     }
 

@@ -1,6 +1,6 @@
 package be.iramps.florencemary.devsgbd.dto;
 
-public class AdresseDto {
+public class AdresseDtoPost {
     private String rue;
     private int numero;
     private String complementNumero;
@@ -9,7 +9,7 @@ public class AdresseDto {
     private String pays;
     private Long idClient;
 
-    public AdresseDto(String rue, int numero, String complementNumero, int codePostal, String ville, String pays, Long idClient) {
+    public AdresseDtoPost(String rue, int numero, String complementNumero, int codePostal, String ville, String pays, Long idClient) {
         this.rue = rue;
         this.numero = numero;
         this.complementNumero = complementNumero;
@@ -19,7 +19,7 @@ public class AdresseDto {
         this.idClient = idClient;
     }
 
-    public AdresseDto(String rue, int numero, int codePostal, String ville, String pays, Long idClient) {
+    public AdresseDtoPost(String rue, int numero, int codePostal, String ville, String pays, Long idClient) {
         this.rue = rue;
         this.numero = numero;
         this.codePostal = codePostal;
@@ -28,7 +28,7 @@ public class AdresseDto {
         this.idClient = idClient;
     }
 
-    public AdresseDto() {
+    public AdresseDtoPost() {
     }
 
     public String getRue() {

@@ -1,15 +1,9 @@
 package be.iramps.florencemary.devsgbd.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
 import java.util.*;
 
 @Entity
@@ -73,7 +67,7 @@ public class Client implements Serializable {
     }
 
     public void setTelephoneClient(String telephoneClient) {
-        if ((telephoneClient.length() > 8 && telephoneClient.length() < 11) && (telephoneClient.matches("-?\\d+(\\.\\d+)?")))
+        if ((telephoneClient.length() > 8) && (telephoneClient.matches("-?\\d+(\\.\\d+)?")))
             this.telephoneClient = telephoneClient;
     }
 
@@ -151,7 +145,7 @@ public class Client implements Serializable {
                 ", telephoneClient=" + telephoneClient +
                 ", dateNaissanceClient=" + dateNaissanceClient +
                 ", isActifClient=" + isActifClient +
-//                ", adressesList=" + adressesList +
+                ", adressesList=" + adressesList +
 //                ", facturesList=" + facturesList +
                 '}';
     }

@@ -1,6 +1,7 @@
 package be.iramps.florencemary.devsgbd.controller;
 
-import be.iramps.florencemary.devsgbd.dto.AdresseDto;
+import be.iramps.florencemary.devsgbd.dto.AdresseDtoGet;
+import be.iramps.florencemary.devsgbd.dto.AdresseDtoPost;
 import be.iramps.florencemary.devsgbd.repository.AdresseRepository;
 import be.iramps.florencemary.devsgbd.service.AdresseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +23,28 @@ public class AdresseController {
     AdresseRepository repository;
 
     @GetMapping
-    public List<AdresseDto> read() {
+    public List<AdresseDtoGet> read() {
         return service.readActive();
     }
 
     @GetMapping("/{id}")
-    public AdresseDto readOne(@PathVariable("id") Long id) {
+    public AdresseDtoGet readOne(@PathVariable("id") Long id) {
         return service.readOne(id);
     }
 
     @PostMapping("/client/{idClient}")
-    public List<AdresseDto> create(@RequestBody AdresseDto adresseDto, @PathVariable("idClient") Long idClient) {
-        return service.create(idClient, adresseDto);
+    public List<AdresseDtoPost> create(@RequestBody AdresseDtoPost adresseDtoPost, @PathVariable("idClient") Long idClient) {
+        return service.create(idClient, adresseDtoPost);
+    }
+
+    @GetMapping("/client/{idClient}")
+    public List<AdresseDtoGet> readFromClient(@PathVariable("idClient") Long idClient) {
+        return service.readFromClient(idClient);
     }
 
     @PutMapping("/{id}")
-    public AdresseDto update(@PathVariable("id") Long id, @RequestBody AdresseDto adresseDto) {
-        return service.update(id, adresseDto);
+    public AdresseDtoPost update(@PathVariable("id") Long id, @RequestBody AdresseDtoPost adresseDtoPost) {
+        return service.update(id, adresseDtoPost);
     }
 
     @DeleteMapping("/{id}")

@@ -11,7 +11,7 @@ public interface UtilisateurService {
     UtilisateurDto readOne(Long id);
     UtilisateurDto create(UtilisateurDto newItem);
     UtilisateurDto update(String login, UtilisateurDto update);
-    UtilisateurDto delete(Long id);
+    UtilisateurDto delete(String login);
     List<UtilisateurDto> readActive();
     ConnectionMessenger connectUser(String login, String motDePasse);
 }

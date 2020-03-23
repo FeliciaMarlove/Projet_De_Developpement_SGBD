@@ -1,6 +1,7 @@
 package be.iramps.florencemary.devsgbd.service;
 
-import be.iramps.florencemary.devsgbd.dto.ClientDto;
+import be.iramps.florencemary.devsgbd.dto.ClientDtoGet;
+import be.iramps.florencemary.devsgbd.dto.ClientDtoPost;
 import be.iramps.florencemary.devsgbd.model.Client;
 import be.iramps.florencemary.devsgbd.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,17 @@ public class ClientServiceImplemented implements ClientService {
     }
 
     @Override
-    public ClientDto readOne(Long id) {
+    public ClientDtoGet readOne(Long id) {
         for (Client client: repository.findAll()) {
             if (client.getIdClient().equals(id)) {
-                return mapEntityToDto(repository.findById(id).get());
+                return mapEntityToDtoGet(repository.findById(id).get());
             }
         }
         return null;
     }
 
     @Override
-    public ClientDto create(ClientDto newItem) {
+    public ClientDtoPost create(ClientDtoPost newItem) {
         Client newClient = new Client(
                 newItem.getNomClient(),
                 newItem.getPrenomClient(),
@@ -49,7 +50,7 @@ public class ClientServiceImplemented implements ClientService {
     }
 
     @Override
-    public ClientDto update(Long id, ClientDto update) {
+    public ClientDtoPost update(Long id, ClientDtoPost update) {
         if (exists(id)) {
             Client toUpdate = repository.findById(id).get();
             toUpdate.setNomClient(update.getNomClient());
@@ -63,7 +64,7 @@ public class ClientServiceImplemented implements ClientService {
     }
 
     @Override
-    public ClientDto delete(Long id) {
+    public ClientDtoGet delete(Long id) {
         Client client = repository.findById(id).get();
         if (exists(id)) {
             client.setActifClient(false);
@@ -74,12 +75,12 @@ public class ClientServiceImplemented implements ClientService {
     }
 
     @Override
-    public List<ClientDto> readActive() {
+    public List<ClientDtoGet> readActive() {
         List<Client> actifs = new ArrayList<>();
         for (Client client : read()) {
             if (client.isActifClient()) actifs.add(client);
         }
-        return mapEntitiesToDtos(actifs);
+        return mapEntitiesToDtosGet(actifs);
     }
 
     private boolean exists(Long id) {
@@ -97,24 +98,36 @@ public class ClientServiceImplemented implements ClientService {
         return null;
     }
 
-    private Client equalsAny(ClientDto clientDto) {
+    private Client equalsAny(ClientDtoPost clientDtoPost) {
         for (Client clientCompared : read()) {
-            if (clientDto.getNomClient().equals(clientCompared.getNomClient())
-                && (clientDto.getPrenomClient().equals(clientCompared.getPrenomClient()))
-                && (clientDto.getDateNaissanceClient().equals(clientCompared.getDateNaissanceClient())))
+            if (clientDtoPost.getNomClient().equals(clientCompared.getNomClient())
+                && (clientDtoPost.getPrenomClient().equals(clientCompared.getPrenomClient()))
+                && (clientDtoPost.getDateNaissanceClient().equals(clientCompared.getDateNaissanceClient())))
                 return repository.findById(clientCompared.getIdClient()).get();
         }
         return null;
     }
 
-    private ClientDto mapEntityToDto(Client client) {
-        return new ClientDto(client.getNomClient(), client.getPrenomClient(), client.getTelephoneClient() == null? "Non renseigné" : client.getTelephoneClient(), client.getDateNaissanceClient());
+    private ClientDtoPost mapEntityToDto(Client client) {
+        return new ClientDtoPost(client.getNomClient(), client.getPrenomClient(), client.getTelephoneClient() == null ? "Non renseigné" : client.getTelephoneClient(), client.getDateNaissanceClient());
     }
 
-    private List<ClientDto> mapEntitiesToDtos(List<Client> clients) {
-        List<ClientDto> dtos = new ArrayList<>();
+    private List<ClientDtoPost> mapEntitiesToDtos(List<Client> clients) {
+        List<ClientDtoPost> dtos = new ArrayList<>();
         for (Client client: clients) {
             dtos.add(mapEntityToDto(client));
+        }
+        return dtos;
+    }
+
+    private ClientDtoGet mapEntityToDtoGet(Client client) {
+        return new ClientDtoGet(client.getIdClient(), client.getNomClient(), client.getPrenomClient(), client.getTelephoneClient() == null ? "Non renseigné" : client.getTelephoneClient(), client.getDateNaissanceClient(), client.isActifClient());
+    }
+
+    private List<ClientDtoGet> mapEntitiesToDtosGet(List<Client> clients) {
+        List<ClientDtoGet> dtos = new ArrayList<>();
+        for (Client client: clients) {
+            dtos.add(mapEntityToDtoGet(client));
         }
         return dtos;
     }

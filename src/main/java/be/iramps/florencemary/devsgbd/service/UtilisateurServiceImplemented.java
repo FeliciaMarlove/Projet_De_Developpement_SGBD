@@ -77,8 +77,9 @@ public class UtilisateurServiceImplemented implements UtilisateurService {
     }
 
     @Override
-    public UtilisateurDto delete(Long id) {
-        Utilisateur utilisateur = repository.findById(id).get();
+    public UtilisateurDto delete(String login) {
+        Utilisateur utilisateur = repository.findUtilisateurByLogin(login);
+        Long id = utilisateur.getIdUtilisateur();
         if (exists(id)) {
             utilisateur.setActifUtilisateur(false);
             repository.save(utilisateur);

@@ -1,15 +1,17 @@
 package be.iramps.florencemary.devsgbd.service;
 
-import be.iramps.florencemary.devsgbd.dto.AdresseDto;
+import be.iramps.florencemary.devsgbd.dto.AdresseDtoGet;
+import be.iramps.florencemary.devsgbd.dto.AdresseDtoPost;
 import be.iramps.florencemary.devsgbd.model.Adresse;
 
 import java.util.List;
 
 public interface AdresseService {
     List<Adresse> read();
-    AdresseDto readOne(Long id);
-    List<AdresseDto> create(Long idClient, AdresseDto newItem);
-    AdresseDto update(Long id, AdresseDto update);
-    AdresseDto delete(Long id);
-    List<AdresseDto> readActive();
+    AdresseDtoGet readOne(Long id);
+    List<AdresseDtoPost> create(Long idClient, AdresseDtoPost newItem);
+    AdresseDtoPost update(Long id, AdresseDtoPost update);
+    AdresseDtoGet delete(Long id);
+    List<AdresseDtoGet> readActive();
+    List<AdresseDtoGet> readFromClient(Long idClient);
 }

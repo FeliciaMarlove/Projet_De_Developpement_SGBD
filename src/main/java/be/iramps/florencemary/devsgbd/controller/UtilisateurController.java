@@ -36,6 +36,6 @@ public class UtilisateurController {
     @PutMapping("/{login}")
     public UtilisateurDto update(@PathVariable("login") String login, @RequestBody UtilisateurDto utilisateurDto) { return service.update(login, utilisateurDto); }
 
-    @DeleteMapping("/{id}")
-    public UtilisateurDto delete(@PathVariable("id") Long id) { return service.delete(id); }
+    @DeleteMapping("/{login}")
+    public UtilisateurDto delete(@PathVariable("login") String login) { return service.delete(login); }
 }
