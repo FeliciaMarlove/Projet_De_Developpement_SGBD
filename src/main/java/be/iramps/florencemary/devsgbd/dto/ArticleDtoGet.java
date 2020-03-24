@@ -1,6 +1,7 @@
 package be.iramps.florencemary.devsgbd.dto;
 
-public class ArticleDto {
+public class ArticleDtoGet {
+    private Long idArticle;
     private String nomArticle;
     private String descArticle;
     private int stock;
@@ -8,7 +9,8 @@ public class ArticleDto {
     private String codeEAN;
     private Long idTva;
 
-    public ArticleDto(String nomArticle, String descArticle, int stock, double prixUnitaire, String codeEAN, Long idTva) {
+    public ArticleDtoGet(Long idArticle, String nomArticle, String descArticle, int stock, double prixUnitaire, String codeEAN, Long idTva) {
+        this.idArticle = idArticle;
         this.nomArticle = nomArticle;
         this.descArticle = descArticle;
         this.stock = stock;
@@ -17,7 +19,15 @@ public class ArticleDto {
         this.idTva = idTva;
     }
 
-    public ArticleDto() {
+    public ArticleDtoGet() {
+    }
+
+    public Long getIdArticle() {
+        return idArticle;
+    }
+
+    public void setIdArticle(Long idArticle) {
+        this.idArticle = idArticle;
     }
 
     public String getNomArticle() {
@@ -41,23 +51,23 @@ public class ArticleDto {
     }
 
     public void setStock(int stock) {
-        if (stock >= 0)
-            this.stock = stock;
+        this.stock = stock;
     }
+
     public double getPrixUnitaire() {
         return prixUnitaire;
     }
 
     public void setPrixUnitaire(double prixUnitaire) {
-        if (prixUnitaire >= 0.00)
-            this.prixUnitaire = prixUnitaire;
+        this.prixUnitaire = prixUnitaire;
     }
+
     public String getCodeEAN() {
         return codeEAN;
     }
 
     public void setCodeEAN(String codeEAN) {
-            this.codeEAN = codeEAN;
+        this.codeEAN = codeEAN;
     }
 
     public Long getIdTva() {
@@ -66,17 +76,5 @@ public class ArticleDto {
 
     public void setIdTva(Long idTva) {
         this.idTva = idTva;
-    }
-
-    @Override
-    public String toString() {
-        return "ArticleDto{" +
-                "nomArticle='" + nomArticle + '\'' +
-                ", descArticle='" + descArticle + '\'' +
-                ", stock=" + stock +
-                ", prixUnitaire=" + prixUnitaire +
-                ", codeEAN='" + codeEAN + '\'' +
-                ", idTva=" + idTva +
-                '}';
     }
 }

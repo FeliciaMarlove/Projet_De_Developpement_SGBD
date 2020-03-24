@@ -1,15 +1,25 @@
 package be.iramps.florencemary.devsgbd.dto;
 
-public class FactureDto {
+public class FactureDtoGet {
+    private Long idFacture;
     private Long idClient;
     private Long idPaiement;
 
-    public FactureDto(Long idClient, Long idPaiement) {
+    public FactureDtoGet(Long idFacture, Long idClient, Long idPaiement) {
+        this.idFacture = idFacture;
         this.idClient = idClient;
         this.idPaiement = idPaiement;
     }
 
-    public FactureDto() {
+    public FactureDtoGet() {
+    }
+
+    public Long getIdFacture() {
+        return idFacture;
+    }
+
+    public void setIdFacture(Long idFacture) {
+        this.idFacture = idFacture;
     }
 
     public Long getIdClient() {

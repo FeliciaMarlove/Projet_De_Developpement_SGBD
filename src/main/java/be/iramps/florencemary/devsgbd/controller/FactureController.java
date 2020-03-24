@@ -1,8 +1,7 @@
 package be.iramps.florencemary.devsgbd.controller;
 
 import be.iramps.florencemary.devsgbd.dto.FactureArticleDto;
-import be.iramps.florencemary.devsgbd.dto.FactureDto;
-import be.iramps.florencemary.devsgbd.model.Facture;
+import be.iramps.florencemary.devsgbd.dto.FactureDtoPost;
 import be.iramps.florencemary.devsgbd.repository.FactureRepository;
 import be.iramps.florencemary.devsgbd.service.FactureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,18 +23,18 @@ public class FactureController {
     FactureRepository repository;
 
     @GetMapping
-    public List<FactureDto> read() {
+    public List<FactureDtoPost> read() {
         return service.readActive();
     }
 
     @GetMapping("/{id}")
-    public FactureDto readOne(@PathVariable("id") Long id) {
+    public FactureDtoPost readOne(@PathVariable("id") Long id) {
         return service.readOne(id);
     }
 
     @PostMapping
-    public FactureDto create(@RequestBody FactureDto factureDto) {
-        return service.create(factureDto.getIdClient(), factureDto.getIdPaiement());
+    public FactureDtoPost create(@RequestBody FactureDtoPost factureDtoPost) {
+        return service.create(factureDtoPost.getIdClient(), factureDtoPost.getIdPaiement());
     }
 
     @PutMapping("/{id}/add")
@@ -43,13 +42,23 @@ public class FactureController {
         return service.addArticle(factureArticleDto.getIdFacture(), factureArticleDto);
     }
 
+    @GetMapping("/{id}/minus/{idArt}")
+    public boolean minusOne(@PathVariable("id") Long id, @PathVariable("idArt") Long idArt) {
+        return service.articleMinusOne(id, idArt);
+    }
+
+    @GetMapping("/{id}/del/{idArt}")
+    public boolean deleteArticle(@PathVariable("id") Long id, @PathVariable("idArt") Long idArt) {
+        return service.deleteArticle(id, idArt);
+    }
+
     @PutMapping("/{id}")
-    public FactureDto validate(@PathVariable("id") Long id) {
+    public FactureDtoPost validate(@PathVariable("id") Long id) {
         return service.validateFacture(id);
     }
 
     @DeleteMapping("/{id}")
-    public FactureDto delete(@PathVariable("id") Long id) {
+    public FactureDtoPost delete(@PathVariable("id") Long id) {
         return service.delete(id);
     }
 }

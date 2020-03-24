@@ -11,7 +11,7 @@ public class Adresse implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "adresse_generator")
-    @SequenceGenerator(name = "adresse_generator", allocationSize = 1, initialValue = 20)
+    @SequenceGenerator(name = "adresse_generator", allocationSize = 1, initialValue = 1)
     @Column(name = "id_adresse")
     private Long idAdresse;
 

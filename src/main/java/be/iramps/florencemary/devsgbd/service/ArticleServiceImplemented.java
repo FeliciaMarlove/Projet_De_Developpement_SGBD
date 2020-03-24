@@ -1,6 +1,8 @@
 package be.iramps.florencemary.devsgbd.service;
 
-import be.iramps.florencemary.devsgbd.dto.ArticleDto;
+import be.iramps.florencemary.devsgbd.dto.ArticleDtoGet;
+import be.iramps.florencemary.devsgbd.dto.ArticleDtoPost;
+import be.iramps.florencemary.devsgbd.dto.PaiementDtoPost;
 import be.iramps.florencemary.devsgbd.model.Article;
 import be.iramps.florencemary.devsgbd.model.Tva;
 import be.iramps.florencemary.devsgbd.repository.ArticleRepository;
@@ -28,17 +30,17 @@ public class ArticleServiceImplemented implements ArticleService {
     }
 
     @Override
-    public Article readOne(Long id) {
+    public ArticleDtoGet readOne(Long id) {
         for (Article article: repository.findAll()) {
             if (article.getIdArticle().equals(id)) {
-                return repository.findById(id).get();
+                return mapEntityToDtoGet(repository.findById(id).get());
             }
         }
         return null;
     }
 
     @Override
-    public Article create(ArticleDto newItem) {
+    public ArticleDtoGet create(ArticleDtoPost newItem) {
         Tva findTva = repositoryTva.findById(newItem.getIdTva()).get();
         Article newArticle = new Article(
                 newItem.getNomArticle(),
@@ -50,13 +52,13 @@ public class ArticleServiceImplemented implements ArticleService {
         );
         if (equalsAny(newItem) == null) {
             repository.save(newArticle);
-            return newArticle;
+            return mapEntityToDtoGet(newArticle);
         }
         return null;
     }
 
     @Override
-    public Boolean update(Long id, ArticleDto update) {
+    public Boolean update(Long id, ArticleDtoPost update) {
         if ((exists(id))) {
             Article toUpdate = repository.findById(id).get();
             System.out.println(toUpdate);
@@ -76,7 +78,7 @@ public class ArticleServiceImplemented implements ArticleService {
     }
 
     @Override
-    public Article delete(Long id) {
+    public ArticleDtoGet delete(Long id) {
         if (exists(id)) {
             Article article = repository.findById(id).get();
             repository.findById(id).get().setActifArticle(false);
@@ -87,10 +89,10 @@ public class ArticleServiceImplemented implements ArticleService {
     }
 
     @Override
-    public List<Article> readActive() {
-        List<Article> actifs = new ArrayList<>();
+    public List<ArticleDtoGet> readActive() {
+        List<ArticleDtoGet> actifs = new ArrayList<>();
         for (Article article : read()) {
-            if (article.isActifArticle()) actifs.add(article);
+            if (article.isActifArticle()) actifs.add(mapEntityToDtoGet(article));
         }
         return actifs;
     }
@@ -110,12 +112,36 @@ public class ArticleServiceImplemented implements ArticleService {
         return null;
     }
 
-    private Article equalsAny(ArticleDto articleDto) {
+    private Article equalsAny(ArticleDtoPost articleDtoPost) {
         for (Article articleCompared : read()) {
-            if ((articleDto.getCodeEAN().equals(articleCompared.getCodeEAN()))) {
+            if ((articleDtoPost.getCodeEAN().equals(articleCompared.getCodeEAN()))) {
                 return repository.findById(articleCompared.getIdArticle()).get();
             }
         }
         return null;
+    }
+
+    private ArticleDtoPost mapEntityToDtoPost(Article article) {
+        return new ArticleDtoPost(article.getNomArticle(), article.getDescArticle(), article.getStock(), article.getPrixUnitaire(), article.getCodeEAN(), article.getTva().getIdTva());
+    }
+
+    private ArticleDtoGet mapEntityToDtoGet(Article article) {
+        return new ArticleDtoGet(article.getIdArticle(),article.getNomArticle(), article.getDescArticle(), article.getStock(), article.getPrixUnitaire(), article.getCodeEAN(), article.getTva().getIdTva());
+    }
+
+    private List<ArticleDtoGet> mapEntitiesToDtosGet(List<Article> articles) {
+        List<ArticleDtoGet> dtos = new ArrayList<>();
+        for (Article article: articles) {
+            dtos.add(mapEntityToDtoGet(article));
+        }
+        return dtos;
+    }
+
+    private List<ArticleDtoPost> mapEntitiesToDtosPost(List<Article> articles) {
+        List<ArticleDtoPost> dtos = new ArrayList<>();
+        for (Article article: articles) {
+            dtos.add(mapEntityToDtoPost(article));
+        }
+        return dtos;
     }
 }

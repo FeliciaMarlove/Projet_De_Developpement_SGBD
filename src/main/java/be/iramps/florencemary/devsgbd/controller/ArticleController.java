@@ -1,6 +1,7 @@
 package be.iramps.florencemary.devsgbd.controller;
 
-import be.iramps.florencemary.devsgbd.dto.ArticleDto;
+import be.iramps.florencemary.devsgbd.dto.ArticleDtoGet;
+import be.iramps.florencemary.devsgbd.dto.ArticleDtoPost;
 import be.iramps.florencemary.devsgbd.model.Article;
 import be.iramps.florencemary.devsgbd.repository.ArticleRepository;
 import be.iramps.florencemary.devsgbd.service.ArticleService;
@@ -23,21 +24,21 @@ public class ArticleController {
     ArticleRepository repository;
 
     @GetMapping
-    public List<Article> read() { return service.readActive(); }
+    public List<ArticleDtoGet> read() { return service.readActive(); }
 
     @GetMapping("/{id}")
-    public Article readOne(@PathVariable("id") Long id) { return service.readOne(id); }
+    public ArticleDtoGet readOne(@PathVariable("id") Long id) { return service.readOne(id); }
 
     @PostMapping
-    public Article create(@RequestBody ArticleDto articleDto) { return service.create(articleDto);}
+    public ArticleDtoGet create(@RequestBody ArticleDtoPost articleDtoPost) { return service.create(articleDtoPost);}
 
     @PutMapping("/{id}")
-    public Boolean update(@PathVariable("id") Long id, @RequestBody ArticleDto articleDto) {
-        return service.update(id, articleDto);
+    public Boolean update(@PathVariable("id") Long id, @RequestBody ArticleDtoPost articleDtoPost) {
+        return service.update(id, articleDtoPost);
     }
 
     @DeleteMapping("/{id}")
-    public Article delete(@PathVariable("id") Long id) {
+    public ArticleDtoGet delete(@PathVariable("id") Long id) {
         return service.delete(id);
     }
 }

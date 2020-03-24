@@ -1,15 +1,25 @@
 package be.iramps.florencemary.devsgbd.dto;
 
-public class PaiementDto {
+public class PaiementDtoGet {
+    private Long idPaiement;
     private String nomPaiement;
     private String descPaiement;
 
-    public PaiementDto(String nomPaiement, String descPaiement) {
+    public PaiementDtoGet(Long idPaiement, String nomPaiement, String descPaiement) {
+        this.idPaiement = idPaiement;
         this.nomPaiement = nomPaiement;
         this.descPaiement = descPaiement;
     }
 
-    public PaiementDto() {
+    public PaiementDtoGet() {
+    }
+
+    public Long getIdPaiement() {
+        return idPaiement;
+    }
+
+    public void setIdPaiement(Long idPaiement) {
+        this.idPaiement = idPaiement;
     }
 
     public String getNomPaiement() {

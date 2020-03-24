@@ -1,6 +1,7 @@
 package be.iramps.florencemary.devsgbd.service;
 
-import be.iramps.florencemary.devsgbd.dto.PaiementDto;
+import be.iramps.florencemary.devsgbd.dto.PaiementDtoGet;
+import be.iramps.florencemary.devsgbd.dto.PaiementDtoPost;
 import be.iramps.florencemary.devsgbd.model.Paiement;
 import be.iramps.florencemary.devsgbd.repository.PaiementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,39 +25,39 @@ public class PaiementServiceImplemented implements PaiementService {
     }
 
     @Override
-    public Paiement readOne(Long id) {
+    public PaiementDtoGet readOne(Long id) {
         for (Paiement paiement: repository.findAll()) {
             if (paiement.getIdPaiement().equals(id)) {
-                return repository.findById(id).get();
+                return mapEntityToDtoGet(repository.findById(id).get());
             }
         }
         return null;
     }
 
     @Override
-    public Paiement create(PaiementDto newItem) {
+    public PaiementDtoGet create(PaiementDtoPost newItem) {
         Paiement newPaiement = new Paiement(newItem.getNomPaiement(), newItem.getDescPaiement());
         if (equalsAny(newPaiement) == null) {
             repository.save(newPaiement);
-            return newPaiement;
+            return mapEntityToDtoGet(newPaiement);
         }
         return null;
     }
 
     @Override
-    public Paiement update(Long id, PaiementDto update) {
+    public PaiementDtoGet update(Long id, PaiementDtoPost update) {
         if (exists(id)) {
             Paiement toUpdate = repository.findById(id).get();
             toUpdate.setNomPaiement(update.getNomPaiement());
             toUpdate.setDescPaiement(update.getDescPaiement());
             repository.save(toUpdate);
-            return toUpdate;
+            return mapEntityToDtoGet(toUpdate);
         }
         return null;
     }
 
     @Override
-    public Paiement delete(Long id) {
+    public PaiementDtoGet delete(Long id) {
         Paiement paiement = repository.findById(id).get();
         if (exists(id)) {
             paiement.setActifPaiement(false);
@@ -67,12 +68,12 @@ public class PaiementServiceImplemented implements PaiementService {
     }
 
     @Override
-    public List<Paiement> readActive() {
+    public List<PaiementDtoGet> readActive() {
         List<Paiement> actifs = new ArrayList<>();
         for (Paiement paiement : read()) {
             if (paiement.isActifPaiement()) actifs.add(paiement);
         }
-        return actifs;
+        return mapEntitiesToDtosGet(actifs);
     }
 
     private boolean exists(Long id) {
@@ -90,10 +91,34 @@ public class PaiementServiceImplemented implements PaiementService {
         return null;
     }
 
-    private Paiement equalsAny(PaiementDto paiementDto) {
+    private Paiement equalsAny(PaiementDtoPost paiementDtoPost) {
         for (Paiement paiementCompared : read()) {
-            if (paiementCompared.getNomPaiement().equals(paiementDto.getNomPaiement())) return repository.findById(paiementCompared.getIdPaiement()).get();
+            if (paiementCompared.getNomPaiement().equals(paiementDtoPost.getNomPaiement())) return repository.findById(paiementCompared.getIdPaiement()).get();
         }
         return null;
+    }
+
+    private PaiementDtoGet mapEntityToDtoGet(Paiement paiement) {
+        return new PaiementDtoGet(paiement.getIdPaiement(), paiement.getNomPaiement(), paiement.getDescPaiement());
+    }
+
+    private PaiementDtoPost mapEntityToDtoPost(Paiement paiement) {
+        return new PaiementDtoPost(paiement.getNomPaiement(), paiement.getDescPaiement());
+    }
+
+    private List<PaiementDtoGet> mapEntitiesToDtosGet(List<Paiement> paiements) {
+        List<PaiementDtoGet> dtos = new ArrayList<>();
+        for (Paiement paiement: paiements) {
+            dtos.add(mapEntityToDtoGet(paiement));
+        }
+        return dtos;
+    }
+
+    private List<PaiementDtoPost> mapEntitiesToDtosPost(List<Paiement> paiements) {
+        List<PaiementDtoPost> dtos = new ArrayList<>();
+        for (Paiement paiement: paiements) {
+            dtos.add(mapEntityToDtoPost(paiement));
+        }
+        return dtos;
     }
 }

@@ -1,6 +1,7 @@
 package be.iramps.florencemary.devsgbd.controller;
 
-import be.iramps.florencemary.devsgbd.dto.PaiementDto;
+import be.iramps.florencemary.devsgbd.dto.PaiementDtoGet;
+import be.iramps.florencemary.devsgbd.dto.PaiementDtoPost;
 import be.iramps.florencemary.devsgbd.model.Paiement;
 import be.iramps.florencemary.devsgbd.repository.PaiementRepository;
 import be.iramps.florencemary.devsgbd.service.PaiementService;
@@ -23,19 +24,19 @@ public class PaiementController {
     PaiementRepository repository;
 
     @GetMapping
-    public List<Paiement> read() {
+    public List<PaiementDtoGet> read() {
         return service.readActive();
     }
 
     @GetMapping("/{id}")
-    public Paiement readOne(@PathVariable("id") Long id) { return service.readOne(id); }
+    public PaiementDtoGet readOne(@PathVariable("id") Long id) { return service.readOne(id); }
 
     @PostMapping
-    public Paiement create(@RequestBody PaiementDto paiementDto) { return service.create(paiementDto); }
+    public PaiementDtoGet create(@RequestBody PaiementDtoPost paiementDtoPost) { return service.create(paiementDtoPost); }
 
     @PutMapping("/{id}")
-    public Paiement update(@PathVariable("id") Long id, @RequestBody PaiementDto paiementDto) { return service.update(id, paiementDto); }
+    public PaiementDtoGet update(@PathVariable("id") Long id, @RequestBody PaiementDtoPost paiementDtoPost) { return service.update(id, paiementDtoPost); }
 
     @DeleteMapping("/{id}")
-    public Paiement delete(@PathVariable("id") Long id) { return service.delete(id); }
+    public PaiementDtoGet delete(@PathVariable("id") Long id) { return service.delete(id); }
 }

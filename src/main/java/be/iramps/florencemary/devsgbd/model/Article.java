@@ -11,7 +11,7 @@ public class Article implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_generator")
-    @SequenceGenerator(name = "article_generator", allocationSize = 1, initialValue = 20)
+    @SequenceGenerator(name = "article_generator", allocationSize = 1, initialValue = 1)
     @Column(name = "id_article")
     private Long idArticle;
 

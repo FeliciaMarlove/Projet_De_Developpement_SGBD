@@ -13,7 +13,7 @@ public class Client implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_generator")
-    @SequenceGenerator(name = "client_generator", allocationSize = 1, initialValue = 20)
+    @SequenceGenerator(name = "client_generator", allocationSize = 1, initialValue = 1)
     @Column(name = "id_client")
     private Long idClient;
 

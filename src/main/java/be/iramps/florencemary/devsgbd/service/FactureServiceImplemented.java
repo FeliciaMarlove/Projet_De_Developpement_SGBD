@@ -1,14 +1,13 @@
 package be.iramps.florencemary.devsgbd.service;
 
 import be.iramps.florencemary.devsgbd.dto.FactureArticleDto;
-import be.iramps.florencemary.devsgbd.dto.FactureDto;
+import be.iramps.florencemary.devsgbd.dto.FactureDtoPost;
 import be.iramps.florencemary.devsgbd.model.*;
 import be.iramps.florencemary.devsgbd.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,12 +45,12 @@ public class FactureServiceImplemented implements FactureService {
      * @return une facture
      */
     @Override
-    public FactureDto readOne(Long id) {
+    public FactureDtoPost readOne(Long id) {
         Facture facture;
         for (Facture fact : repository.findAll()) {
             if (fact.getIdFacture().equals(id)) {
                 facture = repository.findById(id).get();
-                return new FactureDto(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement());
+                return new FactureDtoPost(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement());
             }
         }
         return null;
@@ -64,7 +63,7 @@ public class FactureServiceImplemented implements FactureService {
      * @return la facture qui a été effacée, ou null si pas de suppression
      */
     @Override
-    public FactureDto delete(Long id) {
+    public FactureDtoPost delete(Long id) {
         Facture facture = repository.findById(id).get();
         if (exists(id)) {
             facture.setActiveFacture(false);
@@ -80,13 +79,13 @@ public class FactureServiceImplemented implements FactureService {
      * @return la liste des factures actives
      */
     @Override
-    public List<FactureDto> readActive() {
+    public List<FactureDtoPost> readActive() {
         List<Facture> actifs = new ArrayList<>();
-        List<FactureDto> actifsDtos = new ArrayList<>();
+        List<FactureDtoPost> actifsDtos = new ArrayList<>();
         for (Facture facture : read()) {
             if (facture.isActiveFacture()) {
                 actifs.add(facture);
-                actifsDtos.add(new FactureDto(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement()));
+                actifsDtos.add(new FactureDtoPost(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement()));
             }
         }
         if (!actifsDtos.isEmpty()) {
@@ -153,44 +152,47 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Fonction qui supprime un article (facture_article) de la facture (quantité = 0)
-     *
      * @param idFacture
      * @param idArticle
      * @return true sur l'article a été trouvé et supprimé
      */
     @Override
     public boolean deleteArticle(Long idFacture, Long idArticle) {
-        boolean success = false;
         Facture facture = repository.findById(idFacture).get();
         List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
         for (FactureArticlesLiaison articleSurFacture : articlesSurFacture) {
-            if (exists(idFacture) && (articleSurFacture.getIdArticle() == idArticle)) {
-                success = articlesSurFacture.remove(articleSurFacture);
-                break;
+            if (exists(idFacture) && (articleSurFacture.getIdArticle().equals(idArticle))) {
+                Article article = repositoryArticle.findById(articleSurFacture.getIdArticle()).get();
+                article.setStock(article.getStock() + articleSurFacture.getQuantite());
+                articlesSurFacture.remove(articleSurFacture);
+                repositoryFactureArticles.delete(articleSurFacture);
+                return true;
             }
         }
-        return success;
+        return false;
     }
 
     /**
-     * Fonction qui supprime 1 unité de l'article (quantité -= 1) ou supprime l'article sur la quantité = 0
+     * Fonction qui supprime 1 unité de l'article (quantité -= 1) ou supprime l'article si la quantité = 0
      *
      * @param idFacture
      * @param idArticle
      * @return true sur l'article a été trouvé et supprimé
      */
     @Override
-    public boolean deleteOneArticle(Long idFacture, Long idArticle) {
+    public boolean articleMinusOne(Long idFacture, Long idArticle) {
         boolean success = false;
         Facture facture = repository.findById(idFacture).get();
         List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
         for (FactureArticlesLiaison articleSurFacture : articlesSurFacture) {
-            if (exists(idFacture) && (articleSurFacture.getIdArticle() == idArticle)) {
+            if (exists(idFacture) && (articleSurFacture.getIdArticle().equals(idArticle))) {
                 success = true;
-                if (articleSurFacture.getIdArticle() == 1L) {
+                if (articleSurFacture.getQuantite().equals(1)) {
                     deleteArticle(idFacture, idArticle);
                     break;
                 } else {
+                    Article article = repositoryArticle.findById(articleSurFacture.getIdArticle()).get();
+                    article.setStock(article.getStock() + 1);
                     articleSurFacture.setQuantite(articleSurFacture.getQuantite() - 1);
                     break;
                 }
@@ -200,14 +202,14 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     @Override
-    public FactureDto create(Long idClient, Long idPaiement) {
+    public FactureDtoPost create(Long idClient, Long idPaiement) {
         Client client = repositoryClient.findById(idClient).get();
         Paiement paiement = repositoryPaiement.findById(idPaiement).get();
         Facture newFacture = new Facture(client, paiement);
         if (equalsAny(newFacture) == null) {
             System.out.println(newFacture);
             repository.save(newFacture);
-            return new FactureDto(idClient, idPaiement);
+            return new FactureDtoPost(idClient, idPaiement);
         }
         return null;
     }
@@ -220,7 +222,7 @@ public class FactureServiceImplemented implements FactureService {
      */
     @Override
     @Transactional
-    public FactureDto validateFacture(Long idFacture) {
+    public FactureDtoPost validateFacture(Long idFacture) {
         if (exists(idFacture)) {
             Facture factureAFinaliser = repository.findById(idFacture).get();
             if (!factureAFinaliser.getArticlesList().isEmpty()) {
@@ -248,7 +250,7 @@ public class FactureServiceImplemented implements FactureService {
                         " \n Total TTC : " + factureFinale.getTotalTTC() +
                         " \n Articles : " + factureFinale.getArticlesList()
                 );
-                return new FactureDto(factureFinale.getClient().getIdClient(), factureFinale.getPaiement().getIdPaiement());
+                return new FactureDtoPost(factureFinale.getClient().getIdClient(), factureFinale.getPaiement().getIdPaiement());
             }
         }
         return null;

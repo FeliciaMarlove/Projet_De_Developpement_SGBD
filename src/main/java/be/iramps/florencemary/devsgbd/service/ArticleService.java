@@ -1,15 +1,16 @@
 package be.iramps.florencemary.devsgbd.service;
 
-import be.iramps.florencemary.devsgbd.dto.ArticleDto;
+import be.iramps.florencemary.devsgbd.dto.ArticleDtoGet;
+import be.iramps.florencemary.devsgbd.dto.ArticleDtoPost;
 import be.iramps.florencemary.devsgbd.model.Article;
 
 import java.util.List;
 
 public interface ArticleService {
     List<Article> read();
-    Article readOne(Long id);
-    Article create(ArticleDto newItem);
-    Boolean update(Long id, ArticleDto update);
-    Article delete(Long id);
-    List<Article> readActive();
+    ArticleDtoGet readOne(Long id);
+    ArticleDtoGet create(ArticleDtoPost newItem);
+    Boolean update(Long id, ArticleDtoPost update);
+    ArticleDtoGet delete(Long id);
+    List<ArticleDtoGet> readActive();
 }

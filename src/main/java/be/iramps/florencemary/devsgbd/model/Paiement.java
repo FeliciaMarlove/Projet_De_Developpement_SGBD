@@ -11,7 +11,7 @@ public class Paiement implements Serializable {
     /* _____________________________CHAMPS_____________________________ */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "paiement_generator")
-    @SequenceGenerator(name = "paiement_generator", allocationSize = 1, initialValue = 20)
+    @SequenceGenerator(name = "paiement_generator", allocationSize = 1, initialValue = 1)
     @Column(name = "id_paiement")
     private Long idPaiement;
 
