@@ -128,8 +128,7 @@ public class FactureServiceImplemented implements FactureService {
      */
     @Override
     @Transactional
-    public boolean addArticle(Long idFacture, FactureArticleDto articleDto) {
-        boolean success = false;
+    public FactureArticlesLiaison addArticle(Long idFacture, FactureArticleDto articleDto) {
         Article article = repositoryArticle.findById(articleDto.getIdArticle()).get();
         Facture facture = repository.findById(idFacture).get();
         if (exists(idFacture)) {
@@ -139,7 +138,6 @@ public class FactureServiceImplemented implements FactureService {
                 articlesSurFacture.get(articlesSurFacture.indexOf(factArt)).setQuantite(factArt.getQuantite() + articleDto.getQuantite());
                 factArt.setMontantLigne(factArt.getQuantite() * (article.getPrixUnitaire()));
                 repositoryFactureArticles.save(factArt);
-                success = true;
             } else {
                 factArt = new FactureArticlesLiaison(
                         articleDto.getIdFacture(),
@@ -147,14 +145,15 @@ public class FactureServiceImplemented implements FactureService {
                         articleDto.getQuantite());
                 factArt.setMontantLigne(factArt.getQuantite() * (article.getPrixUnitaire()));
                 repositoryFactureArticles.save(factArt);
-                success = articlesSurFacture.add(factArt);
+                articlesSurFacture.add(factArt);
                 repository.save(facture);
             }
             article.setStock(article.getStock() - articleDto.getQuantite());
             repositoryArticle.save(article);
-            // tester si la transaction s'arrête bien en cas de problème : System.exit(1);
+            // pour tester si la transaction s'arrête bien en cas de problème : System.exit(1);
+            return factArt;
         }
-        return success;
+        return null;
     }
 
     /**
@@ -172,7 +171,8 @@ public class FactureServiceImplemented implements FactureService {
                 Article article = repositoryArticle.findById(articleSurFacture.getIdArticle()).get();
                 article.setStock(article.getStock() + articleSurFacture.getQuantite());
                 articlesSurFacture.remove(articleSurFacture);
-                repositoryFactureArticles.delete(articleSurFacture);
+                articleSurFacture.setQuantite(0);
+                repository.save(facture);
                 return true;
             }
         }
@@ -189,19 +189,22 @@ public class FactureServiceImplemented implements FactureService {
     @Override
     public boolean articleMinusOne(Long idFacture, Long idArticle) {
         boolean success = false;
-        Facture facture = repository.findById(idFacture).get();
-        List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
-        for (FactureArticlesLiaison articleSurFacture : articlesSurFacture) {
-            if (exists(idFacture) && (articleSurFacture.getIdArticle().equals(idArticle))) {
-                success = true;
-                if (articleSurFacture.getQuantite().equals(1)) {
-                    deleteArticle(idFacture, idArticle);
-                    break;
-                } else {
-                    Article article = repositoryArticle.findById(articleSurFacture.getIdArticle()).get();
-                    article.setStock(article.getStock() + 1);
-                    articleSurFacture.setQuantite(articleSurFacture.getQuantite() - 1);
-                    break;
+        if (exists(idFacture)) {
+            Facture facture = repository.findById(idFacture).get();
+            List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
+            for (FactureArticlesLiaison articleSurFacture : articlesSurFacture) {
+                if (articleSurFacture.getIdArticle().equals(idArticle)) {
+                    success = true;
+                    if (articleSurFacture.getQuantite().equals(1)) {
+                        deleteArticle(idFacture, idArticle);
+                        break;
+                    } else {
+                        Article article = repositoryArticle.findById(articleSurFacture.getIdArticle()).get();
+                        article.setStock(article.getStock() + 1);
+                        articleSurFacture.setQuantite(articleSurFacture.getQuantite() - 1);
+                        repositoryFactureArticles.save(articleSurFacture);
+                        break;
+                    }
                 }
             }
         }
@@ -216,7 +219,7 @@ public class FactureServiceImplemented implements FactureService {
             Facture newFacture = new Facture(client, paiement);
             System.out.println(newFacture);
             repository.save(newFacture);
-            return new FactureDtoGet(newFacture.getIdFacture(), idClient, idPaiement);
+            return new FactureDtoGet(newFacture.getIdFacture(), idClient, idPaiement, newFacture.getRefFacture(), newFacture.getDateHeure(), newFacture.isActiveFacture(), newFacture.isValidee(), newFacture.getTotal(), newFacture.getTotalTva(), newFacture.getTotalTTC());
         }
         return null;
     }

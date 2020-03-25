@@ -40,7 +40,7 @@ public class FactureController {
     }
 
     @PutMapping("/{id}/add")
-    public boolean update(@RequestBody FactureArticleDto factureArticleDto, @PathVariable("id") Long id) {
+    public FactureArticlesLiaison update(@RequestBody FactureArticleDto factureArticleDto, @PathVariable("id") Long id) {
         return service.addArticle(factureArticleDto.getIdFacture(), factureArticleDto);
     }
 

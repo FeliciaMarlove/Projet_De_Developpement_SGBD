@@ -14,7 +14,7 @@ public interface FactureService {
     FactureDtoGet create(Long idClient, Long idPaiement);
     FactureDtoPost delete(Long id);
     List<FactureDtoPost> readActive();
-    boolean addArticle(Long id, FactureArticleDto article);
+    FactureArticlesLiaison addArticle(Long id, FactureArticleDto article);
     boolean deleteArticle(Long idFacture, Long idArticle);
     boolean articleMinusOne(Long idFacture, Long idArticle);
     FactureDtoPost validateFacture(Long idFacture);
