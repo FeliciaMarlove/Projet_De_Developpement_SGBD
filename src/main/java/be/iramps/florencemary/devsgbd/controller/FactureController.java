@@ -1,7 +1,9 @@
 package be.iramps.florencemary.devsgbd.controller;
 
 import be.iramps.florencemary.devsgbd.dto.FactureArticleDto;
+import be.iramps.florencemary.devsgbd.dto.FactureDtoGet;
 import be.iramps.florencemary.devsgbd.dto.FactureDtoPost;
+import be.iramps.florencemary.devsgbd.model.FactureArticlesLiaison;
 import be.iramps.florencemary.devsgbd.repository.FactureRepository;
 import be.iramps.florencemary.devsgbd.service.FactureService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ public class FactureController {
     }
 
     @PostMapping
-    public FactureDtoPost create(@RequestBody FactureDtoPost factureDtoPost) {
+    public FactureDtoGet create(@RequestBody FactureDtoPost factureDtoPost) {
         return service.create(factureDtoPost.getIdClient(), factureDtoPost.getIdPaiement());
     }
 
@@ -50,6 +52,11 @@ public class FactureController {
     @GetMapping("/{id}/del/{idArt}")
     public boolean deleteArticle(@PathVariable("id") Long id, @PathVariable("idArt") Long idArt) {
         return service.deleteArticle(id, idArt);
+    }
+
+    @GetMapping("/{id}/articles")
+    public List<FactureArticlesLiaison> readArticles(@PathVariable("id") Long id) {
+        return service.readArticlesOnFacture(id);
     }
 
     @PutMapping("/{id}")

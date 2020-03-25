@@ -1,6 +1,7 @@
 package be.iramps.florencemary.devsgbd.service;
 
 import be.iramps.florencemary.devsgbd.dto.FactureArticleDto;
+import be.iramps.florencemary.devsgbd.dto.FactureDtoGet;
 import be.iramps.florencemary.devsgbd.dto.FactureDtoPost;
 import be.iramps.florencemary.devsgbd.model.*;
 import be.iramps.florencemary.devsgbd.repository.*;
@@ -54,6 +55,12 @@ public class FactureServiceImplemented implements FactureService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<FactureArticlesLiaison> readArticlesOnFacture(Long id) {
+        Facture facture = repository.findById(id).get();
+        return facture.getArticlesList();
     }
 
     /**
@@ -202,14 +209,14 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     @Override
-    public FactureDtoPost create(Long idClient, Long idPaiement) {
+    public FactureDtoGet create(Long idClient, Long idPaiement) {
         Client client = repositoryClient.findById(idClient).get();
         Paiement paiement = repositoryPaiement.findById(idPaiement).get();
-        Facture newFacture = new Facture(client, paiement);
-        if (equalsAny(newFacture) == null) {
+        if ((client != null) && (paiement != null)) {
+            Facture newFacture = new Facture(client, paiement);
             System.out.println(newFacture);
             repository.save(newFacture);
-            return new FactureDtoPost(idClient, idPaiement);
+            return new FactureDtoGet(newFacture.getIdFacture(), idClient, idPaiement);
         }
         return null;
     }
@@ -284,15 +291,5 @@ public class FactureServiceImplemented implements FactureService {
             if ((facture.isActiveFacture() == true) && (facture.getIdFacture() == id)) exists = true;
         }
         return exists;
-    }
-
-    private Facture equalsAny(Facture facture) {
-        if (!read().isEmpty()) {
-            for (Facture factureCompared : read()) {
-                if (facture.equals(factureCompared)) return repository.findById(factureCompared.getIdFacture()).get();
-            }
-            return null;
-        }
-        return null;
     }
 }
