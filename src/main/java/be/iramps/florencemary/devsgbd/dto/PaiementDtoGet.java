@@ -37,4 +37,13 @@ public class PaiementDtoGet {
     public void setDescPaiement(String descPaiement) {
         this.descPaiement = descPaiement;
     }
+
+    @Override
+    public String toString() {
+        return "PaiementDtoGet{" +
+                "idPaiement=" + idPaiement +
+                ", nomPaiement='" + nomPaiement + '\'' +
+                ", descPaiement='" + descPaiement + '\'' +
+                '}';
+    }
 }

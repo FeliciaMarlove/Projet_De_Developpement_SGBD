@@ -30,7 +30,7 @@ public class FactureController {
     }
 
     @GetMapping("/{id}")
-    public FactureDtoPost readOne(@PathVariable("id") Long id) {
+    public Object readOne(@PathVariable("id") Long id) {
         return service.readOne(id);
     }
 
@@ -65,7 +65,7 @@ public class FactureController {
     }
 
     @DeleteMapping("/{id}")
-    public FactureDtoPost delete(@PathVariable("id") Long id) {
+    public Object delete(@PathVariable("id") Long id) {
         return service.delete(id);
     }
 }

@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface FactureService {
     List<Facture> read();
-    FactureDtoPost readOne(Long id);
+    Object readOne(Long id);
     FactureDtoGet create(Long idClient, Long idPaiement);
-    FactureDtoPost delete(Long id);
+    Object delete(Long id);
     List<FactureDtoPost> readActive();
     FactureArticlesLiaison addArticle(Long id, FactureArticleDto article);
     boolean deleteArticle(Long idFacture, Long idArticle);

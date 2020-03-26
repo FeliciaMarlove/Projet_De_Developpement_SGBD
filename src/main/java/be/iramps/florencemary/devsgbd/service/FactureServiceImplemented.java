@@ -40,18 +40,21 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     /**
-     * Read 1 facture
-     *
+     * Read 1 facture, retourne un DTO post si la facture n'est pas validée ou un DTO get si la facture est validée
      * @param id id de la facture
-     * @return une facture
+     * @return FactureDtoGet si la facture est validée, FactureDtoPost si la facture est ouverte, null si la facture n'est pas trouvée
      */
     @Override
-    public FactureDtoPost readOne(Long id) {
+    public Object readOne(Long id) {
         Facture facture;
         for (Facture fact : repository.findAll()) {
             if (fact.getIdFacture().equals(id)) {
                 facture = repository.findById(id).get();
-                return new FactureDtoPost(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement());
+                if (facture.isValidee()) {
+                    return new FactureDtoGet(facture.getIdFacture(), facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement(), facture.getRefFacture(), facture.getDateHeure(), facture.isActiveFacture(), facture.isValidee(), facture.getTotal(), facture.getTotalTva(), facture.getTotalTTC());
+                } else {
+                    return new FactureDtoPost(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement());
+                }
             }
         }
         return null;
@@ -65,12 +68,11 @@ public class FactureServiceImplemented implements FactureService {
 
     /**
      * Supprimer une facture
-     *
      * @param id de la facture à supprimer
      * @return la facture qui a été effacée, ou null si pas de suppression
      */
     @Override
-    public FactureDtoPost delete(Long id) {
+    public Object delete(Long id) {
         Facture facture = repository.findById(id).get();
         if (exists(id)) {
             facture.setActiveFacture(false);
@@ -131,7 +133,7 @@ public class FactureServiceImplemented implements FactureService {
     public FactureArticlesLiaison addArticle(Long idFacture, FactureArticleDto articleDto) {
         Article article = repositoryArticle.findById(articleDto.getIdArticle()).get();
         Facture facture = repository.findById(idFacture).get();
-        if (exists(idFacture)) {
+        if (exists(idFacture) && (article.getStock() >= articleDto.getQuantite())) {
             List<FactureArticlesLiaison> articlesSurFacture = facture.getArticlesList();
             FactureArticlesLiaison factArt = isOnFacture(idFacture, article.getIdArticle());
             if (factArt != null) {
