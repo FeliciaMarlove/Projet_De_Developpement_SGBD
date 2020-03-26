@@ -24,7 +24,7 @@ public class FactureArticlesLiaison implements Serializable {
     @Column(name = "quantite", nullable = false)
     private Integer quantite;
 
-    @Transient
+    @Column(name = "montant_ligne")
     private Double montantLigne;
 
     /* _____________________________JOINTURES_____________________________ */

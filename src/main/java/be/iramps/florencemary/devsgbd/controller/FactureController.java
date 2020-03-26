@@ -25,7 +25,7 @@ public class FactureController {
     FactureRepository repository;
 
     @GetMapping
-    public List<FactureDtoPost> read() {
+    public List<Object> read() {
         return service.readActive();
     }
 
@@ -59,8 +59,8 @@ public class FactureController {
         return service.readArticlesOnFacture(id);
     }
 
-    @PutMapping("/{id}")
-    public FactureDtoPost validate(@PathVariable("id") Long id) {
+    @GetMapping("/{id}/validate")
+    public FactureDtoGet validate(@PathVariable("id") Long id) {
         return service.validateFacture(id);
     }
 

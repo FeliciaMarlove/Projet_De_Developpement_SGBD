@@ -33,13 +33,13 @@ public class Facture implements Serializable {
     @Column(name = "validee", nullable = false)
     private boolean isValidee;
 
-    @Transient
+    @Column(name = "total")
     private Double total;
 
-    @Transient
+    @Column(name = "total_tva")
     private Double totalTva;
 
-    @Transient
+    @Column(name = "total_ttc")
     private Double totalTTC;
 
     //_____________________________JOINTURES_____________________________

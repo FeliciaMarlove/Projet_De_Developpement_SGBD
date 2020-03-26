@@ -13,10 +13,10 @@ public interface FactureService {
     Object readOne(Long id);
     FactureDtoGet create(Long idClient, Long idPaiement);
     Object delete(Long id);
-    List<FactureDtoPost> readActive();
+    List<Object> readActive();
     FactureArticlesLiaison addArticle(Long id, FactureArticleDto article);
     boolean deleteArticle(Long idFacture, Long idArticle);
     boolean articleMinusOne(Long idFacture, Long idArticle);
-    FactureDtoPost validateFacture(Long idFacture);
+    FactureDtoGet validateFacture(Long idFacture);
     List<FactureArticlesLiaison> readArticlesOnFacture(Long id);
 }

@@ -88,13 +88,15 @@ public class FactureServiceImplemented implements FactureService {
      * @return la liste des factures actives
      */
     @Override
-    public List<FactureDtoPost> readActive() {
-        List<Facture> actifs = new ArrayList<>();
-        List<FactureDtoPost> actifsDtos = new ArrayList<>();
+    public List<Object> readActive() {
+        List<Object> actifsDtos = new ArrayList<>();
         for (Facture facture : read()) {
             if (facture.isActiveFacture()) {
-                actifs.add(facture);
-                actifsDtos.add(new FactureDtoPost(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement()));
+                if (facture.isValidee()) {
+                    actifsDtos.add(new FactureDtoGet(facture.getIdFacture(), facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement(), facture.getRefFacture(), facture.getDateHeure(), facture.isActiveFacture(), facture.isValidee(), facture.getTotal(), facture.getTotalTva(), facture.getTotalTTC()));
+                } else {
+                    actifsDtos.add(new FactureDtoPost(facture.getClient().getIdClient(), facture.getPaiement().getIdPaiement()));
+                }
             }
         }
         if (!actifsDtos.isEmpty()) {
@@ -234,7 +236,7 @@ public class FactureServiceImplemented implements FactureService {
      */
     @Override
     @Transactional
-    public FactureDtoPost validateFacture(Long idFacture) {
+    public FactureDtoGet validateFacture(Long idFacture) {
         if (exists(idFacture)) {
             Facture factureAFinaliser = repository.findById(idFacture).get();
             if (!factureAFinaliser.getArticlesList().isEmpty()) {
@@ -252,7 +254,7 @@ public class FactureServiceImplemented implements FactureService {
                 factureFinale.setTotal(total);
                 factureFinale.setTotalTva(totalTva);
                 factureFinale.setTotalTTC(totalTTC);
-                factureAFinaliser.setValidee(true);
+                factureFinale.setValidee(true);
                 factureAFinaliser.setActiveFacture(false);
                 repository.save(factureFinale);
                 repository.save(factureAFinaliser);
@@ -262,7 +264,7 @@ public class FactureServiceImplemented implements FactureService {
                         " \n Total TTC : " + factureFinale.getTotalTTC() +
                         " \n Articles : " + factureFinale.getArticlesList()
                 );
-                return new FactureDtoPost(factureFinale.getClient().getIdClient(), factureFinale.getPaiement().getIdPaiement());
+                return new FactureDtoGet(factureFinale.getIdFacture(), factureFinale.getClient().getIdClient(), factureFinale.getPaiement().getIdPaiement(), factureFinale.getRefFacture(), factureFinale.getDateHeure(), factureFinale.isActiveFacture(), factureFinale.isValidee(), factureFinale.getTotal(), factureFinale.getTotalTva(), factureFinale.getTotalTTC());
             }
         }
         return null;
