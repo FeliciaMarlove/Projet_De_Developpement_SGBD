@@ -15,12 +15,6 @@ public class FactureArticlesLiaison implements Serializable {
     @Column(name = "id_facture_articles")
     private Long idFactureArticles;
 
-    @Column(name = "id_facture", nullable = false)
-    private Long idFacture;
-
-    @Column(name = "id_article", nullable = false)
-    private Long idArticle;
-
     @Column(name = "quantite", nullable = false)
     private Integer quantite;
 
@@ -28,17 +22,16 @@ public class FactureArticlesLiaison implements Serializable {
     private Double montantLigne;
 
     /* _____________________________JOINTURES_____________________________ */
+    @ManyToOne(targetEntity = Facture.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_facture", referencedColumnName = "id_facture", foreignKey = @ForeignKey(name = "FK_facture_articles_facture"))
+    private Facture facture;
 
+    //
+    @ManyToOne(targetEntity = Article.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_article", referencedColumnName = "id_article", foreignKey = @ForeignKey(name = "FK_facture_articles_article"))
+    private Article article;
 
     /* _____________________________GETTERS/SETTERS_____________________________ */
-
-    public Long getIdFacture() {
-        return idFacture;
-    }
-
-    public Long getIdArticle() {
-        return idArticle;
-    }
 
     public Integer getQuantite() {
         return quantite;
@@ -56,10 +49,27 @@ public class FactureArticlesLiaison implements Serializable {
         this.montantLigne = montantLigne;
     }
 
+    public Facture getFacture() {
+        return facture;
+    }
+
+    public void setFacture(Facture facture) {
+        this.facture = facture;
+    }
+
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
     /* _____________________________CONSTRUCTEURS_____________________________ */
-    public FactureArticlesLiaison(Long idFacture, Long idArticle, Integer quantite) {
-        this.idFacture = idFacture;
-        this.idArticle = idArticle;
+
+    public FactureArticlesLiaison(Facture facture, Article article, Integer quantite) {
+        this.facture = facture;
+        this.article = article;
         this.quantite = quantite;
     }
 
@@ -83,9 +93,11 @@ public class FactureArticlesLiaison implements Serializable {
     @Override
     public String toString() {
         return "FactureArticlesLiaison{" +
-                "idFacture=" + idFacture +
-                ", idArticle=" + idArticle +
+                "idFactureArticles=" + idFactureArticles +
                 ", quantite=" + quantite +
+                ", montantLigne=" + montantLigne +
+                ", facture=" + facture +
+                ", article=" + article +
                 '}';
     }
 }

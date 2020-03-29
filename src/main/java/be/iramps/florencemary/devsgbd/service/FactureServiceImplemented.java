@@ -116,7 +116,7 @@ public class FactureServiceImplemented implements FactureService {
         Facture facture = repository.findById(idFacture).get();
         System.out.println(facture);
         for (FactureArticlesLiaison fal : facture.getArticlesList()) {
-            if (fal.getIdArticle().equals(idArticle)) {
+            if (fal.getArticle().getIdArticle().equals(idArticle)) {
                 return fal;
             }
         }
@@ -144,8 +144,8 @@ public class FactureServiceImplemented implements FactureService {
                 repositoryFactureArticles.save(factArt);
             } else {
                 factArt = new FactureArticlesLiaison(
-                        articleDto.getIdFacture(),
-                        articleDto.getIdArticle(),
+                        facture,
+                        article,
                         articleDto.getQuantite());
                 factArt.setMontantLigne(factArt.getQuantite() * (article.getPrixUnitaire()));
                 repositoryFactureArticles.save(factArt);
@@ -171,8 +171,8 @@ public class FactureServiceImplemented implements FactureService {
         Facture facture = repository.findById(idFacture).get();
         List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
         for (FactureArticlesLiaison articleSurFacture : articlesSurFacture) {
-            if (exists(idFacture) && (articleSurFacture.getIdArticle().equals(idArticle))) {
-                Article article = repositoryArticle.findById(articleSurFacture.getIdArticle()).get();
+            if (exists(idFacture) && (articleSurFacture.getArticle().getIdArticle().equals(idArticle))) {
+                Article article = repositoryArticle.findById(articleSurFacture.getArticle().getIdArticle()).get();
                 article.setStock(article.getStock() + articleSurFacture.getQuantite());
                 articlesSurFacture.remove(articleSurFacture);
                 articleSurFacture.setQuantite(0);
@@ -197,13 +197,13 @@ public class FactureServiceImplemented implements FactureService {
             Facture facture = repository.findById(idFacture).get();
             List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
             for (FactureArticlesLiaison articleSurFacture : articlesSurFacture) {
-                if (articleSurFacture.getIdArticle().equals(idArticle)) {
+                if (articleSurFacture.getArticle().getIdArticle().equals(idArticle)) {
                     success = true;
                     if (articleSurFacture.getQuantite().equals(1)) {
                         deleteArticle(idFacture, idArticle);
                         break;
                     } else {
-                        Article article = repositoryArticle.findById(articleSurFacture.getIdArticle()).get();
+                        Article article = repositoryArticle.findById(articleSurFacture.getArticle().getIdArticle()).get();
                         article.setStock(article.getStock() + 1);
                         articleSurFacture.setQuantite(articleSurFacture.getQuantite() - 1);
                         repositoryFactureArticles.save(articleSurFacture);
@@ -243,7 +243,7 @@ public class FactureServiceImplemented implements FactureService {
                 final Facture factureFinale = new Facture(factureAFinaliser.getClient(), factureAFinaliser.getPaiement());
                 final List<FactureArticlesLiaison> listeFinale = new ArrayList<>();
                 for (FactureArticlesLiaison fal : factureAFinaliser.getArticlesList()) {
-                    final FactureArticlesLiaison falUnite = new FactureArticlesLiaison(fal.getIdFacture(), fal.getIdArticle(), fal.getQuantite());
+                    final FactureArticlesLiaison falUnite = new FactureArticlesLiaison(fal.getFacture(), fal.getArticle(), fal.getQuantite());
                     repositoryFactureArticles.save(falUnite);
                     listeFinale.add(falUnite);
                 }
@@ -274,7 +274,7 @@ public class FactureServiceImplemented implements FactureService {
         Double montant = 0.0;
         Facture facture = repository.findById(idFacture).get();
         for (FactureArticlesLiaison fal : facture.getArticlesList()) {
-            montant += (fal.getQuantite() * repositoryArticle.findById(fal.getIdArticle()).get().getPrixUnitaire());
+            montant += (fal.getQuantite() * repositoryArticle.findById(fal.getArticle().getIdArticle()).get().getPrixUnitaire());
         }
         return montant;
     }
@@ -283,7 +283,7 @@ public class FactureServiceImplemented implements FactureService {
         Double montant = 0.0;
         Facture facture = repository.findById(idFacture).get();
         for (FactureArticlesLiaison fal : facture.getArticlesList()) {
-            montant += (fal.getQuantite() * ((repositoryArticle.findById(fal.getIdArticle()).get().getPrixUnitaire() / 100) * repositoryArticle.findById(fal.getIdArticle()).get().getTva().getTauxTva()));
+            montant += (fal.getQuantite() * ((repositoryArticle.findById(fal.getArticle().getIdArticle()).get().getPrixUnitaire() / 100) * repositoryArticle.findById(fal.getArticle().getIdArticle()).get().getTva().getTauxTva()));
         }
         return montant;
     }

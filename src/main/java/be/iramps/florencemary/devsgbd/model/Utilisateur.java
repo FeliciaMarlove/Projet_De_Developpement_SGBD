@@ -128,7 +128,8 @@ public class Utilisateur implements Serializable {
         Utilisateur that = (Utilisateur) o;
         return isActifUtilisateur == that.isActifUtilisateur &&
                 nomUtilisateur.equals(that.nomUtilisateur) &&
-                prenomUtilisateur.equals(that.prenomUtilisateur);
+                prenomUtilisateur.equals(that.prenomUtilisateur)
+                || login.equalsIgnoreCase(that.login);
     }
 
     @Override
