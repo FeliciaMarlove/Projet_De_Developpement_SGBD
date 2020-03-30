@@ -61,9 +61,9 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     @Override
-    public List<FactureArticlesLiaison> readArticlesOnFacture(Long id) {
+    public List<FactureArticleDto> readArticlesOnFacture(Long id) {
         Facture facture = repository.findById(id).get();
-        return facture.getArticlesList();
+        return mapFALEntitiesToDtos(facture.getArticlesList());
     }
 
     /**
@@ -132,7 +132,7 @@ public class FactureServiceImplemented implements FactureService {
      */
     @Override
     @Transactional
-    public FactureArticlesLiaison addArticle(Long idFacture, FactureArticleDto articleDto) {
+    public FactureArticleDto addArticle(Long idFacture, FactureArticleDto articleDto) {
         Article article = repositoryArticle.findById(articleDto.getIdArticle()).get();
         Facture facture = repository.findById(idFacture).get();
         if (exists(idFacture) && (article.getStock() >= articleDto.getQuantite())) {
@@ -146,8 +146,9 @@ public class FactureServiceImplemented implements FactureService {
                 factArt = new FactureArticlesLiaison(
                         facture,
                         article,
-                        articleDto.getQuantite());
-                factArt.setMontantLigne(factArt.getQuantite() * (article.getPrixUnitaire()));
+                        articleDto.getQuantite(),
+                        articleDto.getMontantLigne());
+                factArt.setMontantLigne(articleDto.getQuantite() * (article.getPrixUnitaire()));
                 repositoryFactureArticles.save(factArt);
                 articlesSurFacture.add(factArt);
                 repository.save(facture);
@@ -155,9 +156,21 @@ public class FactureServiceImplemented implements FactureService {
             article.setStock(article.getStock() - articleDto.getQuantite());
             repositoryArticle.save(article);
             // pour tester si la transaction s'arrête bien en cas de problème : System.exit(1);
-            return factArt;
+            return mapFALEntitiesToDtos(factArt);
         }
         return null;
+    }
+
+    private FactureArticleDto mapFALEntitiesToDtos(FactureArticlesLiaison fal) {
+        return new FactureArticleDto(fal.getFacture().getIdFacture(), fal.getArticle().getIdArticle(), fal.getQuantite(), fal.getMontantLigne());
+    }
+
+    private List<FactureArticleDto> mapFALEntitiesToDtos(List<FactureArticlesLiaison> falList) {
+        List<FactureArticleDto> dtos = new ArrayList<>();
+        for (FactureArticlesLiaison fal: falList) {
+            dtos.add(mapFALEntitiesToDtos(fal));
+        }
+        return dtos;
     }
 
     /**
@@ -167,6 +180,7 @@ public class FactureServiceImplemented implements FactureService {
      * @return true sur l'article a été trouvé et supprimé
      */
     @Override
+    @Transactional
     public boolean deleteArticle(Long idFacture, Long idArticle) {
         Facture facture = repository.findById(idFacture).get();
         List<FactureArticlesLiaison> articlesSurFacture = new ArrayList<>(facture.getArticlesList());
@@ -176,6 +190,7 @@ public class FactureServiceImplemented implements FactureService {
                 article.setStock(article.getStock() + articleSurFacture.getQuantite());
                 articlesSurFacture.remove(articleSurFacture);
                 articleSurFacture.setQuantite(0);
+                articleSurFacture.setMontantLigne(0.0);
                 repository.save(facture);
                 return true;
             }
@@ -191,6 +206,7 @@ public class FactureServiceImplemented implements FactureService {
      * @return true sur l'article a été trouvé et supprimé
      */
     @Override
+    @Transactional
     public boolean articleMinusOne(Long idFacture, Long idArticle) {
         boolean success = false;
         if (exists(idFacture)) {
@@ -243,9 +259,11 @@ public class FactureServiceImplemented implements FactureService {
                 final Facture factureFinale = new Facture(factureAFinaliser.getClient(), factureAFinaliser.getPaiement());
                 final List<FactureArticlesLiaison> listeFinale = new ArrayList<>();
                 for (FactureArticlesLiaison fal : factureAFinaliser.getArticlesList()) {
-                    final FactureArticlesLiaison falUnite = new FactureArticlesLiaison(fal.getFacture(), fal.getArticle(), fal.getQuantite());
-                    repositoryFactureArticles.save(falUnite);
-                    listeFinale.add(falUnite);
+                    if (fal.getQuantite() > 0) {
+                        final FactureArticlesLiaison falUnite = new FactureArticlesLiaison(fal.getFacture(), fal.getArticle(), fal.getQuantite(), fal.getMontantLigne());
+                        repositoryFactureArticles.save(falUnite);
+                        listeFinale.add(falUnite);
+                    }
                 }
                 final Double total = calculerMontant(idFacture);
                 final Double totalTva = calculerMontantTVA(idFacture);

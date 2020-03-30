@@ -40,7 +40,7 @@ public class FactureController {
     }
 
     @PutMapping("/{id}/add")
-    public FactureArticlesLiaison update(@RequestBody FactureArticleDto factureArticleDto, @PathVariable("id") Long id) {
+    public FactureArticleDto update(@RequestBody FactureArticleDto factureArticleDto, @PathVariable("id") Long id) {
         return service.addArticle(factureArticleDto.getIdFacture(), factureArticleDto);
     }
 
@@ -55,7 +55,7 @@ public class FactureController {
     }
 
     @GetMapping("/{id}/articles")
-    public List<FactureArticlesLiaison> readArticles(@PathVariable("id") Long id) {
+    public List<FactureArticleDto> readArticles(@PathVariable("id") Long id) {
         return service.readArticlesOnFacture(id);
     }
 

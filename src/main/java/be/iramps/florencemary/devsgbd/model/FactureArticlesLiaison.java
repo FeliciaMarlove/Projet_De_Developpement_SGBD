@@ -67,10 +67,11 @@ public class FactureArticlesLiaison implements Serializable {
 
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
-    public FactureArticlesLiaison(Facture facture, Article article, Integer quantite) {
+    public FactureArticlesLiaison(Facture facture, Article article, Integer quantite, Double montantLigne) {
+        this.quantite = quantite;
+        this.montantLigne = montantLigne;
         this.facture = facture;
         this.article = article;
-        this.quantite = quantite;
     }
 
     public FactureArticlesLiaison() {
