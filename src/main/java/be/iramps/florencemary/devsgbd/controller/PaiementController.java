@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST du endpoint Paiement (/api/paiement)
+ * CORS Access CrossOrigin localhost:4200
+ */
 @RestController
 @RequestMapping(value = "/api/paiement")
 @CrossOrigin(origins = {"http://localhost:4200"})

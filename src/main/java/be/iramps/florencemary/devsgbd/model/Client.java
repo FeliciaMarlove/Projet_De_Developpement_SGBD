@@ -23,11 +23,9 @@ public class Client implements Serializable {
     @Column(name = "prenom_client", nullable = false)
     private String prenomClient;
 
-    @Column(name = "telephone")
+    @Column(name = "telephone", nullable = false)
     private String telephoneClient;
 
-//    @JsonDeserialize(using = LocalDateDeserializer.class)
-//    @JsonSerialize(using = LocalDateSerializer.class)
     @Column(name = "date_naissance", nullable = false)
     private LocalDate dateNaissanceClient;
 
@@ -76,7 +74,6 @@ public class Client implements Serializable {
     }
 
     public void setDateNaissanceClient(LocalDate dateNaissanceClient) {
-        if (dateNaissanceClient.getYear() <= (LocalDate.now().getYear() - 18))
             this.dateNaissanceClient = dateNaissanceClient;
     }
 

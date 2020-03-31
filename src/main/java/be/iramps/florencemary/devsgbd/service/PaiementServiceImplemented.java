@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service contenant la couche business sur l'entite Paiement
+ */
 @Service
 public class PaiementServiceImplemented implements PaiementService {
     private PaiementRepository repository;
@@ -19,11 +22,20 @@ public class PaiementServiceImplemented implements PaiementService {
         this.repository = repository;
     }
 
+    /**
+     * Retourne la liste des paiements
+     * @return List Paiement tous les paiements en DB
+     */
     @Override
     public List<Paiement> read() {
         return (List<Paiement>) repository.findAll();
     }
 
+    /**
+     * Retourne un paiement
+     * @param id (Long) : id du paiement a retourner
+     * @return le paiement trouve || null si le paiement n'est pas trouve
+     */
     @Override
     public PaiementDtoGet readOne(Long id) {
         for (Paiement paiement: repository.findAll()) {
@@ -34,6 +46,24 @@ public class PaiementServiceImplemented implements PaiementService {
         return null;
     }
 
+    /**
+     * Retourne les paiements actifs
+     * @return List PaiementDtoGet paiements actifs
+     */
+    @Override
+    public List<PaiementDtoGet> readActive() {
+        List<Paiement> actifs = new ArrayList<>();
+        for (Paiement paiement : read()) {
+            if (paiement.isActifPaiement()) actifs.add(paiement);
+        }
+        return mapEntitiesToDtosGet(actifs);
+    }
+
+    /**
+     * Cree un enregistrement de paiement en DB
+     * @param newItem (PaiementDtoPost) : le paiement a enregistrer
+     * @return PaiementDtoGet le paiement enregistre || null si le paiement est deja existant en DB
+     */
     @Override
     public PaiementDtoGet create(PaiementDtoPost newItem) {
         Paiement newPaiement = new Paiement(newItem.getNomPaiement(), newItem.getDescPaiement());
@@ -44,6 +74,12 @@ public class PaiementServiceImplemented implements PaiementService {
         return null;
     }
 
+    /**
+     * Met a jour un paiement
+     * @param id (Long) : id du paiement a mettre a jour
+     * @param update (PaiementDtoPost) : paiement a mettre a jour
+     * @return PaiementDtoGet paiement mis a jour || null si le paiement n'a pas ete trouve
+     */
     @Override
     public PaiementDtoGet update(Long id, PaiementDtoPost update) {
         if (exists(id)) {
@@ -56,6 +92,11 @@ public class PaiementServiceImplemented implements PaiementService {
         return null;
     }
 
+    /**
+     * Supprime logiquement un paiement
+     * @param id (Long) : id du paiement a supprimer
+     * @return PaiementDtoGet le paiement correspondant || null si pas de paiement trouve
+     */
     @Override
     public PaiementDtoGet delete(Long id) {
         Paiement paiement = repository.findById(id).get();
@@ -67,21 +108,15 @@ public class PaiementServiceImplemented implements PaiementService {
         return null;
     }
 
-    @Override
-    public List<PaiementDtoGet> readActive() {
-        List<Paiement> actifs = new ArrayList<>();
-        for (Paiement paiement : read()) {
-            if (paiement.isActifPaiement()) actifs.add(paiement);
-        }
-        return mapEntitiesToDtosGet(actifs);
-    }
+    //__________________PRIVATE METHODS_________________________________________________________________________________
 
     private boolean exists(Long id) {
-        boolean exists = false;
         for (Paiement paiement : read()) {
-            if ((paiement.isActifPaiement() == true) && (paiement.getIdPaiement() == id)) exists = true;
+            if ((paiement.isActifPaiement()) && (paiement.getIdPaiement().equals(id))) {
+                return true;
+            }
         }
-        return exists;
+        return false;
     }
 
     private Paiement equalsAny(Paiement paiement) {

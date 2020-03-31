@@ -4,6 +4,9 @@ import javax.persistence.Column;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
 
+/**
+ * DTO GET pour l'entite Facture
+ */
 public class FactureDtoGet {
     private Long idFacture;
     private Long idClient;
@@ -16,6 +19,19 @@ public class FactureDtoGet {
     private Double totalTva;
     private Double totalTTC;
 
+    /**
+     * Constructeur
+     * @param idFacture (Long)
+     * @param idClient (Long)
+     * @param idPaiement (Long)
+     * @param refFacture (String)
+     * @param dateHeure (LocalDateTime)
+     * @param isActiveFacture (boolean)
+     * @param isValidee (boolean)
+     * @param total (Double)
+     * @param totalTva (Double)
+     * @param totalTTC (Double)
+     */
     public FactureDtoGet(Long idFacture, Long idClient, Long idPaiement, String refFacture, LocalDateTime dateHeure, boolean isActiveFacture, boolean isValidee, Double total, Double totalTva, Double totalTTC) {
         this.idFacture = idFacture;
         this.idClient = idClient;

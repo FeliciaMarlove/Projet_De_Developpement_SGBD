@@ -6,6 +6,9 @@ import be.iramps.florencemary.devsgbd.model.Client;
 
 import java.util.List;
 
+/**
+ * Interface non documentee : Ref Classe Implementee
+ */
 public interface ClientService {
     List<Client> read();
     ClientDtoGet readOne(Long id);

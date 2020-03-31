@@ -5,6 +5,9 @@ import be.iramps.florencemary.devsgbd.model.Tva;
 
 import java.util.List;
 
+/**
+ * Interface non documentee : Ref Classe Implementee
+ */
 public interface TvaService {
     List<Tva> read();
     Tva readOne(Long id);

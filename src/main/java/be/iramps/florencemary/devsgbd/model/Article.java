@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.*;
 
+/**
+ * Modele de l'entite Article
+ */
 @Entity
 @Table(name = "Article", schema = "public", catalog = "brico")
 public class Article implements Serializable {
@@ -107,6 +110,15 @@ public class Article implements Serializable {
 
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
+    /**
+     * Constructeur
+     * @param nomArticle (String) !null
+     * @param descArticle (String) !null
+     * @param stock (int) !null {@literal&& >=}0
+     * @param prixUnitaire (Double) !null {@literal&& >=}0.0
+     * @param codeEAN (String) !null
+     * @param tva (Tva) !null
+     */
     public Article(String nomArticle, String descArticle, int stock, Double prixUnitaire, String codeEAN, Tva tva) {
         this();
         this.nomArticle = nomArticle;

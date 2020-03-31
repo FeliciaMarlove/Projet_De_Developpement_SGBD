@@ -2,12 +2,22 @@ package be.iramps.florencemary.devsgbd.dto;
 
 import java.time.LocalDate;
 
+/**
+ * DTO POST pour l'entite Client
+ */
 public class ClientDtoPost {
     private String nomClient;
     private String prenomClient;
     private String telephoneClient;
     private LocalDate dateNaissanceClient;
 
+    /**
+     * Constructeur
+     * @param nomClient (String)
+     * @param prenomClient (String)
+     * @param telephoneClient (String) length {@literal>} 8 {@literal&&} nombres uniquement
+     * @param dateNaissanceClient (LocalDate)
+     */
     public ClientDtoPost(String nomClient, String prenomClient, String telephoneClient, LocalDate dateNaissanceClient) {
         this.nomClient = nomClient;
         this.prenomClient = prenomClient;
@@ -48,7 +58,6 @@ public class ClientDtoPost {
     }
 
     public void setDateNaissanceClient(LocalDate dateNaissanceClient) {
-        if (dateNaissanceClient.getYear() <= (LocalDate.now().getYear() - 18))
             this.dateNaissanceClient = dateNaissanceClient;
     }
 

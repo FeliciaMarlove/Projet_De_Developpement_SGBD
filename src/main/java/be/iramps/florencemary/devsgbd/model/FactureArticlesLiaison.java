@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Modele de la table de liaison FactureArticles
+ */
 @Entity
 @Table(name = "facture_articles", schema = "public", catalog = "brico")
 public class FactureArticlesLiaison implements Serializable {
@@ -67,6 +70,13 @@ public class FactureArticlesLiaison implements Serializable {
 
     /* _____________________________CONSTRUCTEURS_____________________________ */
 
+    /**
+     * Constructeur
+     * @param facture (Facture) !null
+     * @param article (Article) !null
+     * @param quantite (Integer) !null
+     * @param montantLigne (Double) !null
+     */
     public FactureArticlesLiaison(Facture facture, Article article, Integer quantite, Double montantLigne) {
         this.quantite = quantite;
         this.montantLigne = montantLigne;

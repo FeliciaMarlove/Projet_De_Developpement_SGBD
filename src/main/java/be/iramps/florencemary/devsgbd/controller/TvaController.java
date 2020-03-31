@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Contrôleur REST du endpoint Tva (/api/tva)
+ * CORS Access CrossOrigin localhost:4200
+ */
 @RestController
 @RequestMapping(value = "/api/tva")
 @CrossOrigin(origins = {"http://localhost:4200"})

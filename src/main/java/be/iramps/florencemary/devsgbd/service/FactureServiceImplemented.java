@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service contenant la couche business sur l'entite Facture
+ */
 @Service
 public class FactureServiceImplemented implements FactureService {
     private FactureRepository repository;
@@ -30,9 +33,8 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     /**
-     * Read
-     *
-     * @return liste des factures
+     * Retourne les factures en DB
+     * @return List Facture toutes les factures en DB
      */
     @Override
     public List<Facture> read() {
@@ -40,9 +42,9 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     /**
-     * Read 1 facture, retourne un DTO post si la facture n'est pas validée ou un DTO get si la facture est validée
-     * @param id id de la facture
-     * @return FactureDtoGet si la facture est validée, FactureDtoPost si la facture est ouverte, null si la facture n'est pas trouvée
+     * Retourne une facture
+     * @param id (Long) : id de la facture a retourner
+     * @return Object (FactureDtoPost) si la facture n'est pas encore validee, (FactureDtoGet) si la facture est validee || null si pas de correspondance
      */
     @Override
     public Object readOne(Long id) {
@@ -60,32 +62,9 @@ public class FactureServiceImplemented implements FactureService {
         return null;
     }
 
-    @Override
-    public List<FactureArticleDto> readArticlesOnFacture(Long id) {
-        Facture facture = repository.findById(id).get();
-        return mapFALEntitiesToDtos(facture.getArticlesList());
-    }
-
     /**
-     * Supprimer une facture
-     * @param id de la facture à supprimer
-     * @return la facture qui a été effacée, ou null si pas de suppression
-     */
-    @Override
-    public Object delete(Long id) {
-        Facture facture = repository.findById(id).get();
-        if (exists(id)) {
-            facture.setActiveFacture(false);
-            repository.save(facture);
-            return readOne(id);
-        }
-        return null;
-    }
-
-    /**
-     * Read des factures "actives" (non supprimées logiquement)
-     *
-     * @return la liste des factures actives
+     * Retourne les factures actives
+     * @return List Object (FactureDtoPost/FactureDtoGet) factures actives
      */
     @Override
     public List<Object> readActive() {
@@ -99,36 +78,44 @@ public class FactureServiceImplemented implements FactureService {
                 }
             }
         }
-        if (!actifsDtos.isEmpty()) {
-            return actifsDtos;
-        }
-        return null;
+        return actifsDtos;
     }
 
     /**
-     * Vérifie qu'un FactureArticle se trouve sur la facture
-     *
-     * @param idFacture
-     * @param idArticle
-     * @return le FactureArticle trouvé, ou null si pas trouvé
+     * Retourne la liste des articles sur une facture
+     * @param id (Long) : id de la facture
+     * @return List FactureArticleDto liste des articles sous forme de FactureArticle || null si la facture n'est pas trouvee
      */
-    private FactureArticlesLiaison isOnFacture(Long idFacture, Long idArticle) {
-        Facture facture = repository.findById(idFacture).get();
-        System.out.println(facture);
-        for (FactureArticlesLiaison fal : facture.getArticlesList()) {
-            if (fal.getArticle().getIdArticle().equals(idArticle)) {
-                return fal;
-            }
+    @Override
+    public List<FactureArticleDto> readArticlesOnFacture(Long id) {
+        if (exists(id)) {
+            Facture facture = repository.findById(id).get();
+            return mapFALEntitiesToDtos(facture.getArticlesList());
+        }
+       return null;
+    }
+
+    /**
+     * Supprime logiquement une facture
+     * @param id (Long) : id de la facture a supprimer
+     * @return Object (FactureDtoPost) si la facture n'est pas encore validee, (FactureDtoGet) si la facture est validee || null si pas de correspondance
+     */
+    @Override
+    public Object delete(Long id) {
+        Facture facture = repository.findById(id).get();
+        if (exists(id)) {
+            facture.setActiveFacture(false);
+            repository.save(facture);
+            return readOne(id);
         }
         return null;
     }
 
     /**
-     * Ajoute un article sur la facture
-     *
-     * @param idFacture
-     * @param articleDto
-     * @return
+     * Transaction. Ajoute un article sur la facture avec une quantite determinee. Si l'article est deja present sur la facture, la ligne (FactureArticle) est mise a jour, sinon une nouvelle ligne est cree. Gere la mise a jour du montant par ligne et le stock de l'article.
+     * @param idFacture (Long) : id de la facture sur laquelle ajouter l'article
+     * @param articleDto (FactureArticleDto) : FactureArticle a ajouter sur la facture
+     * @return FactureArticleDto l'article ajoute || null si la facture n'est pas trouvee ou que le stock de l'article est insuffisant
      */
     @Override
     @Transactional
@@ -161,23 +148,11 @@ public class FactureServiceImplemented implements FactureService {
         return null;
     }
 
-    private FactureArticleDto mapFALEntitiesToDtos(FactureArticlesLiaison fal) {
-        return new FactureArticleDto(fal.getFacture().getIdFacture(), fal.getArticle().getIdArticle(), fal.getQuantite(), fal.getMontantLigne());
-    }
-
-    private List<FactureArticleDto> mapFALEntitiesToDtos(List<FactureArticlesLiaison> falList) {
-        List<FactureArticleDto> dtos = new ArrayList<>();
-        for (FactureArticlesLiaison fal: falList) {
-            dtos.add(mapFALEntitiesToDtos(fal));
-        }
-        return dtos;
-    }
-
     /**
-     * Fonction qui supprime un article (facture_article) de la facture (quantité = 0)
-     * @param idFacture
-     * @param idArticle
-     * @return true sur l'article a été trouvé et supprimé
+     * Transaction. Supprime un article sur une facture dans sa totalite (quantite = 0). La quantite et le montant du FactureArticle sont mis a zero. Le stock de l'objet est incremente de la quantite.
+     * @param idFacture (Long) : id de la facture sur laquelle l'article doit etre supprime
+     * @param idArticle (Long) : id de l'article a supprimer
+     * @return boolean true si l'operation a reussi, false si l'id de la facture n'existe pas ou que l'article ne se trouve pas sur la facture
      */
     @Override
     @Transactional
@@ -199,11 +174,10 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     /**
-     * Fonction qui supprime 1 unité de l'article (quantité -= 1) ou supprime l'article si la quantité = 0
-     *
-     * @param idFacture
-     * @param idArticle
-     * @return true sur l'article a été trouvé et supprimé
+     * Transaction. Supprime une unite d'un article sur une facture. Le montant de la ligne et le stock de l'article sont geres. Si la quantite de la ligne vaut zero, l'article est supprime.
+     * @param idFacture (Long) : id de la facture sur laquelle se trouve l'article
+     * @param idArticle (Long) : id de l'article dont il faut supprimer une unite
+     * @return boolean true si l'operation a reussi, false si l'article ne se trouve pas sur la facture ou que la facture n'est pas trouvee
      */
     @Override
     @Transactional
@@ -231,6 +205,12 @@ public class FactureServiceImplemented implements FactureService {
         return success;
     }
 
+    /**
+     * Cree une facture vierge.
+     * @param idClient (Long) : id du client pour lequel la facture est creee
+     * @param idPaiement (Long) : id du mode de paiement affecte a la facture creee
+     * @return FactureDtoGet facture creee || null si le client ou le paiement n'ont pas ete trouves
+     */
     @Override
     public FactureDtoGet create(Long idClient, Long idPaiement) {
         Client client = repositoryClient.findById(idClient).get();
@@ -245,16 +225,17 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     /**
-     * Finaliser la facture (créer une facture immutable)
-     *
-     * @param idFacture
-     * @return
+     * Transaction. Valide une facture qui contient un client, un paiement et une liste d'au moins un article. Cree une nouvelle facture finale dont tous les membres sont finaux. Les montants totaux sont calcules et persistes en DB. Ignore les lignes d'articles ou quantite == 0. La facture initiale est rendue inactive.
+     * @param idFacture (Long) : id de la facture a valider
+     * @return FactureDtoGet facture validee || null si la liste d'articles est vide ou si la facture n'est pas trouvee
      */
     @Override
     @Transactional
     public FactureDtoGet validateFacture(Long idFacture) {
         if (exists(idFacture)) {
             Facture factureAFinaliser = repository.findById(idFacture).get();
+            System.out.println(factureAFinaliser);
+            System.out.println(factureAFinaliser.getArticlesList());
             if (!factureAFinaliser.getArticlesList().isEmpty()) {
                 final Facture factureFinale = new Facture(factureAFinaliser.getClient(), factureAFinaliser.getPaiement());
                 final List<FactureArticlesLiaison> listeFinale = new ArrayList<>();
@@ -288,6 +269,8 @@ public class FactureServiceImplemented implements FactureService {
         return null;
     }
 
+    //__________________PRIVATE METHODS_________________________________________________________________________________
+
     private Double calculerMontant(Long idFacture) {
         Double montant = 0.0;
         Facture facture = repository.findById(idFacture).get();
@@ -311,10 +294,34 @@ public class FactureServiceImplemented implements FactureService {
     }
 
     private boolean exists(Long id) {
-        boolean exists = false;
         for (Facture facture : read()) {
-            if ((facture.isActiveFacture() == true) && (facture.getIdFacture() == id)) exists = true;
+            if ((facture.isActiveFacture()) && (facture.getIdFacture().equals(id))) {
+                return true;
+            }
         }
-        return exists;
+        return false;
+    }
+
+    private FactureArticleDto mapFALEntitiesToDtos(FactureArticlesLiaison fal) {
+        return new FactureArticleDto(fal.getFacture().getIdFacture(), fal.getArticle().getIdArticle(), fal.getQuantite(), fal.getMontantLigne());
+    }
+
+    private List<FactureArticleDto> mapFALEntitiesToDtos(List<FactureArticlesLiaison> falList) {
+        List<FactureArticleDto> dtos = new ArrayList<>();
+        for (FactureArticlesLiaison fal: falList) {
+            dtos.add(mapFALEntitiesToDtos(fal));
+        }
+        return dtos;
+    }
+
+    private FactureArticlesLiaison isOnFacture(Long idFacture, Long idArticle) {
+        Facture facture = repository.findById(idFacture).get();
+        System.out.println(facture);
+        for (FactureArticlesLiaison fal : facture.getArticlesList()) {
+            if (fal.getArticle().getIdArticle().equals(idArticle)) {
+                return fal;
+            }
+        }
+        return null;
     }
 }

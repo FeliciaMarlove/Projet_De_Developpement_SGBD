@@ -6,6 +6,9 @@ import be.iramps.florencemary.devsgbd.dto.UtilisateurDto;
 
 import java.util.List;
 
+/**
+ * Interface non documentee : Ref Classe Implementee
+ */
 public interface UtilisateurService {
     List<Utilisateur> read();
     UtilisateurDto readOne(Long id);

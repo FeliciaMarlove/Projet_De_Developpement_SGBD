@@ -8,6 +8,9 @@ import be.iramps.florencemary.devsgbd.model.FactureArticlesLiaison;
 
 import java.util.List;
 
+/**
+ * Interface non documentee : Ref Classe Implementee
+ */
 public interface FactureService {
     List<Facture> read();
     Object readOne(Long id);

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service contenant la couche business sur l'entite Departement
+ */
 @Service
 public class DepartementServiceImplemented implements DepartementService {
     private DepartementRepository repository;
@@ -18,11 +21,20 @@ public class DepartementServiceImplemented implements DepartementService {
         this.repository = repository;
     }
 
+    /**
+     * Retourne les departements en DB
+     * @return List Departement tous les departements en DB
+     */
     @Override
     public List<Departement> read() {
         return (List<Departement>) repository.findAll();
     }
 
+    /**
+     * Retourne un departement
+     * @param name (String) : nom du departement a retourner
+     * @return DepartementDto departement trouve || null si pas de correspondance
+     */
     @Override
     public DepartementDto readOne(String name) {
         for (Departement departement : repository.findAll()) {
@@ -33,6 +45,24 @@ public class DepartementServiceImplemented implements DepartementService {
         return null;
     }
 
+    /**
+     * Retourne les departements actifs
+     * @return List DepartementDto departements actifs
+     */
+    @Override
+    public List<DepartementDto> readActive() {
+        List<Departement> actifs = new ArrayList<>();
+        for (Departement departement : read()) {
+            if (departement.isActifDepartement()) actifs.add(departement);
+        }
+        return mapEntitiesToDtos(actifs);
+    }
+
+    /**
+     * Cree un enregistrement de departement en DB
+     * @param newItem (DepartementDto) : departement a creer
+     * @return DepartementDto departement cree || null si le departement existait deja en DB
+     */
     @Override
     public DepartementDto create(DepartementDto newItem) {
         Departement newDepartement = new Departement(newItem.getNomDepartement());
@@ -43,6 +73,12 @@ public class DepartementServiceImplemented implements DepartementService {
         return null;
     }
 
+    /**
+     * Met a jour un departement en DB
+     * @param id (Long) : id du departement a modifier
+     * @param update (DepartementDto) : departement modifie
+     * @return DepartementDto departement modifie || null si le departement n'a pas ete trouve en DB
+     */
     @Override
     public DepartementDto update(Long id, DepartementDto update) {
         if (exists(id)) {
@@ -54,6 +90,11 @@ public class DepartementServiceImplemented implements DepartementService {
         return null;
     }
 
+    /**
+     * Supprime logiquement un departement
+     * @param name (String) : nom du departement a supprimer
+     * @return DepartementDto departement supprime
+     */
     @Override
     public DepartementDto delete(String name) {
         Departement departement = repository.findDepartementByNomDepartement(name);
@@ -65,21 +106,15 @@ public class DepartementServiceImplemented implements DepartementService {
         return null;
     }
 
-    @Override
-    public List<DepartementDto> readActive() {
-        List<Departement> actifs = new ArrayList<>();
-        for (Departement departement : read()) {
-            if (departement.isActifDepartement()) actifs.add(departement);
-        }
-        return mapEntitiesToDtos(actifs);
-    }
+    //__________________PRIVATE METHODS_________________________________________________________________________________
 
     private boolean exists(Long id) {
-        boolean exists = false;
         for (Departement departement : read()) {
-            if ((departement.isActifDepartement() == true) && (departement.getIdDepartement() == id)) exists = true;
+            if ((departement.isActifDepartement()) && (departement.getIdDepartement().equals(id))) {
+                return true;
+            }
         }
-        return exists;
+        return false;
     }
 
     private Departement equalsAny(Departement departement) {

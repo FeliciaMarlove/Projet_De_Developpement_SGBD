@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service contenant la couche business sur l'entite Tva
+ */
 @Service
 public class TvaServiceImplemented implements TvaService {
     private TvaRepository repository;
@@ -18,11 +21,20 @@ public class TvaServiceImplemented implements TvaService {
         this.repository = repository;
     }
 
+    /**
+     * Retourne les Tva en DB
+     * @return List Tva toutes les tva en DB
+     */
     @Override
     public List<Tva> read() {
         return (List<Tva>) repository.findAll();
     }
 
+    /**
+     * Retourne une Tva
+     * @param id (Long) : id de la Tva a retourner
+     * @return Tva la Tva trouvee
+     */
     @Override
     public Tva readOne(Long id) {
         for (Tva tva: repository.findAll()) {
@@ -33,6 +45,24 @@ public class TvaServiceImplemented implements TvaService {
         return null;
     }
 
+    /**
+     * Retourne les Tva actives
+     * @return List Tva tva actives
+     */
+    @Override
+    public List<Tva> readActive() {
+        List<Tva> actifs = new ArrayList<>();
+        for (Tva tva : read()) {
+            if (tva.isActifTva()) actifs.add(tva);
+        }
+        return actifs;
+    }
+
+    /**
+     * Cree une Tva
+     * @param newItem (TvaDto) : la Tva a creer
+     * @return Tva la Tva creee || null si la Tva existe deja en DB
+     */
     @Override
     public Tva create(TvaDto newItem) {
         if (equalsAny(newItem) == null) {
@@ -43,7 +73,12 @@ public class TvaServiceImplemented implements TvaService {
         return null;
     }
 
-
+    /**
+     * Met a jour une Tva
+     * @param id (Long) : l'id de la Tva a modifier
+     * @param update (TvaDto) : la Tva a modifier
+     * @return Tva la Tva modifiee
+     */
     @Override
     public Tva update(Long id, TvaDto update) {
         if ((exists(id))) {
@@ -55,6 +90,11 @@ public class TvaServiceImplemented implements TvaService {
         return null;
     }
 
+    /**
+     * Supprime logiquement une Tva
+     * @param id (Long) : id de la Tva a supprimer
+     * @return Tva la Tva supprimee
+     */
     @Override
     public Tva delete(Long id) {
         Tva tva = repository.findById(id).get();
@@ -66,21 +106,15 @@ public class TvaServiceImplemented implements TvaService {
         return null;
     }
 
-    @Override
-    public List<Tva> readActive() {
-        List<Tva> actifs = new ArrayList<>();
-        for (Tva tva : read()) {
-            if (tva.isActifTva()) actifs.add(tva);
-        }
-        return actifs;
-    }
+    //__________________PRIVATE METHODS_________________________________________________________________________________
 
     private boolean exists(Long id) {
-        boolean exists = false;
         for (Tva tva : read()) {
-            if ((tva.isActifTva() == true) && (tva.getIdTva() == id)) exists = true;
+            if ((tva.isActifTva()) && (tva.getIdTva().equals(id))) {
+                return true;
+            }
         }
-        return exists;
+        return false;
     }
 
     private Tva equalsAny(Tva tva) {
@@ -92,7 +126,7 @@ public class TvaServiceImplemented implements TvaService {
 
     private Tva equalsAny(TvaDto tvaDto) {
         for (Tva tvaCompared : read()) {
-            if (tvaDto.getTauxTva() == tvaCompared.getTauxTva()) return repository.findById(tvaCompared.getIdTva()).get();
+            if (tvaDto.getTauxTva().equals(tvaCompared.getTauxTva())) return repository.findById(tvaCompared.getIdTva()).get();
         }
         return null;
     }

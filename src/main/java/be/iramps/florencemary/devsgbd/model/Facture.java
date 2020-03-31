@@ -9,12 +9,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+/**
+ * Modele de l'entite Facture
+ */
 @Entity
 @Table(name = "Facture", schema = "public", catalog = "brico")
 public class Facture implements Serializable {
 
     //_____________________________CHAMPS_____________________________
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "facture_generator")
     @SequenceGenerator(name = "facture_generator", allocationSize = 1, initialValue = 1)
@@ -55,7 +57,6 @@ public class Facture implements Serializable {
     private Paiement paiement;
 
     //_____________________________GETTERS/SETTERS_____________________________
-
     public Long getIdFacture() {
         return idFacture;
     }
@@ -140,6 +141,11 @@ public class Facture implements Serializable {
 
     //_____________________________CONSTRUCTEURS_____________________________
 
+    /**
+     * Constructeur
+     * @param client (Client) !null
+     * @param paiement (Paiement) !null
+     */
     public Facture(Client client, Paiement paiement) {
         this();
         this.client = client;

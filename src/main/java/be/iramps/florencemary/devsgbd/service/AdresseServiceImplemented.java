@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service contenant la couche business sur l'entite Adresse
+ */
 @Service
 public class AdresseServiceImplemented implements AdresseService {
     private AdresseRepository repository;
@@ -23,11 +26,20 @@ public class AdresseServiceImplemented implements AdresseService {
         this.repositoryClient = repositoryClient;
     }
 
+    /**
+     * Retourne la liste des adresses en DB
+     * @return List Adresse toutes les adresses en DB
+     */
     @Override
     public List<Adresse> read() {
         return (List<Adresse>) repository.findAll();
     }
 
+    /**
+     * Retourne une adresse
+     * @param id (Long) : id de l'adresse a retourner
+     * @return AdresseDtoGet DTO GET de l'adresse trouvee || null si l'adresse n'est pas trouvee
+     */
     @Override
     public AdresseDtoGet readOne(Long id) {
         for (Adresse adresse: repository.findAll()) {
@@ -38,6 +50,11 @@ public class AdresseServiceImplemented implements AdresseService {
         return null;
     }
 
+    /**
+     * Retourne la liste des adresses d'un client
+     * @param idClient (Long) : id du client
+     * @return List AdresseDtoGet adresses du client
+     */
     @Override
     public List<AdresseDtoGet> readFromClient(Long idClient) {
         List<AdresseDtoGet> clientsAdresses = new ArrayList<>();
@@ -49,6 +66,10 @@ public class AdresseServiceImplemented implements AdresseService {
         return clientsAdresses;
     }
 
+    /**
+     * Retourne les adresses actives
+     * @return List AdresseDtoGet adresses actives
+     */
     @Override
     public List<AdresseDtoGet> readActive() {
         List<Adresse> actifs = new ArrayList<>();
@@ -58,6 +79,12 @@ public class AdresseServiceImplemented implements AdresseService {
         return mapEntitiesToDtosGet(actifs);
     }
 
+    /**
+     * Enregistre une nouvelle adresse en DB rattachee a un client existant
+     * @param idClient (Long) : id du client auquel est rattachee l'adresse
+     * @param newItem (AdresseDtoPost) : DTO POST de l'adresse a creer
+     * @return List AdresseDtoPost adresses du client || null si l'adresse existe deja en DB
+     */
     @Override
     public List<AdresseDtoPost> create(Long idClient, AdresseDtoPost newItem) {
         if (equalsAny(newItem) == null) {
@@ -73,11 +100,17 @@ public class AdresseServiceImplemented implements AdresseService {
             );
             repository.save(newAdresse);
             repositoryClient.save(findClient);
-            return mapEntitiesToDtos(findClient.getAdressesList()) ;
+            return mapEntitiesToDtosPost(findClient.getAdressesList()) ;
         }
         return null;
     }
 
+    /**
+     * Met a jour une adresse en DB
+     * @param id (Long) : id de l'adresse a modifier
+     * @param update (AdresseDtoPost) : DTO POST de l'adresse modifiee
+     * @return AdresseDtoPost adresse modifiee || null si l'adresse n'a pas ete trouvee
+     */
     @Override
     public AdresseDtoPost update(Long id, AdresseDtoPost update) {
         Adresse toUpdate;
@@ -91,28 +124,22 @@ public class AdresseServiceImplemented implements AdresseService {
             toUpdate.setPays(update.getPays());
             toUpdate.setClient(repositoryClient.findById(update.getIdClient()).get());
             repository.save(toUpdate);
-            return mapEntityToDto(toUpdate);
+            return mapEntityToDtoPost(toUpdate);
         }
         return null;
     }
 
-    private Client findClient(Adresse adresse) {
-        for (Client client: repositoryClient.findAll()) {
-           if (client.getAdressesList().contains(adresse)) {
-               return client;
-           }
-        }
-        return null;
-    }
-
+    /**
+     * Supprime logiquement une adresse en DB et de la liste d'adresses du client auquel elle est rattachee
+     * @param id (Long) : id de l'adresse
+     * @return AdresseDtoGet adresse supprimee || null si l'adresse n'est pas trouvee
+     */
     @Override
     public AdresseDtoGet delete(Long id) {
         Adresse adresse = repository.findById(id).get();
         Client clt = findClient(adresse);
-        System.out.println(clt);
         if (exists(id)) {
             clt.getAdressesList().remove(adresse);
-            System.out.println(clt);
             repositoryClient.save(clt);
             repository.delete(adresse);
             return readOne(id);
@@ -120,12 +147,22 @@ public class AdresseServiceImplemented implements AdresseService {
         return null;
     }
 
-    private boolean exists(Long id) {
-        boolean exists = false;
-        for (Adresse adresse : read()) {
-            if ((adresse.isActifAdresse()) && (adresse.getIdAdresse().equals(id))) exists = true;
+    //__________________PRIVATE METHODS_________________________________________________________________________________
+
+    private Client findClient(Adresse adresse) {
+        for (Client client: repositoryClient.findAll()) {
+            if (client.getAdressesList().contains(adresse)) {
+                return client;
+            }
         }
-        return exists;
+        return null;
+    }
+
+    private boolean exists(Long id) {
+        for (Adresse adresse : read()) {
+            if ((adresse.isActifAdresse()) && (adresse.getIdAdresse().equals(id))) return true;
+        }
+        return false;
     }
 
     private Adresse equalsAny(Adresse adresse) {
@@ -149,15 +186,15 @@ public class AdresseServiceImplemented implements AdresseService {
         return null;
     }
 
-    private List<AdresseDtoPost> mapEntitiesToDtos(List<Adresse> adresses) {
+    private List<AdresseDtoPost> mapEntitiesToDtosPost(List<Adresse> adresses) {
         List<AdresseDtoPost> adressesDtos = new ArrayList<>();
         for (Adresse adresse: adresses) {
-            adressesDtos.add(mapEntityToDto(adresse));
+            adressesDtos.add(mapEntityToDtoPost(adresse));
         }
         return adressesDtos;
     }
 
-    private AdresseDtoPost mapEntityToDto(Adresse adresse) {
+    private AdresseDtoPost mapEntityToDtoPost(Adresse adresse) {
         return new AdresseDtoPost(adresse.getRue(), adresse.getNumero(), adresse.getComplementNumero(), adresse.getCodePostal(), adresse.getVille(), adresse.getPays(), adresse.getClient().getIdClient());
     }
 

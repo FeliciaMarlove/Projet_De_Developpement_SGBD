@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Modele de l'entite Adresse
+ */
 @Entity
 @Table(name = "Adresse", schema = "public", catalog = "brico")
 public class Adresse implements Serializable {
@@ -115,17 +118,18 @@ public class Adresse implements Serializable {
     }
 
     /* _____________________________CONSTRUCTEURS_____________________________ */
-    public Adresse(String rue, int numero, int codePostal, String ville, String pays, Client client) {
-        this();
-        this.rue = rue;
-        this.numero = numero;
-        this.codePostal = codePostal;
-        this.ville = ville;
-        this.pays = pays;
-        this.client = client;
-    }
 
-    public Adresse(String rue, int numero, String complementNumero, int codePostal, String ville, String pays, Client client) {
+    /**
+     * Constructeur
+     * @param rue (String) !null
+     * @param numero (int) !null {@literal&& >}0
+     * @param complementNumero (String) nullable
+     * @param codePostal (int) !null {@literal&&} ({@literal>}0 {@literal&& <}99999)
+     * @param ville (String) !null
+     * @param pays (String) !null {@literal&&} (equals ignore case "Belgique" || "France")
+     * @param client (Client) !null
+     */
+        public Adresse(String rue, int numero, String complementNumero, int codePostal, String ville, String pays, Client client) {
         this();
         this.rue = rue;
         this.numero = numero;

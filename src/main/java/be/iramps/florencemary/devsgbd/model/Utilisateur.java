@@ -77,6 +77,7 @@ public class Utilisateur implements Serializable {
     }
 
     public void setMotDePasse(String motDePasse) {
+        if (motDePasse.length() > 3)
         this.motDePasse = BCrypt.hashpw(motDePasse, BCrypt.gensalt(12));
     }
 

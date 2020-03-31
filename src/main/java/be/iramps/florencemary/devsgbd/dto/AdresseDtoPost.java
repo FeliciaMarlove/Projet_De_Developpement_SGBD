@@ -1,5 +1,8 @@
 package be.iramps.florencemary.devsgbd.dto;
 
+/**
+ * DTO POST pour l'entite Adresse
+ */
 public class AdresseDtoPost {
     private String rue;
     private int numero;
@@ -9,19 +12,20 @@ public class AdresseDtoPost {
     private String pays;
     private Long idClient;
 
+    /**
+     * Constructeur
+     * @param rue (String)
+     * @param numero (int) {@literal>}0
+     * @param complementNumero (String)
+     * @param codePostal (int) {@literal>}0 {@literal&&} {@literal<}99999
+     * @param ville (String)
+     * @param pays (String) equals ignore case "Belgique" || "France"
+     * @param idClient (Long)
+     */
     public AdresseDtoPost(String rue, int numero, String complementNumero, int codePostal, String ville, String pays, Long idClient) {
         this.rue = rue;
         this.numero = numero;
         this.complementNumero = complementNumero;
-        this.codePostal = codePostal;
-        this.ville = ville;
-        this.pays = pays;
-        this.idClient = idClient;
-    }
-
-    public AdresseDtoPost(String rue, int numero, int codePostal, String ville, String pays, Long idClient) {
-        this.rue = rue;
-        this.numero = numero;
         this.codePostal = codePostal;
         this.ville = ville;
         this.pays = pays;

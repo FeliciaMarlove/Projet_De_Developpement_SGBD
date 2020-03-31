@@ -1,9 +1,17 @@
 package be.iramps.florencemary.devsgbd.dto;
 
+/**
+ * DTO pour la connexion
+ */
 public class ConnectionDto {
     private String login;
     private String motDePasse;
 
+    /**
+     * Constructeur
+     * @param login (String)
+     * @param motDePasse (String)
+     */
     public ConnectionDto(String login, String motDePasse) {
         this.login = login;
         this.motDePasse = motDePasse;

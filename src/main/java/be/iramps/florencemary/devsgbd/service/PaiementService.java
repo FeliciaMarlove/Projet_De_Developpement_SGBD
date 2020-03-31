@@ -6,6 +6,9 @@ import be.iramps.florencemary.devsgbd.model.Paiement;
 
 import java.util.List;
 
+/**
+ * Interface non documentee : Ref Classe Implementee
+ */
 public interface PaiementService {
     List<Paiement> read();
     PaiementDtoGet readOne(Long id);

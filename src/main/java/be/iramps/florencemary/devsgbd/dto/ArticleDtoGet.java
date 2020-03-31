@@ -1,5 +1,8 @@
 package be.iramps.florencemary.devsgbd.dto;
 
+/**
+ * DTO GET pour l'entite Article
+ */
 public class ArticleDtoGet {
     private Long idArticle;
     private String nomArticle;
@@ -9,6 +12,16 @@ public class ArticleDtoGet {
     private String codeEAN;
     private Long idTva;
 
+    /**
+     * Constructeur
+     * @param idArticle (Long)
+     * @param nomArticle (String)
+     * @param descArticle (String)
+     * @param stock (int)
+     * @param prixUnitaire (double)
+     * @param codeEAN (String)
+     * @param idTva (Long)
+     */
     public ArticleDtoGet(Long idArticle, String nomArticle, String descArticle, int stock, double prixUnitaire, String codeEAN, Long idTva) {
         this.idArticle = idArticle;
         this.nomArticle = nomArticle;

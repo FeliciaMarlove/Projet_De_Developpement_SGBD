@@ -1,11 +1,21 @@
 package be.iramps.florencemary.devsgbd.dto;
 
+/**
+ * DTO pour FactureArticlesLiaison
+ */
 public class FactureArticleDto {
     Long idFacture;
     Long idArticle;
     Integer quantite;
     Double montantLigne;
 
+    /**
+     * Constructeur
+     * @param idFacture (Long)
+     * @param idArticle (Long)
+     * @param quantite (Integer)
+     * @param montantLigne (Double)
+     */
     public FactureArticleDto(Long idFacture, Long idArticle, Integer quantite, Double montantLigne) {
         this.idFacture = idFacture;
         this.idArticle = idArticle;

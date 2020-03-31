@@ -1,5 +1,8 @@
 package be.iramps.florencemary.devsgbd.dto;
 
+/**
+ * DTO GET pour l'entite Adresse
+ */
 public class AdresseDtoGet {
     private Long idAdresse;
     private String rue;
@@ -10,6 +13,17 @@ public class AdresseDtoGet {
     private String pays;
     private Long idClient;
 
+    /**
+     * Constructeur
+     * @param idAdresse (Long)
+     * @param rue (String)
+     * @param numero (int)
+     * @param complementNumero (String)
+     * @param codePostal (int)
+     * @param ville (String)
+     * @param pays (String)
+     * @param idClient (Long)
+     */
     public AdresseDtoGet(Long idAdresse, String rue, int numero, String complementNumero, int codePostal, String ville, String pays, Long idClient) {
         this.idAdresse = idAdresse;
         this.rue = rue;

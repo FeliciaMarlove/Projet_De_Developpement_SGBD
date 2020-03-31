@@ -1,5 +1,8 @@
 package be.iramps.florencemary.devsgbd.dto;
 
+/**
+ * DTO POST pour l'entite Article
+ */
 public class ArticleDtoPost {
     private String nomArticle;
     private String descArticle;
@@ -8,6 +11,15 @@ public class ArticleDtoPost {
     private String codeEAN;
     private Long idTva;
 
+    /**
+     * Constructeur
+     * @param nomArticle (String)
+     * @param descArticle (String)
+     * @param stock (int) {@literal>=}0
+     * @param prixUnitaire (double) {@literal>=}0.0
+     * @param codeEAN (String)
+     * @param idTva (Long)
+     */
     public ArticleDtoPost(String nomArticle, String descArticle, int stock, double prixUnitaire, String codeEAN, Long idTva) {
         this.nomArticle = nomArticle;
         this.descArticle = descArticle;

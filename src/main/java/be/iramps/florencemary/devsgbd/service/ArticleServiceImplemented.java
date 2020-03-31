@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service contenant la couche business sur l'entite Article
+ */
 @Service
 public class ArticleServiceImplemented implements ArticleService {
     private ArticleRepository repository;
@@ -24,11 +27,20 @@ public class ArticleServiceImplemented implements ArticleService {
         this.repositoryTva = repositoryTva;
     }
 
+    /**
+     * Retourne tous les articles en DB
+     * @return List Article tous les articles en DB
+     */
     @Override
     public List<Article> read() {
         return (List<Article>) repository.findAll();
     }
 
+    /**
+     * Retourne un article
+     * @param id (Long) : id de l'article a retourner
+     * @return ArticleDtoGet l'article || null si pas de correspondance
+     */
     @Override
     public ArticleDtoGet readOne(Long id) {
         for (Article article: repository.findAll()) {
@@ -39,8 +51,27 @@ public class ArticleServiceImplemented implements ArticleService {
         return null;
     }
 
+    /**
+     * Retourne les articles actifs
+     * @return List ArticleDtoGet articles actifs
+     */
+    @Override
+    public List<ArticleDtoGet> readActive() {
+        List<ArticleDtoGet> actifs = new ArrayList<>();
+        for (Article article : read()) {
+            if (article.isActifArticle()) actifs.add(mapEntityToDtoGet(article));
+        }
+        return actifs;
+    }
+
+    /**
+     * Cree un enregistrement d'un nouvel article en DB
+     * @param newItem (ArticleDtoPost) : DTO POST de l'article a enregistrer
+     * @return ArticleDtoGet l'article cree || null si l'article se trouve deja en DB
+     */
     @Override
     public ArticleDtoGet create(ArticleDtoPost newItem) {
+        if (equalsAny(newItem) == null) {
         Tva findTva = repositoryTva.findById(newItem.getIdTva()).get();
         Article newArticle = new Article(
                 newItem.getNomArticle(),
@@ -50,33 +81,39 @@ public class ArticleServiceImplemented implements ArticleService {
                 newItem.getCodeEAN(),
                 findTva
         );
-        if (equalsAny(newItem) == null) {
             repository.save(newArticle);
             return mapEntityToDtoGet(newArticle);
         }
         return null;
     }
 
+    /**
+     * Met a jour un article en DB
+     * @param id (Long) : id de l'article a mettre a jour
+     * @param update (ArticleDtoPost) : DTO POST de l'article modifie
+     * @return Boolean true si la mise a jour a reussi, false si l'id n'a pas ete trouve
+     */
     @Override
     public Boolean update(Long id, ArticleDtoPost update) {
         if ((exists(id))) {
             Article toUpdate = repository.findById(id).get();
-            System.out.println(toUpdate);
-            System.out.println(update);
             toUpdate.setNomArticle(update.getNomArticle());
             toUpdate.setDescArticle(update.getDescArticle());
             toUpdate.setStock(update.getStock());
             toUpdate.setCodeEAN(update.getCodeEAN());
             toUpdate.setPrixUnitaire(update.getPrixUnitaire());
             toUpdate.setTva(repositoryTva.findById(update.getIdTva()).get());
-            System.out.println(toUpdate);
-            System.out.println(update);
             repository.save(toUpdate);
             return true;
         }
         return false;
     }
 
+    /**
+     * Supprime logiquement un article en DB
+     * @param id (Long) : id de l'article a supprimer
+     * @return ArticleDtoGet l'article supprime || null si l'article n'a pas ete trouve en DB
+     */
     @Override
     public ArticleDtoGet delete(Long id) {
         if (exists(id)) {
@@ -88,21 +125,15 @@ public class ArticleServiceImplemented implements ArticleService {
         return null;
     }
 
-    @Override
-    public List<ArticleDtoGet> readActive() {
-        List<ArticleDtoGet> actifs = new ArrayList<>();
-        for (Article article : read()) {
-            if (article.isActifArticle()) actifs.add(mapEntityToDtoGet(article));
-        }
-        return actifs;
-    }
+    //__________________PRIVATE METHODS_________________________________________________________________________________
 
     private boolean exists(Long id) {
-        boolean exists = false;
         for (Article article : read()) {
-            if ((article.isActifArticle() == true) && (article.getIdArticle() == id)) exists = true;
+            if ((article.isActifArticle()) && (article.getIdArticle().equals(id))) {
+                return true;
+            }
         }
-        return exists;
+        return false;
     }
 
     private Article equalsAny(Article article) {

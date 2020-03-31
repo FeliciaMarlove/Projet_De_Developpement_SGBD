@@ -2,6 +2,9 @@ package be.iramps.florencemary.devsgbd.dto;
 
 import java.time.LocalDate;
 
+/**
+ * DTO GET pour l'entite Client
+ */
 public class ClientDtoGet {
     private Long idClient;
     private String nomClient;
@@ -10,6 +13,15 @@ public class ClientDtoGet {
     private LocalDate dateNaissanceClient;
     private boolean isActifClient;
 
+    /**
+     * Constructeur
+     * @param idClient (Long)
+     * @param nomClient (String)
+     * @param prenomClient (String)
+     * @param telephoneClient (String)
+     * @param dateNaissanceClient (LocalDate)
+     * @param isActifClient (boolean)
+     */
     public ClientDtoGet(Long idClient, String nomClient, String prenomClient, String telephoneClient, LocalDate dateNaissanceClient, boolean isActifClient) {
         this.idClient = idClient;
         this.nomClient = nomClient;

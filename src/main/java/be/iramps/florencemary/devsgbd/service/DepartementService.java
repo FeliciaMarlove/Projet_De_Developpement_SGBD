@@ -5,6 +5,9 @@ import be.iramps.florencemary.devsgbd.model.Departement;
 
 import java.util.List;
 
+/**
+ * Interface non documentee : Ref Classe Implementee
+ */
 public interface DepartementService {
     List<Departement> read();
     DepartementDto readOne(String deptName);

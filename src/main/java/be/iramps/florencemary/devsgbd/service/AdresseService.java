@@ -6,6 +6,9 @@ import be.iramps.florencemary.devsgbd.model.Adresse;
 
 import java.util.List;
 
+/**
+ * Interface non documentee : Ref Classe Implementee
+ */
 public interface AdresseService {
     List<Adresse> read();
     AdresseDtoGet readOne(Long id);
